@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Estudia Auxiliar Administrativo del Estado con una IA que no se inventa las leyes</title>
+  <meta name="description" content="Un sistema para estudiar con ChatGPT o Claude sin que te cuele artículos falsos del EBEP o de la Constitución. Resúmenes, esquemas y test hechos a partir de tu temario oficial.">
+  <style>
+    :root {
+      color-scheme: light;
+      --background: #fbfbfa;
+      --surface: #f0f4fc;
+      --input-background: #ffffff;
+      --text: #202938;
+      --muted: #535d70;
+      --accent: #2b59c3;
+      --accent-hover: #20469e;
+      --button-text: #ffffff;
+      --border: #dce1e9;
+      --input-border: #727c8b;
+    }
+
+    * { box-sizing: border-box; }
+    html { font-size: 100%; }
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 1rem;
+      line-height: 1.7;
+      overflow-wrap: break-word;
+    }
+    main, footer {
+      width: min(680px, calc(100% - 48px));
+      margin-inline: auto;
+    }
+    .hero { padding-block: 64px 56px; }
+    .hero::before {
+      content: "";
+      display: block;
+      width: 48px;
+      height: 4px;
+      margin-bottom: 28px;
+      background: var(--accent);
+    }
+    h1, h2 {
+      margin: 0;
+      font-weight: 750;
+      text-wrap: balance;
+    }
+    h1 {
+      max-width: 18ch;
+      font-size: clamp(2.25rem, 6vw, 3.625rem);
+      line-height: 1.1;
+      letter-spacing: -0.045em;
+    }
+    h2 {
+      font-size: clamp(1.5rem, 4vw, 1.875rem);
+      line-height: 1.25;
+      letter-spacing: -0.025em;
+    }
+    p { margin: 18px 0 0; }
+    .hero p {
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 1.125rem;
+      line-height: 1.65;
+    }
+    a, button { -webkit-tap-highlight-color: transparent; }
+    .cta {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 54px;
+      max-width: 100%;
+      padding: 14px 23px;
+      border: 1px solid var(--accent);
+      border-radius: 7px;
+      background: var(--accent);
+      color: var(--button-text);
+      font: inherit;
+      font-weight: 650;
+      line-height: 1.4;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .hero .cta { margin-top: 30px; }
+    .cta:hover {
+      border-color: var(--accent-hover);
+      background: var(--accent-hover);
+    }
+    a:focus-visible, button:focus-visible, input:focus-visible,
+    summary:focus-visible, #lista:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 5px;
+    }
+    main > section {
+      padding-block: 40px;
+      border-top: 1px solid var(--border);
+    }
+    ul { margin: 24px 0 0; padding-left: 23px; }
+    li { padding-left: 7px; }
+    li + li { margin-top: 20px; }
+    li::marker { color: var(--accent); }
+    main > #lista {
+      margin-block: 16px 8px;
+      padding: 28px 24px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      scroll-margin-top: 24px;
+    }
+    form {
+      display: grid;
+      gap: 12px;
+      margin-top: 26px;
+    }
+    input {
+      width: 100%;
+      min-width: 0;
+      min-height: 54px;
+      padding: 14px 16px;
+      border: 1px solid var(--input-border);
+      border-radius: 7px;
+      background: var(--input-background);
+      color: var(--text);
+      font: inherit;
+      line-height: 1.4;
+    }
+    input::placeholder { color: var(--muted); opacity: 1; }
+    small {
+      display: block;
+      color: var(--muted);
+      font-size: 0.8125rem;
+      line-height: 1.65;
+    }
+    .form-note { margin-top: 13px; }
+    main > .faq { border-top: 0; }
+    .faq h2 { margin-bottom: 24px; }
+    details { border-bottom: 1px solid var(--border); }
+    summary {
+      padding-block: 20px;
+      color: var(--text);
+      font-weight: 650;
+      line-height: 1.5;
+      cursor: pointer;
+    }
+    summary::marker { color: var(--accent); }
+    summary:hover { color: var(--accent); }
+    details p { margin: 0 0 22px; color: var(--muted); }
+    footer {
+      padding-block: 24px 44px;
+      border-top: 1px solid var(--border);
+    }
+    footer p { margin: 0; }
+
+    @media (min-width: 640px) {
+      .hero { padding-block: 96px 64px; }
+      main > section { padding-block: 48px; }
+      main > #lista { padding: 36px; }
+      form { grid-template-columns: minmax(0, 1fr) auto; }
+      footer { padding-bottom: 56px; }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --background: #121720;
+        --surface: #1b2536;
+        --input-background: #121720;
+        --text: #f0f3f9;
+        --muted: #b7c1d2;
+        --accent: #9db9ff;
+        --accent-hover: #bed0ff;
+        --button-text: #13213a;
+        --border: #354154;
+        --input-border: #8191aa;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <h1>Estudia Auxiliar Administrativo del Estado con una IA que no se inventa las leyes</h1>
+      <p>Un sistema para estudiar con ChatGPT o Claude sin que te cuele artículos falsos del EBEP o de la Constitución. Resúmenes, esquemas y test hechos a partir de tu temario oficial.</p>
+      <a class="cta" href="#lista">Avísame cuando salga</a>
+    </header>
+
+    <section aria-labelledby="problema">
+      <h2 id="problema">Te suena esto</h2>
+      <p>Le pides a ChatGPT que te resuma el tema 5 y te suelta un artículo de la Ley 39/2015 que no existe. Lo memorizas, llega el examen y fallas por algo que la IA se inventó. Y a partir de ahí ya no te fías de nada de lo que te da, así que vuelves a contrastar tema por tema y tardas más que si estudiaras a mano. Con 30.000 personas presentándose para 1.700 plazas, cada semana de repaso que pierdes cuenta.</p>
+    </section>
+
+    <section aria-labelledby="kit">
+      <h2 id="kit">Qué te llevas</h2>
+      <p>Es un kit descargable que abres y usas la misma tarde. Dentro hay tres cosas:</p>
+      <ul>
+        <li>Prompts probados que obligan a la IA a trabajar solo con el texto que le pegas (tu tema, el BOE, el artículo). Si algo no está en lo que le das, no se lo inventa.</li>
+        <li>El paso a paso para convertir cada tema en resumen, esquema y 20 preguntas tipo test.</li>
+        <li>Un planner de repasos en Notion o Google Sheets, con repetición espaciada, montado para el temario de esta oposición.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="metodo">
+      <h2 id="metodo">Por qué esta IA no te miente</h2>
+      <p>Estudiar con IA sale mal cuando la dejas tirar de memoria. Estos prompts la atan a tu material oficial: resume, pregunta y corrige sobre lo que tú le das, y cuando algo no aparece en tu texto te avisa en vez de rellenarlo. Estudias con IA sin jugártela a que se invente media ley.</p>
+    </section>
+
+    <section id="lista" tabindex="-1" aria-labelledby="lanzamiento">
+      <h2 id="lanzamiento">Todavía no está a la venta</h2>
+      <p>Lo estoy terminando y quiero sacarlo bien. Déjame tu correo y te aviso el día que salga. Quien esté en la lista lo tendrá a 15 euros, precio de lanzamiento, antes que nadie.</p>
+      <form action="https://formspree.io/f/mppzeynn" method="POST">
+        <input type="email" name="email" required aria-label="Correo electrónico" autocomplete="email" inputmode="email">
+        <button class="cta" type="submit">Avísame cuando salga</button>
+      </form>
+      <small class="form-note">Sin spam. Solo un correo el día que salga. Al dejar tu correo aceptas recibir ese aviso. No lo comparto con nadie y puedes pedir que lo borre cuando quieras.</small>
+    </section>
+
+    <section class="faq" aria-labelledby="preguntas">
+      <h2 id="preguntas">Preguntas rápidas</h2>
+      <details>
+        <summary>¿Sirve para mi convocatoria?</summary>
+        <p>Está hecho para Auxiliar Administrativo del Estado (C2). El temario oficial lo pones tú, así que funciona con la versión vigente del temario.</p>
+      </details>
+      <details>
+        <summary>¿Necesito pagar ChatGPT?</summary>
+        <p>No. Funciona con la versión gratuita, y también con Claude o Gemini.</p>
+      </details>
+      <details>
+        <summary>¿Esto es un temario?</summary>
+        <p>No. El temario lo tienes tú o tu academia. Esto es el método para estudiarlo con IA y el planner de repasos.</p>
+      </details>
+      <details>
+        <summary>¿Cuándo sale?</summary>
+        <p>Estoy con ello. Si dejas el correo, eres de los primeros en enterarte.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    <p><small>Producto digital de descarga inmediata. Al comprarlo aceptas que la descarga empieza en el momento y renuncias al derecho de desistimiento (art. 103.m TRLGDCU). Ahora mismo solo se recoge tu correo para avisarte del lanzamiento; no se cobra nada.</small></p>
+  </footer>
+</body>
+</html>
