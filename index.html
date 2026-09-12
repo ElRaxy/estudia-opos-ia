@@ -1,272 +1,255 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Estudia Auxiliar Administrativo del Estado con una IA que no se inventa las leyes</title>
+  <meta name="color-scheme" content="light dark">
   <meta name="description" content="Un sistema para estudiar con ChatGPT o Claude sin que te cuele artículos falsos del EBEP o de la Constitución. Resúmenes, esquemas y test hechos a partir de tu temario oficial.">
+  <title>Auxiliar Administrativo del Estado · Lista de espera</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%231a493d'/%3E%3Cpath d='M12 9h11l5 5v17H12zM22 9v7h6M16 23l3 3 6-7' fill='none' stroke='%23fffdf6' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&amp;display=swap">
   <style>
-    :root{
-      color-scheme: light;
-      --background:#fbfbfa;
-      --surface:#f1f4fb;
-      --surface2:#ffffff;
-      --input-background:#ffffff;
-      --text:#1c2434;
-      --muted:#525d72;
-      --accent:#2b59c3;
-      --accent-soft:#e6ecfb;
-      --accent-hover:#20469e;
-      --bad:#c23b3b;
-      --bad-soft:#fbe6e6;
-      --button-text:#ffffff;
-      --border:#dce1ea;
-      --input-border:#6f7a8b;
-      --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,sans-serif;
+    :root {
+      --scheme: light;
+      color-scheme: var(--scheme);
+      --bg: #f7f6f0; --surface: #fffefa; --ink: #232923; --muted: #62675f;
+      --line: #d7dbd0; --soft: #eeeee6; --accent: #1a493d; --accent-hover: #10372c;
+      --accent-soft: #e5ece1; --on-accent: #fffef7; --error: #a7342c; --error-bg: #fbece6;
+      --error-line: #dc9c91; --shadow: #17261c14; --form-bg: #fffefa; --selection: #cfdec8;
     }
-    *{box-sizing:border-box;}
-    html{font-size:100%;}
-    body{
-      margin:0;background:var(--background);color:var(--text);
-      font-family:var(--font);font-size:1rem;line-height:1.7;overflow-wrap:break-word;
-    }
-    .wrap{width:min(1040px,calc(100% - 40px));margin-inline:auto;}
-    a,button{-webkit-tap-highlight-color:transparent;}
-    a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible,#lista:focus-visible{
-      outline:3px solid var(--accent);outline-offset:4px;
-    }
-    h1,h2,h3{margin:0;font-weight:760;text-wrap:balance;letter-spacing:-.02em;}
-
-    /* HERO */
-    .hero{padding-block:56px 40px;display:grid;gap:44px;align-items:center;}
-    .hero .pill{
-      display:inline-flex;align-items:center;gap:8px;align-self:start;
-      padding:7px 14px;border-radius:100px;background:var(--accent-soft);
-      color:var(--accent);font-size:.82rem;font-weight:650;letter-spacing:.01em;
-    }
-    .hero .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);}
-    h1{font-size:clamp(2.1rem,5.2vw,3.4rem);line-height:1.08;margin-top:20px;}
-    .hero p.sub{margin:22px 0 0;color:var(--muted);font-size:1.12rem;line-height:1.6;max-width:34ch;}
-    .cta{
-      display:inline-flex;justify-content:center;align-items:center;min-height:54px;max-width:100%;
-      padding:14px 26px;border:1px solid var(--accent);border-radius:10px;background:var(--accent);
-      color:var(--button-text);font:inherit;font-weight:680;line-height:1.4;text-align:center;
-      text-decoration:none;cursor:pointer;
-    }
-    .cta:hover{border-color:var(--accent-hover);background:var(--accent-hover);}
-    .hero .cta{margin-top:28px;}
-    .hero .note{margin:14px 0 0;font-size:.82rem;color:var(--muted);}
-
-    /* CHAT MOCKUP */
-    .chat{
-      background:var(--surface2);border:1px solid var(--border);border-radius:18px;
-      box-shadow:0 22px 48px -30px rgba(20,30,60,.5);padding:18px 18px 22px;
-    }
-    .chat .bar{display:flex;gap:7px;padding:2px 2px 16px;border-bottom:1px solid var(--border);margin-bottom:16px;}
-    .chat .bar i{width:11px;height:11px;border-radius:50%;background:var(--border);display:block;}
-    .msg{display:flex;margin-bottom:14px;}
-    .msg .bubble{padding:13px 16px;border-radius:14px;font-size:1rem;line-height:1.5;max-width:88%;}
-    .msg.user{justify-content:flex-end;}
-    .msg.user .bubble{background:var(--accent);color:#fff;border-bottom-right-radius:5px;}
-    .msg.ai .bubble{background:var(--surface);color:var(--text);border:1px solid var(--border);border-bottom-left-radius:5px;}
-    .msg.ai .bubble mark{background:var(--bad-soft);color:var(--bad);padding:1px 5px;border-radius:5px;font-weight:650;}
-    .flag{
-      margin:2px 0 0 6px;display:inline-flex;align-items:center;gap:7px;
-      padding:8px 13px;border-radius:11px;background:var(--bad-soft);color:var(--bad);
-      font-size:.86rem;font-weight:650;
-    }
-    .flag svg{flex:0 0 auto;}
-
-    @media(min-width:860px){
-      .hero{grid-template-columns:1.05fr .95fr;padding-block:80px 56px;}
-    }
-
-    /* STATS BAND */
-    .stats{
-      display:grid;grid-template-columns:1fr;gap:2px;background:var(--border);
-      border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:8px;
-    }
-    .stats div{background:var(--background);padding:22px 24px;}
-    .stats .n{font-size:1.9rem;font-weight:780;letter-spacing:-.03em;color:var(--accent);line-height:1.1;}
-    .stats .l{color:var(--muted);font-size:.98rem;margin-top:4px;}
-    @media(min-width:620px){.stats{grid-template-columns:1fr 1fr 1fr;}}
-
-    /* SECTIONS */
-    section.block{padding-block:44px;border-top:1px solid var(--border);}
-    section.block h2{font-size:clamp(1.5rem,3.6vw,2rem);line-height:1.2;}
-    section.block p{margin:16px 0 0;color:var(--text);max-width:62ch;}
-    section.block p.lead{color:var(--muted);}
-
-    /* KIT CARDS */
-    .cards{display:grid;grid-template-columns:1fr;gap:16px;margin-top:28px;}
-    @media(min-width:720px){.cards{grid-template-columns:repeat(3,1fr);}}
-    .card{
-      background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 20px;
-    }
-    .card .ico{
-      width:44px;height:44px;border-radius:11px;background:var(--accent-soft);color:var(--accent);
-      display:flex;align-items:center;justify-content:center;margin-bottom:14px;
-    }
-    .card h3{font-size:1.08rem;line-height:1.3;}
-    .card p{margin:9px 0 0;color:var(--muted);font-size:.96rem;line-height:1.55;}
-
-    /* MECANISMO row */
-    .why-visual{display:grid;gap:14px;margin-top:26px;}
-    @media(min-width:620px){.why-visual{grid-template-columns:1fr 1fr;}}
-    .why-visual .box{border:1px solid var(--border);border-radius:14px;padding:18px 20px;background:var(--surface);}
-    .why-visual .tag{display:inline-flex;align-items:center;gap:8px;font-size:.8rem;font-weight:680;margin-bottom:10px;}
-    .why-visual .bad .tag{color:var(--bad);}
-    .why-visual .good .tag{color:var(--accent);}
-    .why-visual .box p{margin:0;color:var(--muted);font-size:.96rem;line-height:1.55;}
-    .why-visual .box p b{color:var(--text);font-weight:650;}
-
-    /* LISTA / FORM */
-    #lista{
-      margin-block:16px 0;padding:34px 26px;border:1px solid var(--border);border-radius:18px;
-      background:var(--surface);scroll-margin-top:24px;border-top:1px solid var(--border);
-    }
-    #lista h2{font-size:clamp(1.5rem,3.6vw,2rem);}
-    #lista p{margin:16px 0 0;color:var(--muted);max-width:56ch;}
-    .price{display:inline-flex;align-items:baseline;gap:8px;margin-top:18px;}
-    .price .big{font-size:2.1rem;font-weight:780;color:var(--accent);letter-spacing:-.03em;}
-    .price .small{color:var(--muted);font-size:.98rem;}
-    form{display:grid;gap:12px;margin-top:22px;}
-    input{
-      width:100%;min-width:0;min-height:54px;padding:14px 16px;border:1px solid var(--input-border);
-      border-radius:10px;background:var(--input-background);color:var(--text);font:inherit;line-height:1.4;
-    }
-    input::placeholder{color:var(--muted);opacity:1;}
-    small.form-note{display:block;color:var(--muted);font-size:.8rem;line-height:1.6;margin-top:12px;}
-    @media(min-width:560px){form{grid-template-columns:minmax(0,1fr) auto;}}
-
-    /* FAQ */
-    .faq{padding-block:44px;border-top:1px solid var(--border);}
-    .faq h2{font-size:clamp(1.5rem,3.6vw,2rem);margin-bottom:18px;}
-    details{border-bottom:1px solid var(--border);}
-    summary{padding-block:18px;color:var(--text);font-weight:650;line-height:1.5;cursor:pointer;}
-    summary::marker{color:var(--accent);}
-    summary:hover{color:var(--accent);}
-    details p{margin:0 0 20px;color:var(--muted);}
-
-    footer{padding-block:26px 46px;border-top:1px solid var(--border);}
-    footer p{margin:0;color:var(--muted);font-size:.8rem;line-height:1.6;}
-
-    @media(prefers-color-scheme:dark){
-      :root{
-        color-scheme:dark;
-        --background:#111621;--surface:#1a2231;--surface2:#161d29;--input-background:#111621;
-        --text:#eef2f9;--muted:#b3bccc;--accent:#9db9ff;--accent-soft:#20304f;--accent-hover:#bed0ff;
-        --bad:#f08a7d;--bad-soft:#3a2320;--button-text:#0f1a30;--border:#2f3a4d;--input-border:#7f8ba3;
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --scheme: dark;
+        --bg: #171c19; --surface: #202723; --ink: #f1f1e8; --muted: #afb9af;
+        --line: #3d4a40; --soft: #28302a; --accent: #b8d4b2; --accent-hover: #d1e5cc;
+        --accent-soft: #2d3c30; --on-accent: #182c20; --error: #ffb2a3; --error-bg: #402b27;
+        --error-line: #975d50; --shadow: #00000026; --form-bg: #171f19; --selection: #415b43;
       }
-      .chat{box-shadow:0 22px 48px -28px rgba(0,0,0,.7);}
+    }
+    * { box-sizing: border-box; }
+    .hero > *, .split > *, .kit > *, .signup-panel > *, .compare > * { min-width: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 32px; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+    ::selection { background: var(--selection); color: var(--ink); }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    button, a, summary, input { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 5px; }
+    svg { display: block; flex: none; }
+    p, h1, h2, h3 { margin: 0; }
+    h1, h2, h3, .display, .nav, .button { font-family: "Bricolage Grotesque", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    h1, h2, h3 { font-weight: 600; }
+    .wrap { width: min(1200px, calc(100% - 40px)); margin-inline: auto; }
+    .site-header { min-height: 86px; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid var(--line); }
+    .brand { width: 38px; height: 42px; color: var(--accent); }
+    .nav { display: flex; align-items: center; gap: 26px; font-size: 13px; font-weight: 500; }
+    .nav a { padding-block: 12px; transition: color .18s; }
+    .nav a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 5px; }
+    .hero { padding-block: 46px 42px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; color: var(--accent); font-size: 11px; font-weight: 650; letter-spacing: .065em; margin-bottom: 22px; }
+    .eyebrow::before { content: ""; width: 6px; height: 6px; background: currentColor; border-radius: 50%; }
+    h1 { font-size: clamp(38px, 8.6vw, 66px); line-height: 1.055; letter-spacing: -.052em; text-wrap: balance; }
+    h1 span { color: var(--accent); }
+    .hero-copy > p { margin-top: 24px; max-width: 540px; color: var(--muted); font-size: 16px; line-height: 1.7; }
+    .hero-action { margin-top: 29px; }
+    .button { display: inline-flex; justify-content: center; align-items: center; gap: 23px; min-height: 54px; padding: 15px 23px; border: 1px solid transparent; border-radius: 5px; background: var(--accent); color: var(--on-accent); font-weight: 600; font-size: 15px; line-height: 1.4; cursor: pointer; transition: background .2s, transform .2s; }
+    .button svg { width: 18px; height: 18px; transition: transform .2s; }
+    .button:hover { background: var(--accent-hover); transform: translateY(-2px); }
+    .button:hover svg { transform: translateX(3px); }
+    .hero-note { margin-top: 10px; color: var(--muted); font-size: 12px; }
+    .chat-scene { position: relative; margin-top: 42px; padding: 17px 0 22px; }
+    .chat-scene::before { content: ""; position: absolute; inset: 0 12px 0 20px; border: 1px solid var(--line); border-radius: 12px; background: var(--soft); transform: rotate(3deg); }
+    .chat { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 12px 32px var(--shadow); overflow: hidden; }
+    .chat-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+    .chat-identity { display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 600; }
+    .ai-glyph { width: 22px; height: 22px; }
+    .chat-tools { display: flex; gap: 6px; color: var(--muted); }
+    .chat-tools i { width: 3px; height: 3px; border-radius: 50%; background: currentColor; }
+    .chat-body { padding: 25px 20px 22px; }
+    .user-message { margin-left: 35px; }
+    .chat-label { color: var(--muted); font-size: 11px; font-weight: 600; margin-bottom: 8px; }
+    .user-message .chat-label { text-align: right; }
+    .bubble { background: var(--soft); border: 1px solid var(--line); padding: 14px 16px; border-radius: 12px 12px 3px 12px; font-size: 14px; line-height: 1.55; }
+    .ai-message { margin-top: 29px; }
+    .ai-heading { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .ai-heading .chat-label { margin: 0; color: var(--ink); }
+    .ai-message > p { font-size: 16px; line-height: 1.95; }
+    mark { padding: 2px 3px 3px; color: var(--error); background: var(--error-bg); box-decoration-break: clone; -webkit-box-decoration-break: clone; border-bottom: 1px solid var(--error); }
+    .annotation { position: relative; margin-top: 25px; padding: 14px; display: flex; align-items: flex-start; gap: 10px; color: var(--error); background: var(--error-bg); border: 1px solid var(--error-line); border-radius: 5px; font-size: 13px; font-weight: 600; line-height: 1.55; }
+    .annotation::before { content: ""; position: absolute; height: 21px; border-left: 1px dashed var(--error); left: 23px; top: -22px; }
+    .annotation svg { width: 18px; height: 18px; margin-top: 1px; }
+    .chat-footer { display: flex; gap: 12px; margin-top: 19px; color: var(--muted); }
+    .chat-footer svg { width: 15px; height: 15px; }
+    .stats { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .stat { padding: 24px 0; }
+    .stat:nth-child(2) { padding-left: 22px; border-left: 1px solid var(--line); }
+    .stat:last-child { grid-column: 1 / -1; display: flex; align-items: center; gap: 21px; border-top: 1px solid var(--line); padding-block: 20px; }
+    .stat dt { font-size: 43px; font-weight: 500; line-height: 1.05; letter-spacing: -.06em; }
+    .stat dd { margin: 9px 0 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .stat:last-child dd { margin: 0; max-width: 180px; }
+    .section { padding-block: 64px; border-bottom: 1px solid var(--line); }
+    h2 { font-size: clamp(31px, 4vw, 44px); line-height: 1.13; letter-spacing: -.04em; text-wrap: balance; }
+    .section-text { margin-top: 22px; color: var(--muted); }
+    .section-text p + p { margin-top: 16px; }
+    .problem { padding-block: 58px; }
+    .problem h2 { font-size: 29px; }
+    .problem .section-text { font-size: 16px; line-height: 1.85; }
+    .section-lead { margin-top: 17px; max-width: 500px; color: var(--muted); }
+    .kit { display: grid; margin-top: 32px; gap: 0; }
+    .kit-item { padding: 28px 0; border-top: 1px solid var(--line); }
+    .kit-item:first-child { padding: 27px; background: var(--accent-soft); border: 1px solid var(--line); border-radius: 6px; margin-bottom: 6px; }
+    .kit-icon { width: 35px; height: 35px; color: var(--accent); margin-bottom: 29px; }
+    h3 { font-size: 23px; line-height: 1.2; letter-spacing: -.025em; }
+    .kit-item p { margin-top: 13px; color: var(--muted); font-size: 14px; line-height: 1.75; }
+    .compare { margin-top: 35px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+    .compare-state { padding: 25px; }
+    .compare-state + .compare-state { border-top: 1px solid var(--line); background: var(--accent-soft); }
+    .compare-title { display: flex; align-items: center; gap: 11px; }
+    .compare-title svg { width: 20px; height: 20px; color: var(--muted); }
+    .compare-state:last-child .compare-title svg { color: var(--accent); }
+    .compare-title h3 { font-size: 20px; }
+    .compare-state p { margin-top: 13px; color: var(--muted); font-size: 14px; }
+    .waitlist { padding-block: 64px; }
+    .signup-panel { padding: 28px 23px; background: var(--accent-soft); border: 1px solid var(--line); border-radius: 7px; }
+    .signup-panel h2 { max-width: 410px; }
+    .signup-intro { margin-top: 19px; color: var(--muted); max-width: 420px; font-size: 15px; }
+    .price { display: flex; align-items: center; gap: 17px; margin-top: 28px; padding-top: 23px; border-top: 1px solid var(--line); }
+    .price strong { font-size: 34px; line-height: 1.05; font-weight: 500; letter-spacing: -.05em; white-space: nowrap; }
+    .price span { max-width: 135px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    form { margin-top: 32px; }
+    label { display: block; margin-bottom: 9px; font-size: 13px; font-weight: 600; }
+    input { width: 100%; min-width: 0; height: 55px; padding: 13px 15px; border: 1px solid var(--muted); border-radius: 5px; color: var(--ink); background: var(--form-bg); font-size: 16px; }
+    form .button { width: 100%; margin-top: 10px; }
+    .privacy { font-size: 11px; line-height: 1.75; color: var(--muted); margin-top: 15px; }
+    .faq { padding-block: 0 65px; }
+    .questions { margin-top: 25px; }
+    details { border-bottom: 1px solid var(--line); }
+    details:first-child { border-top: 1px solid var(--line); }
+    summary { padding: 21px 0; display: flex; gap: 16px; align-items: center; justify-content: space-between; list-style: none; cursor: pointer; font-size: 15px; font-weight: 600; }
+    summary::-webkit-details-marker { display: none; }
+    summary svg { width: 19px; height: 19px; color: var(--muted); transition: transform .2s; }
+    summary:hover { color: var(--accent); }
+    details[open] summary svg { transform: rotate(45deg); }
+    details p { padding: 0 30px 22px 0; max-width: 670px; color: var(--muted); font-size: 14px; }
+    .footer { display: flex; align-items: flex-start; gap: 25px; padding-block: 27px 38px; border-top: 1px solid var(--line); }
+    .footer .brand { width: 26px; height: 30px; }
+    .footer p { max-width: 890px; color: var(--muted); font-size: 10px; line-height: 1.8; }
+    @media (min-width: 680px) {
+      .wrap { width: min(1200px, calc(100% - 80px)); }
+      .hero { padding-block: 55px; }
+      .chat-scene { max-width: 510px; margin-inline: auto; }
+      .stats { grid-template-columns: 1.12fr .83fr 1fr; }
+      .stat { padding: 28px 0; }
+      .stat:nth-child(2), .stat:last-child { padding-left: 35px; border-left: 1px solid var(--line); }
+      .stat:last-child { grid-column: auto; display: block; border-top: 0; padding-block: 28px; }
+      .stat:last-child dd { margin-top: 9px; max-width: 230px; }
+      .stat dt { font-size: 52px; }
+      .stat dd { font-size: 13px; }
+      .kit { grid-template-columns: 1fr 1fr; column-gap: 30px; }
+      .kit-item:first-child { grid-column: 1 / -1; display: grid; grid-template-columns: 55px 1fr 1.1fr; gap: 20px; align-items: center; margin-bottom: 18px; }
+      .kit-item:first-child .kit-icon, .kit-item:first-child p { margin: 0; }
+      .compare { display: grid; grid-template-columns: 1fr 1fr; }
+      .compare-state + .compare-state { border-top: 0; border-left: 1px solid var(--line); }
+      .signup-panel { padding: 42px; }
+      .form-controls { display: flex; gap: 9px; }
+      form .button { width: auto; margin-top: 0; white-space: nowrap; gap: 13px; }
+    }
+    @media (min-width: 1020px) {
+      .site-header { min-height: 92px; }
+      .nav { font-size: 14px; gap: 33px; }
+      .hero { display: grid; grid-template-columns: 1.18fr 1fr; gap: 62px; align-items: center; padding-block: 65px 67px; }
+      .eyebrow { font-size: 12px; margin-bottom: 25px; }
+      h1 { font-size: clamp(55px, 4.7vw, 66px); }
+      .hero-copy > p { font-size: 16px; margin-top: 24px; }
+      .chat-scene { width: 100%; margin: 0; padding: 22px 0; }
+      .chat-header { padding: 20px 25px; }
+      .chat-body { padding: 32px 28px 26px; }
+      .user-message { margin-left: 57px; }
+      .bubble { padding: 16px 18px; font-size: 15px; }
+      .ai-message { margin-top: 34px; }
+      .ai-message > p { font-size: 18px; }
+      .annotation { margin-top: 30px; padding: 15px; font-size: 14px; }
+      .stat { padding-block: 32px; }
+      .stat:nth-child(2), .stat:last-child { padding-left: 48px; }
+      .stat:last-child { padding-block: 32px; }
+      .stat dt { font-size: 58px; }
+      .section { padding-block: 90px; }
+      .split { display: grid; grid-template-columns: .8fr 1.5fr; gap: 90px; }
+      .section-text { margin-top: 0; }
+      .problem { padding-block: 70px; }
+      .kit { grid-template-columns: 1.1fr 1fr 1fr; gap: 33px; margin-top: 39px; }
+      .kit-item { border: 0; padding: 29px 0; }
+      .kit-item:first-child { display: block; grid-column: auto; padding: 29px; margin: 0; }
+      .kit-item:first-child .kit-icon { margin-bottom: 29px; }
+      .kit-item:first-child p { margin-top: 13px; }
+      .kit-item:last-child { border-left: 1px solid var(--line); padding-left: 33px; }
+      .kit-item h3 { max-width: 240px; }
+      .mechanism .section-text { max-width: 670px; }
+      .compare { margin-top: 32px; }
+      .compare-state { padding: 28px; }
+      .waitlist { padding-block: 88px; }
+      .signup-panel { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 75px; padding: 53px; }
+      .signup-panel h2 { font-size: 45px; }
+      .signup-panel form { margin: 0; }
+      .form-controls { display: block; }
+      form .button { width: 100%; margin-top: 11px; }
+      .price { width: fit-content; gap: 24px; margin-top: 25px; }
+      .price strong { font-size: 39px; }
+      .price span { max-width: 145px; font-size: 12px; }
+      .privacy { font-size: 12px; }
+      .faq { padding-bottom: 90px; }
+      .questions { margin-top: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header class="hero">
-      <div>
-        <span class="pill"><span class="dot"></span>Auxiliar Administrativo del Estado</span>
-        <h1>Estudia Auxiliar Administrativo del Estado con una IA que no se inventa las leyes</h1>
-        <p class="sub">Un sistema para estudiar con ChatGPT o Claude sin que te cuele artículos falsos del EBEP o de la Constitución. Resúmenes, esquemas y test hechos a partir de tu temario oficial.</p>
-        <a class="cta" href="#lista">Avísame cuando salga</a>
-        <p class="note">Lista de espera. Sin pago todavía.</p>
+  <header class="site-header wrap">
+    <svg class="brand" viewBox="0 0 36 42" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h16l8 8v28H6z"/><path d="M21 3v10h9M11 18h9M11 23h6M15 30l4 4 8-10"/></svg>
+    <nav class="nav" aria-label="Navegación principal"><a href="#incluye">Qué te llevas</a><a href="#preguntas">Preguntas rápidas</a></nav>
+  </header>
+  <main>
+    <section class="hero wrap" aria-labelledby="titulo">
+      <div class="hero-copy">
+        <div class="eyebrow">Auxiliar Administrativo del Estado</div>
+        <h1 id="titulo">Estudia Auxiliar Administrativo del Estado con una IA que <span>no se inventa las leyes</span></h1>
+        <p>Un sistema para estudiar con ChatGPT o Claude sin que te cuele artículos falsos del EBEP o de la Constitución. Resúmenes, esquemas y test hechos a partir de tu temario oficial.</p>
+        <div class="hero-action"><a class="button" href="#lista">Avísame cuando salga<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a><p class="hero-note">Lista de espera. Sin pago todavía.</p></div>
       </div>
-      <div class="chat" role="img" aria-label="Ejemplo de conversación donde la IA se inventa un artículo del EBEP que no existe">
-        <div class="bar"><i></i><i></i><i></i></div>
-        <div class="msg user"><div class="bubble">Resúmeme el tema 5 y cítame el artículo</div></div>
-        <div class="msg ai"><div class="bubble">Claro. Según el <mark>artículo 47 bis del EBEP</mark>, el funcionario dispone de...</div></div>
-        <div class="flag">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="16.5" x2="12" y2="16.5"/></svg>
-          Ese artículo no existe. Te lo acaba de inventar.
-        </div>
-      </div>
-    </header>
-
-    <div class="stats">
-      <div><div class="n">+30.000</div><div class="l">aspirantes por convocatoria</div></div>
-      <div><div class="n">~1.700</div><div class="l">plazas</div></div>
-      <div><div class="n">1</div><div class="l">examen para no fallar por algo inventado</div></div>
-    </div>
-
-    <section class="block" aria-labelledby="problema">
-      <h2 id="problema">Te suena esto</h2>
-      <p>Le pides a ChatGPT que te resuma el tema 5 y te suelta un artículo de la Ley 39/2015 que no existe. Lo memorizas, llega el examen y fallas por algo que la IA se inventó. Y a partir de ahí ya no te fías de nada de lo que te da, así que vuelves a contrastar tema por tema y tardas más que si estudiaras a mano. Con 30.000 personas presentándose para 1.700 plazas, cada semana de repaso que pierdes cuenta.</p>
-    </section>
-
-    <section class="block" aria-labelledby="kit">
-      <h2 id="kit">Qué te llevas</h2>
-      <p class="lead">Es un kit descargable que abres y usas la misma tarde. Dentro hay tres cosas:</p>
-      <div class="cards">
-        <div class="card">
-          <div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
-          <h3>Prompts que la atan a tu texto</h3>
-          <p>Obligan a la IA a trabajar solo con lo que le pegas: tu tema, el BOE, el artículo. Si algo no está ahí, no se lo inventa.</p>
-        </div>
-        <div class="card">
-          <div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg></div>
-          <h3>El paso a paso de estudio</h3>
-          <p>Convierte cada tema en resumen, esquema y 20 preguntas tipo test. Sin quedarte mirando la pantalla en blanco.</p>
-        </div>
-        <div class="card">
-          <div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/><path d="M8 14l2 2 4-4"/></svg></div>
-          <h3>Planner de repasos</h3>
-          <p>En Notion o Google Sheets, con repetición espaciada, montado para el temario de esta oposición.</p>
+      <div class="chat-scene">
+        <div class="chat" role="group" aria-label="Conversación de ejemplo">
+          <div class="chat-header"><div class="chat-identity"><svg class="ai-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M5.6 18.4 18.4 5.6"/></svg>IA</div><span class="chat-tools" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <div class="chat-body">
+            <div class="user-message"><div class="chat-label">Usuario</div><p class="bubble">Resúmeme el tema 5 y cítame el artículo</p></div>
+            <div class="ai-message"><div class="ai-heading"><svg class="ai-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M5.6 18.4 18.4 5.6"/></svg><span class="chat-label">IA</span></div><p>Claro. Según el <mark>artículo 47 bis del EBEP</mark>, el funcionario dispone de...</p></div>
+            <div class="annotation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6m0-6-6 6"/></svg><p>Ese artículo no existe. Te lo acaba de inventar.</p></div>
+            <div class="chat-footer" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 4H6a2 2 0 0 0-2 2v9"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 8a8 8 0 1 0 0 8M20 3v5h-5"/></svg></div>
+          </div>
         </div>
       </div>
     </section>
-
-    <section class="block" aria-labelledby="metodo">
-      <h2 id="metodo">Por qué esta IA no te miente</h2>
-      <p class="lead">Estudiar con IA sale mal cuando la dejas tirar de memoria. Estos prompts la atan a tu material oficial: resume, pregunta y corrige sobre lo que tú le das, y cuando algo no aparece en tu texto te avisa en vez de rellenarlo. Estudias con IA sin jugártela a que se invente media ley.</p>
-      <div class="why-visual">
-        <div class="box bad">
-          <span class="tag"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>IA suelta</span>
-          <p>Tira de su memoria. Rellena huecos con artículos que suenan bien y <b>no existen</b>.</p>
-        </div>
-        <div class="box good">
-          <span class="tag"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg>IA atada a tu texto</span>
-          <p>Solo usa lo que le pegas. Si algo no está en tu temario, <b>te lo dice</b> en vez de inventarlo.</p>
-        </div>
+    <dl class="stats wrap"><div class="stat"><dt class="display">+30.000</dt><dd>aspirantes por convocatoria</dd></div><div class="stat"><dt class="display">~1.700</dt><dd>plazas</dd></div><div class="stat"><dt class="display">1</dt><dd>examen para no fallar por algo inventado</dd></div></dl>
+    <section class="section problem split wrap" aria-labelledby="problema"><h2 id="problema">Te suena esto</h2><div class="section-text"><p>Le pides a ChatGPT que te resuma el tema 5 y te suelta un artículo de la Ley 39/2015 que no existe. Lo memorizas, llega el examen y fallas por algo que la IA se inventó. Y a partir de ahí ya no te fías de nada de lo que te da, así que vuelves a contrastar tema por tema y tardas más que si estudiaras a mano. Con 30.000 personas presentándose para 1.700 plazas, cada semana de repaso que pierdes cuenta.</p></div></section>
+    <section class="section wrap" id="incluye" aria-labelledby="incluye-titulo">
+      <h2 id="incluye-titulo">Qué te llevas</h2><p class="section-lead">Es un kit descargable que abres y usas la misma tarde. Dentro hay tres cosas:</p>
+      <div class="kit">
+        <article class="kit-item"><svg class="kit-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h14l6 6v22H9zM22 4v8h7M14 17h9M14 22h5"/><path d="M5 10H3v22h2m23-9-7 7-3-3"/></svg><h3>Prompts que la atan a tu texto</h3><p>Obligan a la IA a trabajar solo con lo que le pegas: tu tema, el BOE, el artículo. Si algo no está ahí, no se lo inventa.</p></article>
+        <article class="kit-item"><svg class="kit-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="10" height="9" rx="2"/><rect x="22" y="23" width="10" height="9" rx="2"/><path d="M19 8h8v10m-4-4 4 4 4-4M17 28H9V18m-4 4 4-4 4 4"/></svg><h3>El paso a paso de estudio</h3><p>Convierte cada tema en resumen, esquema y 20 preguntas tipo test. Sin quedarte mirando la pantalla en blanco.</p></article>
+        <article class="kit-item"><svg class="kit-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="7" width="28" height="25" rx="3"/><path d="M11 4v6m14-6v6M4 15h28m-21 6h2m6 0h2m-10 6h2m6 0h2m6-6h1"/></svg><h3>Planner de repasos</h3><p>En Notion o Google Sheets, con repetición espaciada, montado para el temario de esta oposición.</p></article>
       </div>
     </section>
-
-    <section id="lista" tabindex="-1" aria-labelledby="lanzamiento">
-      <h2 id="lanzamiento">Todavía no está a la venta</h2>
-      <p>Lo estoy terminando y quiero sacarlo bien. Déjame tu correo y te aviso el día que salga. Quien esté en la lista lo tendrá antes que nadie.</p>
-      <div class="price"><span class="big">15 euros</span><span class="small">precio de lanzamiento para la lista</span></div>
-      <form action="https://formspree.io/f/mppzeynn" method="POST">
-        <input type="email" name="email" required aria-label="Correo electrónico" placeholder="tu@correo.com" autocomplete="email" inputmode="email">
-        <button class="cta" type="submit">Avísame cuando salga</button>
-      </form>
-      <small class="form-note">Sin spam. Solo un correo el día que salga. Al dejar tu correo aceptas recibir ese aviso. No lo comparto con nadie y puedes pedir que lo borre cuando quieras.</small>
-    </section>
-
-    <section class="faq" aria-labelledby="preguntas">
-      <h2 id="preguntas">Preguntas rápidas</h2>
-      <details>
-        <summary>¿Sirve para mi convocatoria?</summary>
-        <p>Está hecho para Auxiliar Administrativo del Estado (C2). El temario oficial lo pones tú, así que funciona con la versión vigente del temario.</p>
-      </details>
-      <details>
-        <summary>¿Necesito pagar ChatGPT?</summary>
-        <p>No. Funciona con la versión gratuita, y también con Claude o Gemini.</p>
-      </details>
-      <details>
-        <summary>¿Esto es un temario?</summary>
-        <p>No. El temario lo tienes tú o tu academia. Esto es el método para estudiarlo con IA y el planner de repasos.</p>
-      </details>
-      <details>
-        <summary>¿Cuándo sale?</summary>
-        <p>Estoy con ello. Si dejas el correo, eres de los primeros en enterarte.</p>
-      </details>
-    </section>
-  </div>
-
-  <footer>
-    <div class="wrap">
-      <p>Producto digital de descarga inmediata. Al comprarlo aceptas que la descarga empieza en el momento y renuncias al derecho de desistimiento (art. 103.m TRLGDCU). Ahora mismo solo se recoge tu correo para avisarte del lanzamiento; no se cobra nada.</p>
-    </div>
-  </footer>
+    <section class="section mechanism split wrap" aria-labelledby="mecanismo"><h2 id="mecanismo">Por qué esta IA no te miente</h2><div><div class="section-text"><p>Estudiar con IA sale mal cuando la dejas tirar de memoria. Estos prompts la atan a tu material oficial: resume, pregunta y corrige sobre lo que tú le das, y cuando algo no aparece en tu texto te avisa en vez de rellenarlo. Estudias con IA sin jugártela a que se invente media ley.</p></div><div class="compare"><div class="compare-state"><div class="compare-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg><h3>IA suelta</h3></div><p>Tira de su memoria. Rellena huecos con artículos que suenan bien y no existen.</p></div><div class="compare-state"><div class="compare-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12 5 5L20 6"/></svg><h3>IA atada a tu texto</h3></div><p>Solo usa lo que le pegas. Si algo no está en tu temario, te lo dice en vez de inventarlo.</p></div></div></div></section>
+    <section class="waitlist wrap" id="lista" aria-labelledby="lista-titulo"><div class="signup-panel"><div><h2 id="lista-titulo">Todavía no está a la venta</h2><p class="signup-intro">Lo estoy terminando y quiero sacarlo bien. Déjame tu correo y te aviso el día que salga. Quien esté en la lista lo tendrá antes que nadie.</p><div class="price"><strong class="display">15 euros</strong><span>precio de lanzamiento para la lista</span></div></div><form action="https://formspree.io/f/mppzeynn" method="POST"><label for="email">Correo electrónico</label><div class="form-controls"><input type="email" name="email" id="email" required autocomplete="email" aria-describedby="privacidad"><button class="button" type="submit">Avísame cuando salga<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></button></div><p class="privacy" id="privacidad">Sin spam. Solo un correo el día que salga. Al dejar tu correo aceptas recibir ese aviso. No lo comparto con nadie y puedes pedir que lo borre cuando quieras.</p></form></div></section>
+    <section class="faq split wrap" id="preguntas" aria-labelledby="faq-titulo"><h2 id="faq-titulo">Preguntas rápidas</h2><div class="questions">
+      <details><summary>¿Sirve para mi convocatoria?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></summary><p>Está hecho para Auxiliar Administrativo del Estado (C2). El temario oficial lo pones tú, así que funciona con la versión vigente del temario.</p></details>
+      <details><summary>¿Necesito pagar ChatGPT?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></summary><p>No. Funciona con la versión gratuita, y también con Claude o Gemini.</p></details>
+      <details><summary>¿Esto es un temario?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></summary><p>No. El temario lo tienes tú o tu academia. Esto es el método para estudiarlo con IA y el planner de repasos.</p></details>
+      <details><summary>¿Cuándo sale?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></summary><p>Estoy con ello. Si dejas el correo, eres de los primeros en enterarte.</p></details>
+    </div></section>
+  </main>
+  <footer class="footer wrap"><svg class="brand" viewBox="0 0 36 42" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h16l8 8v28H6zM21 3v10h9M11 18h9M11 23h6M15 30l4 4 8-10"/></svg><p>Producto digital de descarga inmediata. Al comprarlo aceptas que la descarga empieza en el momento y renuncias al derecho de desistimiento (art. 103.m TRLGDCU). Ahora mismo solo se recoge tu correo para avisarte del lanzamiento; no se cobra nada.</p></footer>
 </body>
 </html>
