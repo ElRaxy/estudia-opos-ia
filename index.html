@@ -6,214 +6,237 @@
   <title>Estudia Auxiliar Administrativo del Estado con una IA que no se inventa las leyes</title>
   <meta name="description" content="Un sistema para estudiar con ChatGPT o Claude sin que te cuele artículos falsos del EBEP o de la Constitución. Resúmenes, esquemas y test hechos a partir de tu temario oficial.">
   <style>
-    :root {
+    :root{
       color-scheme: light;
-      --background: #fbfbfa;
-      --surface: #f0f4fc;
-      --input-background: #ffffff;
-      --text: #202938;
-      --muted: #535d70;
-      --accent: #2b59c3;
-      --accent-hover: #20469e;
-      --button-text: #ffffff;
-      --border: #dce1e9;
-      --input-border: #727c8b;
+      --background:#fbfbfa;
+      --surface:#f1f4fb;
+      --surface2:#ffffff;
+      --input-background:#ffffff;
+      --text:#1c2434;
+      --muted:#525d72;
+      --accent:#2b59c3;
+      --accent-soft:#e6ecfb;
+      --accent-hover:#20469e;
+      --bad:#c23b3b;
+      --bad-soft:#fbe6e6;
+      --button-text:#ffffff;
+      --border:#dce1ea;
+      --input-border:#6f7a8b;
+      --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,sans-serif;
+    }
+    *{box-sizing:border-box;}
+    html{font-size:100%;}
+    body{
+      margin:0;background:var(--background);color:var(--text);
+      font-family:var(--font);font-size:1rem;line-height:1.7;overflow-wrap:break-word;
+    }
+    .wrap{width:min(1040px,calc(100% - 40px));margin-inline:auto;}
+    a,button{-webkit-tap-highlight-color:transparent;}
+    a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible,#lista:focus-visible{
+      outline:3px solid var(--accent);outline-offset:4px;
+    }
+    h1,h2,h3{margin:0;font-weight:760;text-wrap:balance;letter-spacing:-.02em;}
+
+    /* HERO */
+    .hero{padding-block:56px 40px;display:grid;gap:44px;align-items:center;}
+    .hero .pill{
+      display:inline-flex;align-items:center;gap:8px;align-self:start;
+      padding:7px 14px;border-radius:100px;background:var(--accent-soft);
+      color:var(--accent);font-size:.82rem;font-weight:650;letter-spacing:.01em;
+    }
+    .hero .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);}
+    h1{font-size:clamp(2.1rem,5.2vw,3.4rem);line-height:1.08;margin-top:20px;}
+    .hero p.sub{margin:22px 0 0;color:var(--muted);font-size:1.12rem;line-height:1.6;max-width:34ch;}
+    .cta{
+      display:inline-flex;justify-content:center;align-items:center;min-height:54px;max-width:100%;
+      padding:14px 26px;border:1px solid var(--accent);border-radius:10px;background:var(--accent);
+      color:var(--button-text);font:inherit;font-weight:680;line-height:1.4;text-align:center;
+      text-decoration:none;cursor:pointer;
+    }
+    .cta:hover{border-color:var(--accent-hover);background:var(--accent-hover);}
+    .hero .cta{margin-top:28px;}
+    .hero .note{margin:14px 0 0;font-size:.82rem;color:var(--muted);}
+
+    /* CHAT MOCKUP */
+    .chat{
+      background:var(--surface2);border:1px solid var(--border);border-radius:18px;
+      box-shadow:0 22px 48px -30px rgba(20,30,60,.5);padding:18px 18px 22px;
+    }
+    .chat .bar{display:flex;gap:7px;padding:2px 2px 16px;border-bottom:1px solid var(--border);margin-bottom:16px;}
+    .chat .bar i{width:11px;height:11px;border-radius:50%;background:var(--border);display:block;}
+    .msg{display:flex;margin-bottom:14px;}
+    .msg .bubble{padding:13px 16px;border-radius:14px;font-size:1rem;line-height:1.5;max-width:88%;}
+    .msg.user{justify-content:flex-end;}
+    .msg.user .bubble{background:var(--accent);color:#fff;border-bottom-right-radius:5px;}
+    .msg.ai .bubble{background:var(--surface);color:var(--text);border:1px solid var(--border);border-bottom-left-radius:5px;}
+    .msg.ai .bubble mark{background:var(--bad-soft);color:var(--bad);padding:1px 5px;border-radius:5px;font-weight:650;}
+    .flag{
+      margin:2px 0 0 6px;display:inline-flex;align-items:center;gap:7px;
+      padding:8px 13px;border-radius:11px;background:var(--bad-soft);color:var(--bad);
+      font-size:.86rem;font-weight:650;
+    }
+    .flag svg{flex:0 0 auto;}
+
+    @media(min-width:860px){
+      .hero{grid-template-columns:1.05fr .95fr;padding-block:80px 56px;}
     }
 
-    * { box-sizing: border-box; }
-    html { font-size: 100%; }
-    body {
-      margin: 0;
-      background: var(--background);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 1rem;
-      line-height: 1.7;
-      overflow-wrap: break-word;
+    /* STATS BAND */
+    .stats{
+      display:grid;grid-template-columns:1fr;gap:2px;background:var(--border);
+      border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:8px;
     }
-    main, footer {
-      width: min(680px, calc(100% - 48px));
-      margin-inline: auto;
-    }
-    .hero { padding-block: 64px 56px; }
-    .hero::before {
-      content: "";
-      display: block;
-      width: 48px;
-      height: 4px;
-      margin-bottom: 28px;
-      background: var(--accent);
-    }
-    h1, h2 {
-      margin: 0;
-      font-weight: 750;
-      text-wrap: balance;
-    }
-    h1 {
-      max-width: 18ch;
-      font-size: clamp(2.25rem, 6vw, 3.625rem);
-      line-height: 1.1;
-      letter-spacing: -0.045em;
-    }
-    h2 {
-      font-size: clamp(1.5rem, 4vw, 1.875rem);
-      line-height: 1.25;
-      letter-spacing: -0.025em;
-    }
-    p { margin: 18px 0 0; }
-    .hero p {
-      margin-top: 24px;
-      color: var(--muted);
-      font-size: 1.125rem;
-      line-height: 1.65;
-    }
-    a, button { -webkit-tap-highlight-color: transparent; }
-    .cta {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 54px;
-      max-width: 100%;
-      padding: 14px 23px;
-      border: 1px solid var(--accent);
-      border-radius: 7px;
-      background: var(--accent);
-      color: var(--button-text);
-      font: inherit;
-      font-weight: 650;
-      line-height: 1.4;
-      text-align: center;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    .hero .cta { margin-top: 30px; }
-    .cta:hover {
-      border-color: var(--accent-hover);
-      background: var(--accent-hover);
-    }
-    a:focus-visible, button:focus-visible, input:focus-visible,
-    summary:focus-visible, #lista:focus-visible {
-      outline: 3px solid var(--accent);
-      outline-offset: 5px;
-    }
-    main > section {
-      padding-block: 40px;
-      border-top: 1px solid var(--border);
-    }
-    ul { margin: 24px 0 0; padding-left: 23px; }
-    li { padding-left: 7px; }
-    li + li { margin-top: 20px; }
-    li::marker { color: var(--accent); }
-    main > #lista {
-      margin-block: 16px 8px;
-      padding: 28px 24px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: var(--surface);
-      scroll-margin-top: 24px;
-    }
-    form {
-      display: grid;
-      gap: 12px;
-      margin-top: 26px;
-    }
-    input {
-      width: 100%;
-      min-width: 0;
-      min-height: 54px;
-      padding: 14px 16px;
-      border: 1px solid var(--input-border);
-      border-radius: 7px;
-      background: var(--input-background);
-      color: var(--text);
-      font: inherit;
-      line-height: 1.4;
-    }
-    input::placeholder { color: var(--muted); opacity: 1; }
-    small {
-      display: block;
-      color: var(--muted);
-      font-size: 0.8125rem;
-      line-height: 1.65;
-    }
-    .form-note { margin-top: 13px; }
-    main > .faq { border-top: 0; }
-    .faq h2 { margin-bottom: 24px; }
-    details { border-bottom: 1px solid var(--border); }
-    summary {
-      padding-block: 20px;
-      color: var(--text);
-      font-weight: 650;
-      line-height: 1.5;
-      cursor: pointer;
-    }
-    summary::marker { color: var(--accent); }
-    summary:hover { color: var(--accent); }
-    details p { margin: 0 0 22px; color: var(--muted); }
-    footer {
-      padding-block: 24px 44px;
-      border-top: 1px solid var(--border);
-    }
-    footer p { margin: 0; }
+    .stats div{background:var(--background);padding:22px 24px;}
+    .stats .n{font-size:1.9rem;font-weight:780;letter-spacing:-.03em;color:var(--accent);line-height:1.1;}
+    .stats .l{color:var(--muted);font-size:.98rem;margin-top:4px;}
+    @media(min-width:620px){.stats{grid-template-columns:1fr 1fr 1fr;}}
 
-    @media (min-width: 640px) {
-      .hero { padding-block: 96px 64px; }
-      main > section { padding-block: 48px; }
-      main > #lista { padding: 36px; }
-      form { grid-template-columns: minmax(0, 1fr) auto; }
-      footer { padding-bottom: 56px; }
-    }
+    /* SECTIONS */
+    section.block{padding-block:44px;border-top:1px solid var(--border);}
+    section.block h2{font-size:clamp(1.5rem,3.6vw,2rem);line-height:1.2;}
+    section.block p{margin:16px 0 0;color:var(--text);max-width:62ch;}
+    section.block p.lead{color:var(--muted);}
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        color-scheme: dark;
-        --background: #121720;
-        --surface: #1b2536;
-        --input-background: #121720;
-        --text: #f0f3f9;
-        --muted: #b7c1d2;
-        --accent: #9db9ff;
-        --accent-hover: #bed0ff;
-        --button-text: #13213a;
-        --border: #354154;
-        --input-border: #8191aa;
+    /* KIT CARDS */
+    .cards{display:grid;grid-template-columns:1fr;gap:16px;margin-top:28px;}
+    @media(min-width:720px){.cards{grid-template-columns:repeat(3,1fr);}}
+    .card{
+      background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 20px;
+    }
+    .card .ico{
+      width:44px;height:44px;border-radius:11px;background:var(--accent-soft);color:var(--accent);
+      display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+    }
+    .card h3{font-size:1.08rem;line-height:1.3;}
+    .card p{margin:9px 0 0;color:var(--muted);font-size:.96rem;line-height:1.55;}
+
+    /* MECANISMO row */
+    .why-visual{display:grid;gap:14px;margin-top:26px;}
+    @media(min-width:620px){.why-visual{grid-template-columns:1fr 1fr;}}
+    .why-visual .box{border:1px solid var(--border);border-radius:14px;padding:18px 20px;background:var(--surface);}
+    .why-visual .tag{display:inline-flex;align-items:center;gap:8px;font-size:.8rem;font-weight:680;margin-bottom:10px;}
+    .why-visual .bad .tag{color:var(--bad);}
+    .why-visual .good .tag{color:var(--accent);}
+    .why-visual .box p{margin:0;color:var(--muted);font-size:.96rem;line-height:1.55;}
+    .why-visual .box p b{color:var(--text);font-weight:650;}
+
+    /* LISTA / FORM */
+    #lista{
+      margin-block:16px 0;padding:34px 26px;border:1px solid var(--border);border-radius:18px;
+      background:var(--surface);scroll-margin-top:24px;border-top:1px solid var(--border);
+    }
+    #lista h2{font-size:clamp(1.5rem,3.6vw,2rem);}
+    #lista p{margin:16px 0 0;color:var(--muted);max-width:56ch;}
+    .price{display:inline-flex;align-items:baseline;gap:8px;margin-top:18px;}
+    .price .big{font-size:2.1rem;font-weight:780;color:var(--accent);letter-spacing:-.03em;}
+    .price .small{color:var(--muted);font-size:.98rem;}
+    form{display:grid;gap:12px;margin-top:22px;}
+    input{
+      width:100%;min-width:0;min-height:54px;padding:14px 16px;border:1px solid var(--input-border);
+      border-radius:10px;background:var(--input-background);color:var(--text);font:inherit;line-height:1.4;
+    }
+    input::placeholder{color:var(--muted);opacity:1;}
+    small.form-note{display:block;color:var(--muted);font-size:.8rem;line-height:1.6;margin-top:12px;}
+    @media(min-width:560px){form{grid-template-columns:minmax(0,1fr) auto;}}
+
+    /* FAQ */
+    .faq{padding-block:44px;border-top:1px solid var(--border);}
+    .faq h2{font-size:clamp(1.5rem,3.6vw,2rem);margin-bottom:18px;}
+    details{border-bottom:1px solid var(--border);}
+    summary{padding-block:18px;color:var(--text);font-weight:650;line-height:1.5;cursor:pointer;}
+    summary::marker{color:var(--accent);}
+    summary:hover{color:var(--accent);}
+    details p{margin:0 0 20px;color:var(--muted);}
+
+    footer{padding-block:26px 46px;border-top:1px solid var(--border);}
+    footer p{margin:0;color:var(--muted);font-size:.8rem;line-height:1.6;}
+
+    @media(prefers-color-scheme:dark){
+      :root{
+        color-scheme:dark;
+        --background:#111621;--surface:#1a2231;--surface2:#161d29;--input-background:#111621;
+        --text:#eef2f9;--muted:#b3bccc;--accent:#9db9ff;--accent-soft:#20304f;--accent-hover:#bed0ff;
+        --bad:#f08a7d;--bad-soft:#3a2320;--button-text:#0f1a30;--border:#2f3a4d;--input-border:#7f8ba3;
       }
+      .chat{box-shadow:0 22px 48px -28px rgba(0,0,0,.7);}
     }
   </style>
 </head>
 <body>
-  <main>
+  <div class="wrap">
     <header class="hero">
-      <h1>Estudia Auxiliar Administrativo del Estado con una IA que no se inventa las leyes</h1>
-      <p>Un sistema para estudiar con ChatGPT o Claude sin que te cuele artículos falsos del EBEP o de la Constitución. Resúmenes, esquemas y test hechos a partir de tu temario oficial.</p>
-      <a class="cta" href="#lista">Avísame cuando salga</a>
+      <div>
+        <span class="pill"><span class="dot"></span>Auxiliar Administrativo del Estado</span>
+        <h1>Estudia Auxiliar Administrativo del Estado con una IA que no se inventa las leyes</h1>
+        <p class="sub">Un sistema para estudiar con ChatGPT o Claude sin que te cuele artículos falsos del EBEP o de la Constitución. Resúmenes, esquemas y test hechos a partir de tu temario oficial.</p>
+        <a class="cta" href="#lista">Avísame cuando salga</a>
+        <p class="note">Lista de espera. Sin pago todavía.</p>
+      </div>
+      <div class="chat" role="img" aria-label="Ejemplo de conversación donde la IA se inventa un artículo del EBEP que no existe">
+        <div class="bar"><i></i><i></i><i></i></div>
+        <div class="msg user"><div class="bubble">Resúmeme el tema 5 y cítame el artículo</div></div>
+        <div class="msg ai"><div class="bubble">Claro. Según el <mark>artículo 47 bis del EBEP</mark>, el funcionario dispone de...</div></div>
+        <div class="flag">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="13"/><line x1="12" y1="16.5" x2="12" y2="16.5"/></svg>
+          Ese artículo no existe. Te lo acaba de inventar.
+        </div>
+      </div>
     </header>
 
-    <section aria-labelledby="problema">
+    <div class="stats">
+      <div><div class="n">+30.000</div><div class="l">aspirantes por convocatoria</div></div>
+      <div><div class="n">~1.700</div><div class="l">plazas</div></div>
+      <div><div class="n">1</div><div class="l">examen para no fallar por algo inventado</div></div>
+    </div>
+
+    <section class="block" aria-labelledby="problema">
       <h2 id="problema">Te suena esto</h2>
       <p>Le pides a ChatGPT que te resuma el tema 5 y te suelta un artículo de la Ley 39/2015 que no existe. Lo memorizas, llega el examen y fallas por algo que la IA se inventó. Y a partir de ahí ya no te fías de nada de lo que te da, así que vuelves a contrastar tema por tema y tardas más que si estudiaras a mano. Con 30.000 personas presentándose para 1.700 plazas, cada semana de repaso que pierdes cuenta.</p>
     </section>
 
-    <section aria-labelledby="kit">
+    <section class="block" aria-labelledby="kit">
       <h2 id="kit">Qué te llevas</h2>
-      <p>Es un kit descargable que abres y usas la misma tarde. Dentro hay tres cosas:</p>
-      <ul>
-        <li>Prompts probados que obligan a la IA a trabajar solo con el texto que le pegas (tu tema, el BOE, el artículo). Si algo no está en lo que le das, no se lo inventa.</li>
-        <li>El paso a paso para convertir cada tema en resumen, esquema y 20 preguntas tipo test.</li>
-        <li>Un planner de repasos en Notion o Google Sheets, con repetición espaciada, montado para el temario de esta oposición.</li>
-      </ul>
+      <p class="lead">Es un kit descargable que abres y usas la misma tarde. Dentro hay tres cosas:</p>
+      <div class="cards">
+        <div class="card">
+          <div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+          <h3>Prompts que la atan a tu texto</h3>
+          <p>Obligan a la IA a trabajar solo con lo que le pegas: tu tema, el BOE, el artículo. Si algo no está ahí, no se lo inventa.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg></div>
+          <h3>El paso a paso de estudio</h3>
+          <p>Convierte cada tema en resumen, esquema y 20 preguntas tipo test. Sin quedarte mirando la pantalla en blanco.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/><path d="M8 14l2 2 4-4"/></svg></div>
+          <h3>Planner de repasos</h3>
+          <p>En Notion o Google Sheets, con repetición espaciada, montado para el temario de esta oposición.</p>
+        </div>
+      </div>
     </section>
 
-    <section aria-labelledby="metodo">
+    <section class="block" aria-labelledby="metodo">
       <h2 id="metodo">Por qué esta IA no te miente</h2>
-      <p>Estudiar con IA sale mal cuando la dejas tirar de memoria. Estos prompts la atan a tu material oficial: resume, pregunta y corrige sobre lo que tú le das, y cuando algo no aparece en tu texto te avisa en vez de rellenarlo. Estudias con IA sin jugártela a que se invente media ley.</p>
+      <p class="lead">Estudiar con IA sale mal cuando la dejas tirar de memoria. Estos prompts la atan a tu material oficial: resume, pregunta y corrige sobre lo que tú le das, y cuando algo no aparece en tu texto te avisa en vez de rellenarlo. Estudias con IA sin jugártela a que se invente media ley.</p>
+      <div class="why-visual">
+        <div class="box bad">
+          <span class="tag"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>IA suelta</span>
+          <p>Tira de su memoria. Rellena huecos con artículos que suenan bien y <b>no existen</b>.</p>
+        </div>
+        <div class="box good">
+          <span class="tag"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg>IA atada a tu texto</span>
+          <p>Solo usa lo que le pegas. Si algo no está en tu temario, <b>te lo dice</b> en vez de inventarlo.</p>
+        </div>
+      </div>
     </section>
 
     <section id="lista" tabindex="-1" aria-labelledby="lanzamiento">
       <h2 id="lanzamiento">Todavía no está a la venta</h2>
-      <p>Lo estoy terminando y quiero sacarlo bien. Déjame tu correo y te aviso el día que salga. Quien esté en la lista lo tendrá a 15 euros, precio de lanzamiento, antes que nadie.</p>
+      <p>Lo estoy terminando y quiero sacarlo bien. Déjame tu correo y te aviso el día que salga. Quien esté en la lista lo tendrá antes que nadie.</p>
+      <div class="price"><span class="big">15 euros</span><span class="small">precio de lanzamiento para la lista</span></div>
       <form action="https://formspree.io/f/mppzeynn" method="POST">
-        <input type="email" name="email" required aria-label="Correo electrónico" autocomplete="email" inputmode="email">
+        <input type="email" name="email" required aria-label="Correo electrónico" placeholder="tu@correo.com" autocomplete="email" inputmode="email">
         <button class="cta" type="submit">Avísame cuando salga</button>
       </form>
       <small class="form-note">Sin spam. Solo un correo el día que salga. Al dejar tu correo aceptas recibir ese aviso. No lo comparto con nadie y puedes pedir que lo borre cuando quieras.</small>
@@ -238,10 +261,12 @@
         <p>Estoy con ello. Si dejas el correo, eres de los primeros en enterarte.</p>
       </details>
     </section>
-  </main>
+  </div>
 
   <footer>
-    <p><small>Producto digital de descarga inmediata. Al comprarlo aceptas que la descarga empieza en el momento y renuncias al derecho de desistimiento (art. 103.m TRLGDCU). Ahora mismo solo se recoge tu correo para avisarte del lanzamiento; no se cobra nada.</small></p>
+    <div class="wrap">
+      <p>Producto digital de descarga inmediata. Al comprarlo aceptas que la descarga empieza en el momento y renuncias al derecho de desistimiento (art. 103.m TRLGDCU). Ahora mismo solo se recoge tu correo para avisarte del lanzamiento; no se cobra nada.</p>
+    </div>
   </footer>
 </body>
 </html>
