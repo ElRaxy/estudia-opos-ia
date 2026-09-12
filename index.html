@@ -1,25 +1,32 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- Crítica y cambios
+  - La escala apretaba el titular y empequeñecía los secundarios: jerarquía más legible y medidas de línea contenidas.
+  - El ritmo alternaba huecos amplios y bloques densos: retícula y espaciado vertical coherentes.
+  - La marca tenía variantes: el documento con check unifica cabecera, pie y favicon en el acento.
+  - El chat parecía una ilustración: superficie recta, burbujas claras y error integrado con vínculo accesible.
+  - Las cifras competían con el hero: pesos moderados, números tabulares y separadores más equilibrados.
+  - Las tarjetas mezclaban tamaños ópticos y alineaciones: iconos coherentes y una primera pieza destacada con discreción.
+  - Faltaba pulido en lectura e interacción: contraste, foco visible, texto legal legible y movimiento reducido.
+  -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <meta name="description" content="Un sistema para estudiar con ChatGPT o Claude sin que te cuele artículos falsos del EBEP o de la Constitución. Resúmenes, esquemas y test hechos a partir de tu temario oficial.">
   <title>Auxiliar Administrativo del Estado · Lista de espera</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%231a493d'/%3E%3Cpath d='M12 9h11l5 5v17H12zM22 9v7h6M16 23l3 3 6-7' fill='none' stroke='%23fffdf6' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cstyle%3Esvg%7Bcolor%3A%231a493d%7D%40media%28prefers-color-scheme%3Adark%29%7Bsvg%7Bcolor%3A%23b8d4b2%7D%7D%3C%2Fstyle%3E%3Cpath%20d%3D%22M7%203h7l5%205v11a2%202%200%200%201-2%202H7a2%202%200%200%201-2-2V5a2%202%200%200%201%202-2z%22%2F%3E%3Cpath%20d%3D%22M14%203v5h5%22%2F%3E%3Cpath%20d%3D%22M9%2014.5l2%202%204-4%22%2F%3E%3C%2Fsvg%3E">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&amp;display=swap">
   <style>
     :root {
-      --scheme: light;
-      color-scheme: var(--scheme);
+      color-scheme: light dark;
       --bg: #f7f6f0; --surface: #fffefa; --ink: #232923; --muted: #62675f;
       --line: #d7dbd0; --soft: #eeeee6; --accent: #1a493d; --accent-hover: #10372c;
       --accent-soft: #e5ece1; --on-accent: #fffef7; --error: #a7342c; --error-bg: #fbece6;
-      --error-line: #dc9c91; --shadow: #17261c14; --form-bg: #fffefa; --selection: #cfdec8;
+      --error-line: #dc9c91; --shadow: #17261c0d; --form-bg: #fffefa; --selection: #cfdec8;
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --scheme: dark;
         --bg: #171c19; --surface: #202723; --ink: #f1f1e8; --muted: #afb9af;
         --line: #3d4a40; --soft: #28302a; --accent: #b8d4b2; --accent-hover: #d1e5cc;
         --accent-soft: #2d3c30; --on-accent: #182c20; --error: #ffb2a3; --error-bg: #402b27;
@@ -27,9 +34,8 @@
       }
     }
     * { box-sizing: border-box; }
-    .hero > *, .split > *, .kit > *, .signup-panel > *, .compare > * { min-width: 0; }
     html { scroll-behavior: smooth; scroll-padding-top: 32px; }
-    body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
     ::selection { background: var(--selection); color: var(--ink); }
     a { color: inherit; text-decoration: none; }
     button, input { font: inherit; }
@@ -39,165 +45,163 @@
     p, h1, h2, h3 { margin: 0; }
     h1, h2, h3, .display, .nav, .button { font-family: "Bricolage Grotesque", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
     h1, h2, h3 { font-weight: 600; }
-    .wrap { width: min(1200px, calc(100% - 40px)); margin-inline: auto; }
-    .site-header { min-height: 86px; display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid var(--line); }
-    .brand { width: 38px; height: 42px; color: var(--accent); }
-    .nav { display: flex; align-items: center; gap: 26px; font-size: 13px; font-weight: 500; }
-    .nav a { padding-block: 12px; transition: color .18s; }
-    .nav a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 5px; }
-    .hero { padding-block: 46px 42px; }
-    .eyebrow { display: inline-flex; align-items: center; gap: 9px; color: var(--accent); font-size: 11px; font-weight: 650; letter-spacing: .065em; margin-bottom: 22px; }
-    .eyebrow::before { content: ""; width: 6px; height: 6px; background: currentColor; border-radius: 50%; }
-    h1 { font-size: clamp(38px, 8.6vw, 66px); line-height: 1.055; letter-spacing: -.052em; text-wrap: balance; }
+    .hero > *, .split > *, .kit > *, .signup-panel > *, .compare > *, .stats > * { min-width: 0; }
+    .wrap { width: min(1200px, calc(100% - 48px)); margin-inline: auto; }
+    .site-header { min-height: 80px; display: flex; align-items: center; justify-content: space-between; gap: 20px; border-bottom: 1px solid var(--line); }
+    .brand { width: 30px; height: 30px; color: var(--accent); }
+    .nav { display: flex; align-items: center; gap: 20px; font-size: 13px; font-weight: 500; line-height: 1.4; }
+    .nav a { display: inline-flex; align-items: center; min-height: 44px; padding-block: 12px; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 6px; transition: color .18s ease, text-decoration-color .18s ease; }
+    .nav a:hover { color: var(--accent); text-decoration-color: currentColor; }
+    .hero { padding-block: 44px 48px; }
+    .eyebrow { color: var(--muted); font-size: 13px; font-weight: 600; line-height: 1.5; letter-spacing: .015em; margin-bottom: 20px; }
+    h1 { max-width: 14ch; font-size: clamp(38px, 10.8vw, 58px); line-height: 1.075; letter-spacing: -.04em; text-wrap: balance; }
     h1 span { color: var(--accent); }
-    .hero-copy > p { margin-top: 24px; max-width: 540px; color: var(--muted); font-size: 16px; line-height: 1.7; }
-    .hero-action { margin-top: 29px; }
-    .button { display: inline-flex; justify-content: center; align-items: center; gap: 23px; min-height: 54px; padding: 15px 23px; border: 1px solid transparent; border-radius: 5px; background: var(--accent); color: var(--on-accent); font-weight: 600; font-size: 15px; line-height: 1.4; cursor: pointer; transition: background .2s, transform .2s; }
-    .button svg { width: 18px; height: 18px; transition: transform .2s; }
-    .button:hover { background: var(--accent-hover); transform: translateY(-2px); }
-    .button:hover svg { transform: translateX(3px); }
-    .hero-note { margin-top: 10px; color: var(--muted); font-size: 12px; }
-    .chat-scene { position: relative; margin-top: 42px; padding: 17px 0 22px; }
-    .chat-scene::before { content: ""; position: absolute; inset: 0 12px 0 20px; border: 1px solid var(--line); border-radius: 12px; background: var(--soft); transform: rotate(3deg); }
-    .chat { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 12px 32px var(--shadow); overflow: hidden; }
+    .hero-copy > p { margin-top: 24px; max-width: 51ch; color: var(--muted); font-size: 16px; line-height: 1.7; }
+    .hero-action { margin-top: 28px; }
+    .button { display: inline-flex; justify-content: center; align-items: center; gap: 20px; min-height: 54px; padding: 15px 22px; border: 1px solid transparent; border-radius: 5px; background: var(--accent); color: var(--on-accent); font-weight: 600; font-size: 16px; line-height: 1.4; cursor: pointer; transition: background .18s ease, border-color .18s ease; }
+    .button svg { width: 18px; height: 18px; transition: transform .18s ease; }
+    .button:hover { background: var(--accent-hover); }
+    .button:hover svg { transform: translateX(2px); }
+    .button:active { border-color: currentColor; }
+    .hero-action .button { width: 100%; }
+    .hero-note { margin-top: 12px; color: var(--muted); font-size: 13px; }
+    .chat-scene { margin-top: 40px; }
+    .chat { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 8px 24px var(--shadow); overflow: hidden; }
     .chat-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--line); }
-    .chat-identity { display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 600; }
-    .ai-glyph { width: 22px; height: 22px; }
-    .chat-tools { display: flex; gap: 6px; color: var(--muted); }
+    .chat-identity { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; }
+    .ai-glyph { width: 20px; height: 20px; color: var(--muted); }
+    .chat-tools { display: flex; gap: 4px; color: var(--muted); }
     .chat-tools i { width: 3px; height: 3px; border-radius: 50%; background: currentColor; }
-    .chat-body { padding: 25px 20px 22px; }
-    .user-message { margin-left: 35px; }
-    .chat-label { color: var(--muted); font-size: 11px; font-weight: 600; margin-bottom: 8px; }
+    .chat-body { padding: 24px 20px 20px; }
+    .user-message { margin-left: 30px; }
+    .chat-label { color: var(--muted); font-size: 13px; font-weight: 500; line-height: 1.4; margin-bottom: 8px; }
     .user-message .chat-label { text-align: right; }
-    .bubble { background: var(--soft); border: 1px solid var(--line); padding: 14px 16px; border-radius: 12px 12px 3px 12px; font-size: 14px; line-height: 1.55; }
-    .ai-message { margin-top: 29px; }
+    .bubble { background: var(--soft); border: 1px solid var(--line); padding: 12px 15px; border-radius: 12px 12px 3px 12px; font-size: 15px; line-height: 1.6; }
+    .ai-message { margin-top: 26px; }
     .ai-heading { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
-    .ai-heading .chat-label { margin: 0; color: var(--ink); }
-    .ai-message > p { font-size: 16px; line-height: 1.95; }
-    mark { padding: 2px 3px 3px; color: var(--error); background: var(--error-bg); box-decoration-break: clone; -webkit-box-decoration-break: clone; border-bottom: 1px solid var(--error); }
-    .annotation { position: relative; margin-top: 25px; padding: 14px; display: flex; align-items: flex-start; gap: 10px; color: var(--error); background: var(--error-bg); border: 1px solid var(--error-line); border-radius: 5px; font-size: 13px; font-weight: 600; line-height: 1.55; }
-    .annotation::before { content: ""; position: absolute; height: 21px; border-left: 1px dashed var(--error); left: 23px; top: -22px; }
-    .annotation svg { width: 18px; height: 18px; margin-top: 1px; }
-    .chat-footer { display: flex; gap: 12px; margin-top: 19px; color: var(--muted); }
-    .chat-footer svg { width: 15px; height: 15px; }
-    .stats { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-    .stat { padding: 24px 0; }
-    .stat:nth-child(2) { padding-left: 22px; border-left: 1px solid var(--line); }
-    .stat:last-child { grid-column: 1 / -1; display: flex; align-items: center; gap: 21px; border-top: 1px solid var(--line); padding-block: 20px; }
-    .stat dt { font-size: 43px; font-weight: 500; line-height: 1.05; letter-spacing: -.06em; }
-    .stat dd { margin: 9px 0 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
-    .stat:last-child dd { margin: 0; max-width: 180px; }
+    .ai-heading .chat-label { margin: 0; color: var(--ink); font-weight: 600; }
+    .ai-message > p { font-size: 16px; line-height: 1.8; }
+    mark { padding: 2px 2px 3px; color: var(--error); background: var(--error-bg); box-decoration-break: clone; -webkit-box-decoration-break: clone; border-bottom: 1px solid var(--error); }
+    .annotation { margin-top: 18px; padding: 12px; display: flex; align-items: flex-start; gap: 9px; color: var(--error); background: var(--error-bg); border: 1px solid var(--error-line); border-left: 3px solid var(--error); border-radius: 3px; font-size: 13px; font-weight: 500; line-height: 1.6; }
+    .annotation svg { width: 17px; height: 17px; margin-top: 2px; }
+    .chat-footer { display: flex; gap: 14px; margin-top: 20px; color: var(--muted); }
+    .chat-footer svg { width: 16px; height: 16px; }
+    .stats { display: grid; grid-template-columns: 1fr 1fr; margin-block: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .stat { padding: 25px 0; }
+    .stat:nth-child(2) { padding-left: 24px; border-left: 1px solid var(--line); }
+    .stat:last-child { grid-column: 1 / -1; display: flex; align-items: center; gap: 24px; border-top: 1px solid var(--line); }
+    .stat dt { font-size: 40px; font-weight: 500; font-variant-numeric: lining-nums tabular-nums; line-height: 1.1; letter-spacing: -.045em; }
+    .stat dd { margin: 10px 0 0; padding-right: 14px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .stat:last-child dd { margin: 0; max-width: 215px; }
     .section { padding-block: 64px; border-bottom: 1px solid var(--line); }
-    h2 { font-size: clamp(31px, 4vw, 44px); line-height: 1.13; letter-spacing: -.04em; text-wrap: balance; }
-    .section-text { margin-top: 22px; color: var(--muted); }
+    h2 { font-size: clamp(31px, 4vw, 43px); line-height: 1.15; letter-spacing: -.035em; text-wrap: balance; }
+    .section-text { margin-top: 24px; max-width: 65ch; color: var(--muted); }
     .section-text p + p { margin-top: 16px; }
-    .problem { padding-block: 58px; }
-    .problem h2 { font-size: 29px; }
-    .problem .section-text { font-size: 16px; line-height: 1.85; }
-    .section-lead { margin-top: 17px; max-width: 500px; color: var(--muted); }
-    .kit { display: grid; margin-top: 32px; gap: 0; }
-    .kit-item { padding: 28px 0; border-top: 1px solid var(--line); }
-    .kit-item:first-child { padding: 27px; background: var(--accent-soft); border: 1px solid var(--line); border-radius: 6px; margin-bottom: 6px; }
-    .kit-icon { width: 35px; height: 35px; color: var(--accent); margin-bottom: 29px; }
-    h3 { font-size: 23px; line-height: 1.2; letter-spacing: -.025em; }
-    .kit-item p { margin-top: 13px; color: var(--muted); font-size: 14px; line-height: 1.75; }
-    .compare { margin-top: 35px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
-    .compare-state { padding: 25px; }
+    .problem h2 { font-size: 31px; }
+    .section-lead { margin-top: 18px; max-width: 51ch; color: var(--muted); }
+    .kit { display: grid; margin-top: 32px; }
+    .kit-item { padding: 28px 24px; border-bottom: 1px solid var(--line); }
+    .kit-item:last-child { border-bottom: 0; padding-bottom: 0; }
+    .kit-item:first-child { background: var(--accent-soft); border: 1px solid var(--line); border-radius: 6px; }
+    .kit-icon { width: 30px; height: 30px; color: var(--accent); margin-bottom: 24px; }
+    h3 { font-size: 23px; line-height: 1.25; letter-spacing: -.025em; }
+    .kit-item p { margin-top: 14px; color: var(--muted); font-size: 15px; line-height: 1.7; }
+    .compare { margin-top: 32px; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+    .compare-state { padding: 24px; }
     .compare-state + .compare-state { border-top: 1px solid var(--line); background: var(--accent-soft); }
-    .compare-title { display: flex; align-items: center; gap: 11px; }
+    .compare-title { display: flex; align-items: center; gap: 10px; }
     .compare-title svg { width: 20px; height: 20px; color: var(--muted); }
     .compare-state:last-child .compare-title svg { color: var(--accent); }
     .compare-title h3 { font-size: 20px; }
-    .compare-state p { margin-top: 13px; color: var(--muted); font-size: 14px; }
+    .compare-state p { margin-top: 14px; color: var(--muted); font-size: 15px; line-height: 1.7; }
     .waitlist { padding-block: 64px; }
     .signup-panel { padding: 28px 23px; background: var(--accent-soft); border: 1px solid var(--line); border-radius: 7px; }
     .signup-panel h2 { max-width: 410px; }
-    .signup-intro { margin-top: 19px; color: var(--muted); max-width: 420px; font-size: 15px; }
-    .price { display: flex; align-items: center; gap: 17px; margin-top: 28px; padding-top: 23px; border-top: 1px solid var(--line); }
-    .price strong { font-size: 34px; line-height: 1.05; font-weight: 500; letter-spacing: -.05em; white-space: nowrap; }
-    .price span { max-width: 135px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .signup-intro { margin-top: 20px; color: var(--muted); max-width: 45ch; font-size: 16px; }
+    .price { display: flex; align-items: center; gap: 18px; margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--line); }
+    .price strong { font-size: 33px; line-height: 1.1; font-weight: 500; letter-spacing: -.04em; white-space: nowrap; }
+    .price span { max-width: 140px; color: var(--muted); font-size: 13px; line-height: 1.5; }
     form { margin-top: 32px; }
-    label { display: block; margin-bottom: 9px; font-size: 13px; font-weight: 600; }
-    input { width: 100%; min-width: 0; height: 55px; padding: 13px 15px; border: 1px solid var(--muted); border-radius: 5px; color: var(--ink); background: var(--form-bg); font-size: 16px; }
-    form .button { width: 100%; margin-top: 10px; }
-    .privacy { font-size: 11px; line-height: 1.75; color: var(--muted); margin-top: 15px; }
-    .faq { padding-block: 0 65px; }
-    .questions { margin-top: 25px; }
+    label { display: block; margin-bottom: 10px; font-size: 14px; font-weight: 600; }
+    input { width: 100%; min-width: 0; height: 55px; padding: 13px 15px; border: 1px solid var(--muted); border-radius: 5px; color: var(--ink); background: var(--form-bg); font-size: 16px; transition: border-color .18s ease; }
+    input:hover, input:focus-visible { border-color: var(--accent); }
+    form .button { width: 100%; margin-top: 12px; gap: 12px; padding-inline: 16px; }
+    .privacy { font-size: 12px; line-height: 1.7; color: var(--muted); margin-top: 18px; max-width: 57ch; }
+    .faq { padding-block: 0 64px; }
+    .questions { margin-top: 24px; }
     details { border-bottom: 1px solid var(--line); }
     details:first-child { border-top: 1px solid var(--line); }
-    summary { padding: 21px 0; display: flex; gap: 16px; align-items: center; justify-content: space-between; list-style: none; cursor: pointer; font-size: 15px; font-weight: 600; }
+    summary { padding: 22px 0; display: flex; gap: 16px; align-items: center; justify-content: space-between; list-style: none; cursor: pointer; font-size: 16px; font-weight: 600; line-height: 1.5; transition: color .18s ease; }
     summary::-webkit-details-marker { display: none; }
-    summary svg { width: 19px; height: 19px; color: var(--muted); transition: transform .2s; }
+    summary svg { width: 20px; height: 20px; color: var(--muted); transition: transform .18s ease; }
     summary:hover { color: var(--accent); }
     details[open] summary svg { transform: rotate(45deg); }
-    details p { padding: 0 30px 22px 0; max-width: 670px; color: var(--muted); font-size: 14px; }
-    .footer { display: flex; align-items: flex-start; gap: 25px; padding-block: 27px 38px; border-top: 1px solid var(--line); }
-    .footer .brand { width: 26px; height: 30px; }
-    .footer p { max-width: 890px; color: var(--muted); font-size: 10px; line-height: 1.8; }
+    details p { padding: 0 28px 24px 0; max-width: 65ch; color: var(--muted); font-size: 15px; line-height: 1.7; }
+    .footer { display: flex; align-items: flex-start; gap: 20px; padding-block: 28px 40px; border-top: 1px solid var(--line); }
+    .footer .brand { width: 26px; height: 26px; margin-top: 2px; }
+    .footer p { max-width: 96ch; color: var(--muted); font-size: 12px; line-height: 1.7; }
     @media (min-width: 680px) {
       .wrap { width: min(1200px, calc(100% - 80px)); }
-      .hero { padding-block: 55px; }
-      .chat-scene { max-width: 510px; margin-inline: auto; }
-      .stats { grid-template-columns: 1.12fr .83fr 1fr; }
-      .stat { padding: 28px 0; }
-      .stat:nth-child(2), .stat:last-child { padding-left: 35px; border-left: 1px solid var(--line); }
-      .stat:last-child { grid-column: auto; display: block; border-top: 0; padding-block: 28px; }
-      .stat:last-child dd { margin-top: 9px; max-width: 230px; }
-      .stat dt { font-size: 52px; }
-      .stat dd { font-size: 13px; }
-      .kit { grid-template-columns: 1fr 1fr; column-gap: 30px; }
-      .kit-item:first-child { grid-column: 1 / -1; display: grid; grid-template-columns: 55px 1fr 1.1fr; gap: 20px; align-items: center; margin-bottom: 18px; }
+      .hero { padding-block: 56px; }
+      h1 { max-width: 18ch; }
+      .hero-action .button { width: auto; }
+      .chat-scene { max-width: 520px; margin-inline: auto; }
+      .stats { grid-template-columns: repeat(3, 1fr); }
+      .stat { padding-block: 30px; }
+      .stat:nth-child(2), .stat:last-child { padding-left: 28px; border-left: 1px solid var(--line); }
+      .stat:last-child { grid-column: auto; display: block; border-top: 0; }
+      .stat:last-child dd { margin-top: 10px; max-width: 230px; }
+      .stat dt { font-size: clamp(42px, 5vw, 56px); }
+      .kit { grid-template-columns: 1fr 1fr; gap: 24px; }
+      .kit-item, .kit-item:last-child { padding: 28px 24px; border-bottom: 0; }
+      .kit-item:first-child { grid-column: 1 / -1; display: grid; grid-template-columns: 30px 1fr 1.2fr; gap: 24px; align-items: start; }
       .kit-item:first-child .kit-icon, .kit-item:first-child p { margin: 0; }
       .compare { display: grid; grid-template-columns: 1fr 1fr; }
       .compare-state + .compare-state { border-top: 0; border-left: 1px solid var(--line); }
-      .signup-panel { padding: 42px; }
-      .form-controls { display: flex; gap: 9px; }
-      form .button { width: auto; margin-top: 0; white-space: nowrap; gap: 13px; }
+      .signup-panel { padding: 40px; }
+      .form-controls { display: flex; gap: 12px; }
+      form .button { width: auto; margin-top: 0; white-space: nowrap; }
+      .price strong { font-size: 38px; }
     }
     @media (min-width: 1020px) {
+      body { font-size: 17px; }
       .site-header { min-height: 92px; }
-      .nav { font-size: 14px; gap: 33px; }
-      .hero { display: grid; grid-template-columns: 1.18fr 1fr; gap: 62px; align-items: center; padding-block: 65px 67px; }
-      .eyebrow { font-size: 12px; margin-bottom: 25px; }
-      h1 { font-size: clamp(55px, 4.7vw, 66px); }
-      .hero-copy > p { font-size: 16px; margin-top: 24px; }
-      .chat-scene { width: 100%; margin: 0; padding: 22px 0; }
-      .chat-header { padding: 20px 25px; }
-      .chat-body { padding: 32px 28px 26px; }
-      .user-message { margin-left: 57px; }
-      .bubble { padding: 16px 18px; font-size: 15px; }
-      .ai-message { margin-top: 34px; }
-      .ai-message > p { font-size: 18px; }
-      .annotation { margin-top: 30px; padding: 15px; font-size: 14px; }
+      .brand { width: 32px; height: 32px; }
+      .nav { font-size: 14px; gap: 32px; }
+      .hero { display: grid; grid-template-columns: 1.12fr 1fr; gap: 56px; align-items: center; padding-block: 64px 72px; }
+      .eyebrow { margin-bottom: 24px; }
+      h1 { max-width: 17ch; font-size: clamp(54px, 4.65vw, 63px); }
+      .hero-copy > p { font-size: 17px; margin-top: 26px; }
+      .hero-action { margin-top: 30px; }
+      .chat-scene { width: 100%; margin: 0; }
+      .chat-header { padding: 18px 24px; }
+      .chat-body { padding: 28px 24px 24px; }
+      .user-message { margin-left: 46px; }
+      .bubble { padding: 14px 16px; }
+      .ai-message { margin-top: 30px; }
+      .ai-message > p { font-size: 17px; }
+      .annotation { margin-top: 20px; padding: 13px; font-size: 14px; }
       .stat { padding-block: 32px; }
-      .stat:nth-child(2), .stat:last-child { padding-left: 48px; }
-      .stat:last-child { padding-block: 32px; }
-      .stat dt { font-size: 58px; }
-      .section { padding-block: 90px; }
-      .split { display: grid; grid-template-columns: .8fr 1.5fr; gap: 90px; }
+      .stat:nth-child(2), .stat:last-child { padding-left: 40px; }
+      .stat dd { font-size: 14px; }
+      .section { padding-block: 80px; }
+      .split { display: grid; grid-template-columns: .8fr 1.5fr; gap: 80px; }
       .section-text { margin-top: 0; }
-      .problem { padding-block: 70px; }
-      .kit { grid-template-columns: 1.1fr 1fr 1fr; gap: 33px; margin-top: 39px; }
-      .kit-item { border: 0; padding: 29px 0; }
-      .kit-item:first-child { display: block; grid-column: auto; padding: 29px; margin: 0; }
-      .kit-item:first-child .kit-icon { margin-bottom: 29px; }
-      .kit-item:first-child p { margin-top: 13px; }
-      .kit-item:last-child { border-left: 1px solid var(--line); padding-left: 33px; }
-      .kit-item h3 { max-width: 240px; }
-      .mechanism .section-text { max-width: 670px; }
-      .compare { margin-top: 32px; }
-      .compare-state { padding: 28px; }
-      .waitlist { padding-block: 88px; }
-      .signup-panel { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 75px; padding: 53px; }
-      .signup-panel h2 { font-size: 45px; }
+      .kit { grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 36px; }
+      .kit-item, .kit-item:last-child { padding: 28px; border-top: 1px solid var(--line); }
+      .kit-item:first-child { display: block; grid-column: auto; }
+      .kit-item:first-child .kit-icon { margin-bottom: 24px; }
+      .kit-item h3 { min-height: 2.5em; max-width: 240px; }
+      .kit-item:first-child p { margin-top: 14px; }
+      .compare-state { padding: 26px; }
+      .waitlist { padding-block: 80px; }
+      .signup-panel { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 64px; padding: 48px; }
+      .signup-panel h2 { font-size: 43px; }
       .signup-panel form { margin: 0; }
       .form-controls { display: block; }
-      form .button { width: 100%; margin-top: 11px; }
-      .price { width: fit-content; gap: 24px; margin-top: 25px; }
-      .price strong { font-size: 39px; }
-      .price span { max-width: 145px; font-size: 12px; }
-      .privacy { font-size: 12px; }
-      .faq { padding-bottom: 90px; }
+      form .button { width: 100%; margin-top: 12px; }
+      .price { width: fit-content; gap: 24px; }
+      .faq { padding-bottom: 80px; }
       .questions { margin-top: 0; }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -208,7 +212,7 @@
 </head>
 <body>
   <header class="site-header wrap">
-    <svg class="brand" viewBox="0 0 36 42" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h16l8 8v28H6z"/><path d="M21 3v10h9M11 18h9M11 23h6M15 30l4 4 8-10"/></svg>
+    <svg class="brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5"/><path d="M9 14.5l2 2 4-4"/></svg>
     <nav class="nav" aria-label="Navegación principal"><a href="#incluye">Qué te llevas</a><a href="#preguntas">Preguntas rápidas</a></nav>
   </header>
   <main>
@@ -221,11 +225,11 @@
       </div>
       <div class="chat-scene">
         <div class="chat" role="group" aria-label="Conversación de ejemplo">
-          <div class="chat-header"><div class="chat-identity"><svg class="ai-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M5.6 18.4 18.4 5.6"/></svg>IA</div><span class="chat-tools" aria-hidden="true"><i></i><i></i><i></i></span></div>
+          <div class="chat-header"><div class="chat-identity"><svg class="ai-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-6 3V6a2 2 0 0 1 2-2z"/><path d="M8 9h8M8 13h5"/></svg>IA</div><span class="chat-tools" aria-hidden="true"><i></i><i></i><i></i></span></div>
           <div class="chat-body">
             <div class="user-message"><div class="chat-label">Usuario</div><p class="bubble">Resúmeme el tema 5 y cítame el artículo</p></div>
-            <div class="ai-message"><div class="ai-heading"><svg class="ai-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M5.6 18.4 18.4 5.6"/></svg><span class="chat-label">IA</span></div><p>Claro. Según el <mark>artículo 47 bis del EBEP</mark>, el funcionario dispone de...</p></div>
-            <div class="annotation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6m0-6-6 6"/></svg><p>Ese artículo no existe. Te lo acaba de inventar.</p></div>
+            <div class="ai-message"><div class="ai-heading"><svg class="ai-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-6 3V6a2 2 0 0 1 2-2z"/><path d="M8 9h8M8 13h5"/></svg><span class="chat-label">IA</span></div><p>Claro. Según el <mark aria-describedby="chat-error">artículo 47 bis del EBEP</mark>, el funcionario dispone de...</p></div>
+            <div class="annotation" id="chat-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6m0-6-6 6"/></svg><p>Ese artículo no existe. Te lo acaba de inventar.</p></div>
             <div class="chat-footer" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M15 4H6a2 2 0 0 0-2 2v9"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 8a8 8 0 1 0 0 8M20 3v5h-5"/></svg></div>
           </div>
         </div>
@@ -236,9 +240,9 @@
     <section class="section wrap" id="incluye" aria-labelledby="incluye-titulo">
       <h2 id="incluye-titulo">Qué te llevas</h2><p class="section-lead">Es un kit descargable que abres y usas la misma tarde. Dentro hay tres cosas:</p>
       <div class="kit">
-        <article class="kit-item"><svg class="kit-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h14l6 6v22H9zM22 4v8h7M14 17h9M14 22h5"/><path d="M5 10H3v22h2m23-9-7 7-3-3"/></svg><h3>Prompts que la atan a tu texto</h3><p>Obligan a la IA a trabajar solo con lo que le pegas: tu tema, el BOE, el artículo. Si algo no está ahí, no se lo inventa.</p></article>
-        <article class="kit-item"><svg class="kit-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="10" height="9" rx="2"/><rect x="22" y="23" width="10" height="9" rx="2"/><path d="M19 8h8v10m-4-4 4 4 4-4M17 28H9V18m-4 4 4-4 4 4"/></svg><h3>El paso a paso de estudio</h3><p>Convierte cada tema en resumen, esquema y 20 preguntas tipo test. Sin quedarte mirando la pantalla en blanco.</p></article>
-        <article class="kit-item"><svg class="kit-icon" viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="7" width="28" height="25" rx="3"/><path d="M11 4v6m14-6v6M4 15h28m-21 6h2m6 0h2m-10 6h2m6 0h2m6-6h1"/></svg><h3>Planner de repasos</h3><p>En Notion o Google Sheets, con repetición espaciada, montado para el temario de esta oposición.</p></article>
+        <article class="kit-item"><svg class="kit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5"/><path d="M9 14.5l2 2 4-4"/></svg><h3>Prompts que la atan a tu texto</h3><p>Obligan a la IA a trabajar solo con lo que le pegas: tu tema, el BOE, el artículo. Si algo no está ahí, no se lo inventa.</p></article>
+        <article class="kit-item"><svg class="kit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="6" rx="1.5"/><rect x="14" y="15" width="7" height="6" rx="1.5"/><path d="M14 6h4v6m-3-3 3 3 3-3M10 18H6v-6m-3 3 3-3 3 3"/></svg><h3>El paso a paso de estudio</h3><p>Convierte cada tema en resumen, esquema y 20 preguntas tipo test. Sin quedarte mirando la pantalla en blanco.</p></article>
+        <article class="kit-item"><svg class="kit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18M7 15h2m6 0h2m-10 3h2m6 0h2"/></svg><h3>Planner de repasos</h3><p>En Notion o Google Sheets, con repetición espaciada, montado para el temario de esta oposición.</p></article>
       </div>
     </section>
     <section class="section mechanism split wrap" aria-labelledby="mecanismo"><h2 id="mecanismo">Por qué esta IA no te miente</h2><div><div class="section-text"><p>Estudiar con IA sale mal cuando la dejas tirar de memoria. Estos prompts la atan a tu material oficial: resume, pregunta y corrige sobre lo que tú le das, y cuando algo no aparece en tu texto te avisa en vez de rellenarlo. Estudias con IA sin jugártela a que se invente media ley.</p></div><div class="compare"><div class="compare-state"><div class="compare-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg><h3>IA suelta</h3></div><p>Tira de su memoria. Rellena huecos con artículos que suenan bien y no existen.</p></div><div class="compare-state"><div class="compare-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12 5 5L20 6"/></svg><h3>IA atada a tu texto</h3></div><p>Solo usa lo que le pegas. Si algo no está en tu temario, te lo dice en vez de inventarlo.</p></div></div></div></section>
@@ -250,6 +254,6 @@
       <details><summary>¿Cuándo sale?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></summary><p>Estoy con ello. Si dejas el correo, eres de los primeros en enterarte.</p></details>
     </div></section>
   </main>
-  <footer class="footer wrap"><svg class="brand" viewBox="0 0 36 42" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h16l8 8v28H6zM21 3v10h9M11 18h9M11 23h6M15 30l4 4 8-10"/></svg><p>Producto digital de descarga inmediata. Al comprarlo aceptas que la descarga empieza en el momento y renuncias al derecho de desistimiento (art. 103.m TRLGDCU). Ahora mismo solo se recoge tu correo para avisarte del lanzamiento; no se cobra nada.</p></footer>
+  <footer class="footer wrap"><svg class="brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5"/><path d="M9 14.5l2 2 4-4"/></svg><p>Producto digital de descarga inmediata. Al comprarlo aceptas que la descarga empieza en el momento y renuncias al derecho de desistimiento (art. 103.m TRLGDCU). Ahora mismo solo se recoge tu correo para avisarte del lanzamiento; no se cobra nada.</p></footer>
 </body>
 </html>
