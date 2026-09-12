@@ -1,0 +1,23 @@
+# Estudia con IA
+
+> Estudia con IA es un metodo descargable para preparar Auxiliar Administrativo del Estado (C2, Espana) con ChatGPT o Claude: prompts para trabajar con tu temario y comprobar las respuestas, mas un planner de repasos. El temario lo aportas tu; el metodo organiza como trabajarlo, comprobar cada respuesta contra su fuente y repasarlo. En fase de lista de espera, con precio de lanzamiento de 15 euros.
+
+## Que es
+- Producto: metodo (prompts + planner), no un temario.
+- Oposicion: Auxiliar Administrativo del Estado (C2), Espana, por libre.
+- Herramientas: se usa con tu propia cuenta de ChatGPT o Claude.
+- Estado: lista de espera (smoke test). Aun sin fecha de lanzamiento. Apuntarse es gratis.
+
+## Paginas
+- [Landing y lista de espera](https://elraxy.github.io/estudia-opos-ia/): que es, como funciona el metodo, prompt de muestra, comparativa y FAQ.
+
+## Preguntas que responde la pagina
+- Sirve ChatGPT para preparar Auxiliar Administrativo del Estado.
+- Como evito que la IA se invente las leyes al estudiar.
+- Puedo aprobar por libre, sin academia.
+- Necesito ChatGPT de pago o vale la version gratuita.
+- Que incluye el metodo y que tengo que aportar yo.
+
+## Notas
+- Los prompts reducen el riesgo de respuestas inventadas, pero no garantizan cero errores: la comprobacion contra el texto oficial forma parte del metodo.
+- No incluye el temario ni actualiza la legislacion; el material lo aporta el usuario.
