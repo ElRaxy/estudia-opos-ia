@@ -1,6 +1,6 @@
 # Estudia con IA
 
-> Estudia con IA es un metodo descargable para preparar Auxiliar Administrativo del Estado (C2, Espana) con ChatGPT o Claude: prompts para trabajar con tu temario y comprobar las respuestas, mas un planner de repasos. El temario lo aportas tu; el metodo organiza como trabajarlo, comprobar cada respuesta contra su fuente y repasarlo. En fase de lista de espera, con precio de lanzamiento de 15 euros.
+> Estudia con IA es un metodo descargable para preparar Auxiliar Administrativo del Estado (C2, Espana) con ChatGPT o Claude: prompts para trabajar con tu temario y comprobar las respuestas, mas un planner de repasos. El temario lo aportas tu; el metodo organiza como trabajarlo, comprobar cada respuesta contra su fuente y repasarlo. En fase de lista de espera (aun sin fecha de lanzamiento); apuntarse es gratis y da acceso anticipado.
 
 ## Que es
 - Producto: metodo (prompts + planner), no un temario.
