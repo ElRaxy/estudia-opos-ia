@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Tarjeta og:image — Estudia con IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Poppins:wght@400;500;600;700&amp;display=swap">
+<style>
+  /* Tarjeta de previsualizacion 1200x630. Mismos tokens que la landing v9: si el
+     enlace y la pagina no se parecen, la tarjeta no prepara, despista. Ningun
+     texto por debajo de 28 px, que es el suelo legible en la miniatura de un DM.
+     Cero box-shadow, igual que la landing: la profundidad es un halo radial
+     desenfocado. */
+  :root {
+    --paper: #faf6ee; --paper-deep: #f3eee2; --white: #fffefa;
+    --ink: #2b2620; --muted: #575047; --line: #dcd5ca;
+    --blue: #1f57d6; --blue-soft: #edf1fa;
+    --yellow: #ffe08a;
+    --serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+    --sans: "Poppins", "Avenir Next", Avenir, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { width: 1200px; height: 630px; overflow: hidden; background: var(--paper); color: var(--ink); font: 400 28px/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
+  svg { display: block; flex: none; }
+
+  .card { position: relative; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); align-items: center; gap: 44px; width: 1200px; height: 630px; padding: 46px 60px; }
+  .card::before { content: ""; position: absolute; top: 0; right: 0; width: 574px; height: 630px; background: var(--paper-deep); }
+  .card::after { content: ""; position: absolute; top: 0; right: 574px; width: 1px; height: 630px; background: var(--line); }
+  .col { position: relative; }
+
+  .brand { display: flex; align-items: center; gap: 13px; }
+  .brand svg { width: 34px; height: 34px; color: var(--blue); }
+  .brand span { font-size: 29px; font-weight: 600; letter-spacing: .02em; }
+
+  .rule { width: 52px; height: 4px; margin: 30px 0 20px; border-radius: 2px; background: var(--blue); }
+
+  h1 { margin: 0; font-family: var(--serif); font-size: 56px; font-weight: 400; line-height: 1.03; letter-spacing: -.016em; }
+  h1 i { font-style: italic; }
+
+  .meta { display: flex; align-items: center; gap: 15px; margin: 30px 0 0; font-size: 29px; font-weight: 500; }
+  .meta .free { padding: 7px 17px; border-radius: 999px; color: var(--blue); background: var(--blue-soft); font-weight: 600; }
+  .meta .dot { width: 5px; height: 5px; border-radius: 50%; background: #b6aa98; }
+  .meta .price { color: var(--muted); }
+  .meta .price b { color: var(--ink); font-weight: 600; }
+
+  /* Pantalla partida, version corta: la IA acierta a la izquierda, la hoja en
+     blanco con el reloj a la derecha. */
+  .mock { position: relative; isolation: isolate; display: grid; gap: 14px; }
+  .mock::before { content: ""; position: absolute; z-index: -1; inset: 6% 2% -4%; background: radial-gradient(60% 55% at 26% 50%, #1f57d640, transparent 70%), radial-gradient(55% 55% at 78% 55%, #b9a9822e, transparent 72%); filter: blur(38px); }
+  .panel { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 6px 18px; padding: 18px 20px 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--white); }
+  .tag { grid-column: 1 / -1; display: block; margin: 0 0 4px; color: var(--muted); font-size: 28px; font-weight: 600; letter-spacing: .02em; line-height: 1.2; }
+  .panel.ia .tag { color: var(--blue); }
+  .a { grid-column: 1 / -1; margin: 0; padding: 13px 15px; border: 1px solid #d9e1f3; border-radius: 3px 13px 13px 13px; background: var(--blue-soft); font-size: 28px; line-height: 1.4; }
+  .ok { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; margin: 12px 0 0; color: #1d6b45; font-size: 28px; font-weight: 600; line-height: 1.2; }
+  .ok svg { width: 24px; height: 24px; }
+  .t { grid-column: 1; margin: 0; font: 600 52px/1 var(--sans); font-variant-numeric: lining-nums tabular-nums; letter-spacing: -.045em; }
+  .sheet { grid-column: 2; height: 96px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background-color: #fff; background-image: repeating-linear-gradient(transparent 0 30px, #cbd6ea 30px 31px); overflow: hidden; }
+  .sheet p { margin: 0; color: #a9a294; font-size: 28px; line-height: 30px; font-variant-numeric: lining-nums tabular-nums; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="col">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5"/><path d="M9 14.5l2 2 4-4"/></svg>
+      <span>Estudia con IA</span>
+    </div>
+    <div class="rule"></div>
+    <h1>Estudia Auxiliar Administrativo con tu IA. El examen lo haces <i>sin ella</i>.</h1>
+    <p class="meta"><span class="free">5 prompts gratis</span><span class="dot"></span><span class="price">planner <b>19 €</b></span></p>
+  </div>
+  <div class="col">
+    <div class="mock">
+      <div class="panel ia">
+        <span class="tag">Con el chat</span>
+        <p class="a">Tres meses. Art. 21.3 de la Ley 39/2015.</p>
+        <p class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12 5 5L20 6"/></svg>Correcta</p>
+      </div>
+      <div class="panel">
+        <span class="tag">En el examen</span>
+        <p class="t">90:00</p>
+        <div class="sheet"><p>1.</p><p>2.</p><p>3.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,23 +1,32 @@
 # Estudia con IA
 
-> Estudia con IA es un metodo descargable para preparar Auxiliar Administrativo del Estado (C2, Espana) con ChatGPT o Claude: prompts para trabajar con tu temario y comprobar las respuestas, mas un planner de repasos. El temario lo aportas tu; el metodo organiza como trabajarlo, comprobar cada respuesta contra su fuente y repasarlo. En fase de lista de espera (aun sin fecha de lanzamiento); apuntarse es gratis y da acceso anticipado.
+> Estudia con IA prepara Auxiliar Administrativo del Estado (C2, España) con ChatGPT o Claude. Cinco prompts gratuitos y en abierto para trabajar tu temario, y un planner de pago con los 28 temas del programa oficial ya cargados. El temario lo aportas tú; el método organiza cómo trabajarlo, comprobarlo y repasarlo. La idea de fondo: la IA te contesta bien, y aun así el examen lo haces a mano y sin ella.
 
-## Que es
-- Producto: metodo (prompts + planner), no un temario.
-- Oposicion: Auxiliar Administrativo del Estado (C2), Espana, por libre.
-- Herramientas: se usa con tu propia cuenta de ChatGPT o Claude.
-- Estado: lista de espera (smoke test). Aun sin fecha de lanzamiento. Apuntarse es gratis.
+## Qué es
+- Prompts: cinco, gratis y publicados en abierto en /prompts/, con botón de copiar. Se usan en tu propia cuenta de ChatGPT o Claude.
+- Planner: el producto de pago. Hojas Hoy, Temas, Repasos y Test para Google Sheets o Excel, con los 28 temas del programa oficial precargados y 12 meses de actualizaciones de la convocatoria.
+- Precio del planner: 19 EUR las 30 primeras plazas, 29 EUR después.
+- Estado: el botón de compra todavía no está activo y la página no tiene fecha de apertura puesta. Los prompts sí están publicados y se pueden copiar hoy. Cuando abra, la entrega será inmediata en el momento del pago, sin reserva y sin preventa.
+- Oposición: Auxiliar Administrativo del Estado (C2), España, por libre.
+- Temario: 28 temas, 16 del bloque I y 12 del bloque II, según el Anexo I de la convocatoria BOE-A-2025-26262, de 22 de diciembre de 2025.
+- Examen: ejercicio único de noventa minutos. Primera parte, hasta 60 preguntas (30 del bloque I y 30 psicotécnicas). Segunda parte, hasta 50 preguntas del bloque II. Las dos partes son eliminatorias y se hacen juntas.
 
-## Paginas
-- [Landing y lista de espera](https://elraxy.github.io/estudia-opos-ia/): que es, como funciona el metodo, prompt de muestra, comparativa y FAQ.
+## Páginas
+- [Landing y planner](https://elraxy.github.io/estudia-opos-ia/): qué es, cómo funciona el método, comparativa, qué trae el planner, precio y FAQ.
+- [Los 5 prompts gratis](https://elraxy.github.io/estudia-opos-ia/prompts/): los cinco prompts completos con botón de copiar.
 
-## Preguntas que responde la pagina
+## Preguntas que responde la página
 - Sirve ChatGPT para preparar Auxiliar Administrativo del Estado.
-- Como evito que la IA se invente las leyes al estudiar.
+- Hago test con IA y los apruebo, por qué luego fallo en el examen.
+- Si ChatGPT ya me responde bien, para qué necesito el planner.
+- Sirve para los psicotécnicos, que son 30 de las 60 preguntas de la primera parte.
 - Puedo aprobar por libre, sin academia.
-- Necesito ChatGPT de pago o vale la version gratuita.
-- Que incluye el metodo y que tengo que aportar yo.
+- Cuánto cuesta el planner y qué incluye.
+- Qué necesito para usarlo y cómo se entrega.
+- Cuántos temas tiene Auxiliar Administrativo del Estado.
 
 ## Notas
-- Los prompts reducen el riesgo de respuestas inventadas, pero no garantizan cero errores: la comprobacion contra el texto oficial forma parte del metodo.
-- No incluye el temario ni actualiza la legislacion; el material lo aporta el usuario.
+- Responder con el chat abierto y responder en el examen con la hoja en blanco son cosas distintas. El método trabaja la segunda, que es la que se puntúa.
+- El planner no incluye el temario ni actualiza la legislación; el material de estudio lo aporta el usuario.
+- Los prompts son gratis y se pueden compartir.
+- Ningún método garantiza el aprobado. La página no promete resultados.

@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>5 prompts para estudiar oposiciones con IA</title>
+  <meta name="description" content="Cinco prompts gratuitos para trabajar tu temario de Auxiliar Administrativo del Estado con ChatGPT o Claude, y comprobar qué recuerdas cuando cierras el chat.">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&amp;family=Poppins:wght@500;600;700&amp;display=swap">
+  <style>
+    :root {
+      --paper:#faf6ee;
+      --ink:#2b2620;
+      --soft:#625b52;
+      --blue:#2f5fe0;
+      --coral:#b93f2d;
+      --line:rgba(43,38,32,.15);
+      --card:#fffdf8;
+      --success:#24723f;
+      --shadow:0 12px 30px rgba(43,38,32,.06);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 0;
+      overflow-x: hidden;
+      color: var(--ink);
+      background-color: var(--paper);
+      background-image: radial-gradient(rgba(43,38,32,.075) .85px, transparent .95px);
+      background-size: 28px 28px;
+      font-family: Poppins, Arial, Helvetica, sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: 1.65;
+      text-rendering: optimizeLegibility;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    pre:focus-visible {
+      outline: 3px solid var(--coral);
+      outline-offset: 3px;
+    }
+
+    .shell {
+      width: min(100% - 32px, 760px);
+      margin-inline: auto;
+    }
+
+    .site-header {
+      padding: 54px 0 38px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin: 0 0 14px;
+      color: var(--coral);
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 720px;
+      margin-bottom: 18px;
+      font-size: clamp(2.15rem, 10vw, 4.35rem);
+      font-weight: 700;
+      line-height: 1.04;
+      letter-spacing: -.045em;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: clamp(1.55rem, 6vw, 2.25rem);
+      line-height: 1.18;
+      letter-spacing: -.025em;
+    }
+
+    h3 {
+      margin-bottom: 5px;
+      font-size: clamp(1.18rem, 5vw, 1.5rem);
+      line-height: 1.25;
+      letter-spacing: -.018em;
+    }
+
+    .subtitle {
+      max-width: 620px;
+      margin-bottom: 24px;
+      color: var(--soft);
+      font-size: clamp(1rem, 4.3vw, 1.18rem);
+    }
+
+    .golden-rule {
+      max-width: 680px;
+      margin: 0;
+      color: var(--blue);
+      font-family: Caveat, "Segoe Print", "Bradley Hand", cursive;
+      font-size: clamp(1.65rem, 7.4vw, 2.45rem);
+      font-weight: 600;
+      line-height: 1.08;
+      transform: rotate(-1deg);
+    }
+
+    main {
+      padding-bottom: 72px;
+    }
+
+    section + section {
+      margin-top: 62px;
+    }
+
+    .how-to {
+      padding: 24px 22px 26px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255,253,248,.84);
+      box-shadow: var(--shadow);
+    }
+
+    .how-to h2 {
+      margin-bottom: 16px;
+      font-size: 1.35rem;
+    }
+
+    .steps {
+      display: grid;
+      gap: 13px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: steps;
+    }
+
+    .steps li {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr);
+      gap: 11px;
+      align-items: start;
+      counter-increment: steps;
+    }
+
+    .steps li::before {
+      display: grid;
+      width: 32px;
+      height: 32px;
+      place-items: center;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--blue);
+      content: counter(steps);
+      font-size: .82rem;
+      font-weight: 700;
+    }
+
+    .warning {
+      margin-top: 22px;
+      padding: 18px 18px 18px 20px;
+      border-left: 4px solid var(--coral);
+      border-radius: 0 12px 12px 0;
+      background: rgba(185,63,45,.09);
+      color: #52271f;
+      font-size: .94rem;
+      line-height: 1.58;
+    }
+
+    .warning p {
+      margin: 0;
+    }
+
+    .section-intro {
+      max-width: 620px;
+      margin-bottom: 26px;
+      color: var(--soft);
+    }
+
+    .prompt-list {
+      display: grid;
+      gap: 26px;
+    }
+
+    .prompt-card {
+      min-width: 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+    }
+
+    .prompt-head {
+      position: sticky;
+      top: 8px;
+      z-index: 2;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin: -4px -4px 16px;
+      padding: 4px;
+      border-radius: 12px;
+      background: rgba(255,253,248,.96);
+      backdrop-filter: blur(8px);
+    }
+
+    .prompt-heading {
+      min-width: 0;
+    }
+
+    .prompt-label {
+      display: inline-block;
+      margin-bottom: 8px;
+      color: var(--coral);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .prompt-purpose {
+      margin: 0;
+      color: var(--soft);
+      font-size: .88rem;
+      line-height: 1.5;
+    }
+
+    .prompt-purpose strong {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .copy-button {
+      flex: 0 0 auto;
+      min-width: 92px;
+      min-height: 46px;
+      padding: 11px 15px;
+      border: 0;
+      border-radius: 10px;
+      color: #fff;
+      background: var(--blue);
+      box-shadow: 0 5px 14px rgba(47,95,224,.2);
+      font: 700 .82rem/1.15 Poppins, Arial, Helvetica, sans-serif;
+      cursor: pointer;
+      transition: transform 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .copy-button:hover {
+      box-shadow: 0 7px 18px rgba(47,95,224,.28);
+      transform: translateY(-1px);
+    }
+
+    .copy-button:active {
+      transform: translateY(1px);
+    }
+
+    .copy-button.is-copied {
+      background: var(--success);
+      box-shadow: 0 5px 14px rgba(36,114,63,.2);
+    }
+
+    .copy-button.is-error {
+      max-width: 150px;
+      background: var(--coral);
+      font-size: .7rem;
+    }
+
+    .prompt-text {
+      width: 100%;
+      max-width: 100%;
+      margin: 0;
+      padding: 17px 15px;
+      overflow: visible;
+      border: 1px solid rgba(43,38,32,.12);
+      border-radius: 11px;
+      color: #24211d;
+      background: #f6f1e7;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: .86rem;
+      line-height: 1.55;
+      tab-size: 2;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .usage-note {
+      margin: 15px 2px 0;
+      color: var(--soft);
+      font-size: .84rem;
+      font-style: italic;
+      line-height: 1.55;
+    }
+
+    .cta-card {
+      position: relative;
+      overflow: hidden;
+      padding: 28px 22px 24px;
+      border: 1px solid var(--blue);
+      border-top-width: 6px;
+      border-radius: 14px;
+      background: var(--card);
+      box-shadow: 0 18px 44px rgba(47,95,224,.11);
+    }
+
+    .cta-card::after {
+      position: absolute;
+      top: -74px;
+      right: -68px;
+      width: 160px;
+      height: 160px;
+      border: 28px solid rgba(47,95,224,.07);
+      border-radius: 50%;
+      content: "";
+      pointer-events: none;
+    }
+
+    .cta-card h2 {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 16px;
+    }
+
+    .cta-card > p:not(.guarantee) {
+      color: var(--soft);
+    }
+
+    .benefits {
+      display: grid;
+      gap: 12px;
+      margin: 24px 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .benefits li {
+      position: relative;
+      padding-left: 27px;
+    }
+
+    .benefits li::before {
+      position: absolute;
+      top: .56em;
+      left: 3px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 0 4px rgba(47,95,224,.11);
+      content: "";
+    }
+
+    .guarantee {
+      margin: 0 0 22px;
+      padding: 16px;
+      border-left: 4px solid var(--blue);
+      border-radius: 0 10px 10px 0;
+      background: rgba(47,95,224,.08);
+      font-size: .94rem;
+      font-weight: 700;
+    }
+
+    .cta-button {
+      display: flex;
+      width: 100%;
+      min-height: 52px;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 20px;
+      border-radius: 11px;
+      color: #fff;
+      background: var(--blue);
+      box-shadow: 0 8px 20px rgba(47,95,224,.22);
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .cta-button:hover {
+      box-shadow: 0 10px 24px rgba(47,95,224,.3);
+      transform: translateY(-2px);
+    }
+
+    .site-footer {
+      padding: 30px 0 42px;
+      border-top: 1px solid var(--line);
+      color: var(--soft);
+      font-size: .78rem;
+      text-align: center;
+    }
+
+    .site-footer p {
+      margin-bottom: 4px;
+    }
+
+    .site-footer p:last-child {
+      margin-bottom: 0;
+    }
+
+    @media (min-width: 700px) {
+      .site-header {
+        padding-top: 86px;
+      }
+
+      .how-to,
+      .prompt-card,
+      .cta-card {
+        padding: 30px;
+      }
+
+      .prompt-head {
+        position: static;
+        margin: 0 0 18px;
+        padding: 0;
+        background: transparent;
+        backdrop-filter: none;
+      }
+
+      .prompt-text {
+        padding: 22px;
+        font-size: .9rem;
+      }
+
+      .cta-card {
+        padding: 38px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="shell">
+      <p class="eyebrow">Auxiliar Administrativo del Estado · C2</p>
+      <h1>Los 5 prompts que uso para trabajar el temario con IA</h1>
+      <p class="subtitle">Son gratis y para siempre. Úsalos con ChatGPT o Claude y con el texto de tu temario delante.</p>
+      <p class="golden-rule">Cada afirmación legal viene con el fragmento que la respalda, o no se estudia.</p>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="how-to" aria-labelledby="como-usarlo">
+      <h2 id="como-usarlo">Cómo se usa</h2>
+      <ol class="steps">
+        <li>Copia el prompt.</li>
+        <li>Pégalo en ChatGPT o Claude y pega debajo TU texto del temario.</li>
+        <li>Comprueba que cada cita existe de verdad en tu texto antes de estudiártela.</li>
+      </ol>
+    </section>
+
+    <aside class="warning" aria-label="Aviso importante">
+      <p>Pega SIEMPRE tu texto del temario. Si le pides «resúmeme el tema 5 de Auxiliar» sin pegar nada, la IA tira de lo que recuerda y te contesta sobre un temario que no tiene por qué ser el tuyo.</p>
+    </aside>
+
+    <section aria-labelledby="los-prompts">
+      <h2 id="los-prompts">Los cinco prompts</h2>
+      <p class="section-intro">Empieza por el que necesites hoy. Cada botón copia el prompt completo, con sus saltos de línea y el hueco para pegar el tema.</p>
+
+      <div class="prompt-list">
+        <article class="prompt-card">
+          <div class="prompt-head">
+            <div class="prompt-heading">
+              <span class="prompt-label">P1</span>
+              <h3>Resumen atado al texto</h3>
+              <p class="prompt-purpose"><strong>Para qué sirve:</strong> el que más se usa. Resume un tema y cita el fragmento que respalda cada afirmación legal.</p>
+            </div>
+            <button class="copy-button" type="button" data-target="p1" aria-label="Copiar el prompt P1, resumen atado al texto" aria-live="polite">Copiar</button>
+          </div>
+          <pre class="prompt-text" id="p1" tabindex="-1">Trabaja solo con el texto que pego debajo. No uses conocimiento externo.
+Resume las ideas principales en puntos claros.
+Junto a cada afirmación legal (artículo, plazo, órgano, requisito), copia entre comillas el
+fragmento exacto del texto que la respalda y conserva la referencia tal como aparece en el original.
+Si algo no está en el texto, escribe: "No consta en el texto aportado". No completes huecos.
+Al final, lista "Afirmaciones sin respaldo textual" con lo que no hayas podido citar.
+
+Texto:
+[pega aquí tu tema]</pre>
+          <p class="usage-note">Pega un tema (o un apartado si es largo). Lee el resumen comprobando que cada cita existe de verdad en tu texto. Lo que caiga en "sin respaldo", no va a tus apuntes hasta aclararlo.</p>
+        </article>
+
+        <article class="prompt-card">
+          <div class="prompt-head">
+            <div class="prompt-heading">
+              <span class="prompt-label">P2</span>
+              <h3>Tanda de 20 preguntas tipo test</h3>
+              <p class="prompt-purpose"><strong>Para qué sirve:</strong> 20 preguntas con la opción correcta y el fragmento que la justifica.</p>
+            </div>
+            <button class="copy-button" type="button" data-target="p2" aria-label="Copiar el prompt P2, tanda de 20 preguntas tipo test" aria-live="polite">Copiar</button>
+          </div>
+          <pre class="prompt-text" id="p2" tabindex="-1">Usa solo el texto que pego debajo. Genera 20 preguntas tipo test de una sola respuesta correcta,
+al estilo del examen de Auxiliar Administrativo del Estado (C2).
+Para cada pregunta: 4 opciones (a-d), la correcta marcada, una explicación de 1-2 frases y
+el fragmento exacto del texto que justifica la respuesta correcta.
+Los distractores deben ser plausibles pero inequívocamente incorrectos según el texto.
+No preguntes por nada que no esté en el texto. Si un dato es ambiguo, no hagas la pregunta.
+
+Texto:
+[pega aquí tu tema]</pre>
+          <p class="usage-note">Haz la tanda antes de mirar soluciones. Revisa los distractores: si dos opciones valen o hay ambigüedad, descarta esa pregunta. Son práctica, no preguntas oficiales ni predicción del examen.</p>
+        </article>
+
+        <article class="prompt-card">
+          <div class="prompt-head">
+            <div class="prompt-heading">
+              <span class="prompt-label">P3</span>
+              <h3>Esquema para memorizar</h3>
+              <p class="prompt-purpose"><strong>Para qué sirve:</strong> convierte el tema en un esquema jerárquico sin perder plazos ni referencias.</p>
+            </div>
+            <button class="copy-button" type="button" data-target="p3" aria-label="Copiar el prompt P3, esquema para memorizar" aria-live="polite">Copiar</button>
+          </div>
+          <pre class="prompt-text" id="p3" tabindex="-1">Con el texto que pego debajo y solo con él, hazme un esquema jerárquico (títulos, subpuntos)
+para memorizar. Conserva definiciones, plazos, requisitos, excepciones y las referencias legales
+tal cual aparecen. Marca con [!] lo que más se suele preguntar si el texto lo permite deducir;
+si no, no lo marques. No añadas contenido que no esté en el texto.
+
+Texto:
+[pega aquí tu tema]</pre>
+        </article>
+
+        <article class="prompt-card">
+          <div class="prompt-head">
+            <div class="prompt-heading">
+              <span class="prompt-label">P4</span>
+              <h3>Comprobador de afirmaciones</h3>
+              <p class="prompt-purpose"><strong>Para qué sirve:</strong> el control de calidad. Repasa la respuesta anterior afirmación por afirmación y marca cuáles están respaldadas por tu texto y cuáles no constan.</p>
+            </div>
+            <button class="copy-button" type="button" data-target="p4" aria-label="Copiar el prompt P4, comprobador de afirmaciones" aria-live="polite">Copiar</button>
+          </div>
+          <pre class="prompt-text" id="p4" tabindex="-1">Te voy a pegar una respuesta que me diste antes y el texto original del que debía salir.
+Comprueba, afirmación por afirmación, si cada una está respaldada por el texto.
+Devuelve una tabla: Afirmación | ¿Respaldada? (sí/no) | Fragmento que la respalda o "no consta".
+No defiendas tu respuesta anterior: si algo no está en el texto, márcalo como no respaldado.
+
+Respuesta anterior:
+[pégala]
+
+Texto original:
+[pégalo]</pre>
+          <p class="usage-note">Este es el prompt que cierra el círculo. Pásalo cuando dudes de un resumen o antes de dar un tema por estudiado. Es tu segunda lectura, hecha contra la fuente.</p>
+        </article>
+
+        <article class="prompt-card">
+          <div class="prompt-head">
+            <div class="prompt-heading">
+              <span class="prompt-label">P5</span>
+              <h3>Repaso activo</h3>
+              <p class="prompt-purpose"><strong>Para qué sirve:</strong> te examina con preguntas abiertas, de una en una, y te corrige citando el texto.</p>
+            </div>
+            <button class="copy-button" type="button" data-target="p5" aria-label="Copiar el prompt P5, repaso activo" aria-live="polite">Copiar</button>
+          </div>
+          <pre class="prompt-text" id="p5" tabindex="-1">Hazme de examinador. Con el texto de abajo, hazme 8 preguntas abiertas cortas, de una en una,
+esperando mi respuesta antes de la siguiente. Al final de cada una, corrígeme citando el fragmento
+del texto y dime qué me faltó. No me des la respuesta antes de que yo conteste.
+
+Texto:
+[pega aquí el tema que quieres repasar]</pre>
+        </article>
+      </div>
+    </section>
+
+    <section class="cta-card" aria-labelledby="planner-title">
+      <h2 id="planner-title">Los prompts son tuyos. Lo que cuesta es el orden.</h2>
+      <p>El planner de repasos para Auxiliar Administrativo del Estado ya viene precargado con los 28 temas oficiales del BOE. Lo abres en Google Sheets y te dice qué estudiar hoy y qué repasos te tocan.</p>
+      <ul class="benefits">
+        <li>Los 28 temas oficiales ya dentro: Bloque I, 16 temas; Bloque II, 12 temas.</li>
+        <li>La hoja "Hoy" te dice qué toca sin que configures nada.</li>
+        <li>El calendario de repasos se recalcula solo con tus notas de los test.</li>
+      </ul>
+      <!-- GARANTÍA (no publicar hasta que P2 dé 20/20 con fragmento, council 2026-09-19):
+      <p class="guarantee">Si una pregunta no lleva la cita literal del fragmento que pegaste, te devuelvo el dinero.</p>
+      -->
+      <a class="cta-button" href="../#planner">Quiero el planner</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell">
+      <p>@oposita.con.ia</p>
+      <p>Estos prompts son gratis y se pueden compartir.</p>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const resetButton = (button) => {
+        window.clearTimeout(button.copyTimer);
+        button.copyTimer = window.setTimeout(() => {
+          button.textContent = "Copiar";
+          button.classList.remove("is-copied", "is-error");
+        }, 1800);
+      };
+
+      const fallbackCopy = (text) => {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.left = "-9999px";
+        textarea.style.top = "0";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        textarea.setSelectionRange(0, textarea.value.length);
+
+        let copied = false;
+        try {
+          copied = document.execCommand("copy");
+        } catch (error) {
+          copied = false;
+        }
+
+        textarea.remove();
+        return copied;
+      };
+
+      const selectPrompt = (pre) => {
+        const selection = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(pre);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        pre.focus();
+      };
+
+      document.addEventListener("click", async (event) => {
+        const button = event.target.closest("button[data-target]");
+        if (!button) return;
+
+        const pre = document.getElementById(button.dataset.target);
+        if (!pre) return;
+
+        const text = pre.textContent;
+        let copied = false;
+
+        try {
+          if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+            await navigator.clipboard.writeText(text);
+            copied = true;
+          }
+        } catch (error) {
+          copied = false;
+        }
+
+        if (!copied) copied = fallbackCopy(text);
+
+        window.clearTimeout(button.copyTimer);
+        if (copied) {
+          button.textContent = "Copiado";
+          button.classList.remove("is-error");
+          button.classList.add("is-copied");
+          resetButton(button);
+          return;
+        }
+
+        selectPrompt(pre);
+        button.textContent = "Selecciona y copia a mano";
+        button.classList.remove("is-copied");
+        button.classList.add("is-error");
+      });
+    })();
+  </script>
+</body>
+</html>
