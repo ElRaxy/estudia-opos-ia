@@ -1,886 +1,845 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <!-- AEO/GEO aplicado
-  - Entidad visible junto al hero para identificar el producto y su alcance.
-  - H2 con preguntas y respuestas directas BLUF antes del detalle.
-  - FAQ completa con H3; las 22 respuestas siguen en el HTML, plegadas en <details> (la primera abierta).
-  - Enlaces oficiales conservados para comprobar herramientas y convocatoria.
-  - JSON-LD de FAQPage, Product y Organization sin valoraciones ni fechas inventadas.
-  - Title, descripción y Open Graph alineados con el copy de venta de la v9 (eje nuevo del 2026-09-20).
-  - Producto con precio visible (19/29 €) y las mismas FAQ en el HTML y en el JSON-LD.
-  -->
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
-  <meta name="theme-color" content="#faf6ee">
-  <meta name="description" content="Hasta 110 preguntas en noventa minutos, a mano y sin chat al lado. Cinco prompts gratis y un planner con los 28 temas oficiales desde 19 €.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://elraxy.github.io/estudia-opos-ia/">
-  <meta property="og:site_name" content="Estudia con IA">
-  <meta property="og:locale" content="es_ES">
-  <meta property="og:title" content="Auxiliar Administrativo con ChatGPT | Estudia con IA">
-  <meta property="og:description" content="Hasta 110 preguntas en noventa minutos, a mano y sin chat al lado. Cinco prompts gratis y un planner con los 28 temas oficiales desde 19 €.">
-  <meta property="og:image" content="https://elraxy.github.io/estudia-opos-ia/og.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Estudia con IA: «Estudia Auxiliar Administrativo con tu IA. El examen lo haces sin ella», con 5 prompts gratis, el planner por 19 € y una pantalla partida en dos: a la izquierda la IA contestando bien, a la derecha una hoja de examen en blanco con el reloj en 90:00.">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Auxiliar Administrativo con ChatGPT | Estudia con IA">
-  <meta name="twitter:description" content="Hasta 110 preguntas en noventa minutos, a mano y sin chat al lado. Cinco prompts gratis y un planner con los 28 temas oficiales desde 19 €.">
-  <meta name="twitter:image" content="https://elraxy.github.io/estudia-opos-ia/og.png">
-  <meta name="twitter:image:alt" content="Estudia con IA: «Estudia Auxiliar Administrativo con tu IA. El examen lo haces sin ella», con 5 prompts gratis, el planner por 19 € y una pantalla partida en dos: a la izquierda la IA contestando bien, a la derecha una hoja de examen en blanco con el reloj en 90:00.">
-  <title>Auxiliar Administrativo con ChatGPT | Estudia con IA</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%231f57d6%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M7%203h7l5%205v11a2%202%200%200%201-2%202H7a2%202%200%200%201-2-2V5a2%202%200%200%201%202-2z%22%2F%3E%3Cpath%20d%3D%22M14%203v5h5%22%2F%3E%3Cpath%20d%3D%22M9%2014.5l2%202%204-4%22%2F%3E%3C%2Fsvg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Instrument Serif es la de display: entra con su italica, que es el unico
-       enfasis que se permite dentro de un titular. Poppins se queda para la
-       interfaz y el cuerpo. Caveat sale porque su unico uso, la linea manuscrita
-       de la fecha de apertura, queda comentada mas abajo. -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Poppins:wght@400;500;600;700&amp;display=swap">
-  <style>
-    /* ==========================================================================
-       Landing v9 — sistema visual del pase del 2026-09-20.
-       Sustituye entero al de la v8. Tres reglas mandan sobre el resto:
-       1) Cero box-shadow en toda la pagina. La profundidad se hace con
-          gradientes radiales y filter: blur().
-       2) Serif de display en los titulares, con la italica del mismo serif como
-          unico enfasis. Ni negritas ni color dentro de un titular.
-       3) Tres medidas decrecientes: titular ancho, cuerpo en medio, subtitulo a
-          la mitad del titular.
-       Lo unico que se mueve solo es la luz que recorre el boton principal.
-       ========================================================================== */
-
-    @property --giro { syntax: "<angle>"; inherits: true; initial-value: 0deg; }
-
-    :root {
-      color-scheme: light;
-      --paper: #faf6ee; --paper-deep: #f3eee2; --white: #fffefa;
-      --ink: #2b2620; --muted: #575047; --line: #dcd5ca;
-      --blue: #1f57d6; --blue-deep: #1745ae; --blue-soft: #edf1fa;
-      --yellow: #ffe08a; --coral: #a83d2d; --coral-soft: #fce9e2;
-      --serif: "Instrument Serif", Georgia, "Times New Roman", serif;
-      --sans: "Poppins", "Avenir Next", Avenir, Arial, sans-serif;
-      --r: 8px;
-      --shell: 1160px; --gap: 44px;
-      /* Las tres medidas. Se usan tal cual en el hero y en toda la prosa. */
-      --w-title: 1120px; --w-body: 760px; --w-sub: 600px;
-      /* Curvas propias: las de fabrica no tienen pegada. */
-      --ease-out: cubic-bezier(.23, 1, .32, 1);
-      --muelle: cubic-bezier(.32, .72, 0, 1);
-    }
-
-    * { box-sizing: border-box; }
-    html, body { overflow-x: clip; }
-    html { scroll-padding-top: 32px; }
-    @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
-    body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.62 var(--sans); -webkit-font-smoothing: antialiased; }
-    ::selection { color: var(--ink); background: var(--yellow); }
-    a { color: inherit; text-decoration: none; }
-    button, input { font: inherit; }
-    a, button, input, summary { -webkit-tap-highlight-color: transparent; }
-    :focus-visible { outline: 3px solid var(--blue); outline-offset: 5px; }
-    svg { display: block; flex: none; }
-    p, h1, h2, h3 { margin: 0; }
-    img { max-width: 100%; height: auto; }
-    .wrap { width: min(var(--shell), calc(100% - 32px)); margin-inline: auto; }
-    .skip-link { position: absolute; top: 0; left: -9999px; z-index: 40; padding: 13px 20px; border-radius: 0 0 var(--r) 0; background: var(--blue); color: #fff; font-size: 15px; font-weight: 600; }
-    .skip-link:focus { left: 0; }
-    main:focus { outline: none; }
-
-    /* --- Titulares: serif, y la italica del mismo serif como unico enfasis. --- */
-    h1, h2 { font-family: var(--serif); font-weight: 400; letter-spacing: -.012em; text-wrap: balance; }
-    h1 i, h2 i { font-style: italic; color: inherit; }
-    h1 { max-width: var(--w-title); font-size: 42px; line-height: 1.04; }
-    h2 { max-width: var(--w-title); font-size: 31px; line-height: 1.08; }
-    h3 { font-family: var(--sans); font-size: 18px; font-weight: 600; line-height: 1.4; letter-spacing: -.03em; }
-
-    /* --- Cabecera: pastilla colgada del borde, como la referencia. --- */
-    .site-header { padding-block: 14px 0; }
-    .header-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 20px; padding: 10px 16px 10px 14px; border-radius: 14px; background: var(--ink); color: var(--paper); }
-    .brand-lockup { display: flex; align-items: center; gap: 10px; }
-    .brand { width: 24px; height: 24px; color: var(--yellow); }
-    .eyebrow { font-size: 14px; font-weight: 600; line-height: 1.4; letter-spacing: -.015em; }
-    .nav { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 0 13px; font-size: 12.5px; font-weight: 500; }
-    .nav a { display: inline-flex; align-items: center; min-height: 44px; color: #efe7d9; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 5px; transition: color .18s ease, text-decoration-color .18s ease; }
-    .nav a:hover { color: var(--yellow); text-decoration-color: currentColor; }
-
-    /* --- Boton pastilla. Cuatro capas: relleno, borde de gradiente, glow con
-       blur y flecha. La luz da vueltas al perimetro en bucle y es lo unico que
-       se mueve solo en la pagina. --- */
-    .button {
-      position: relative; isolation: isolate;
-      display: inline-flex; align-items: center; justify-content: center; gap: 13px;
-      min-height: 54px; padding: 15px 28px;
-      border: 0; border-radius: 999px;
-      background: var(--blue); color: #fff;
-      font: 600 15px/1.35 var(--sans); letter-spacing: -.012em; text-align: center;
-      cursor: pointer;
-      animation: giro-luz 4.6s linear infinite;
-      transition: transform .18s var(--ease-out), background-color .2s ease;
-    }
-    .button::before, .button::after { transition: opacity .24s ease, filter .24s ease; }
-    .button svg { width: 18px; height: 18px; transition: transform .2s var(--ease-out); }
-    /* La luz vive SOLO en el anillo del borde. El boton crea stacking context con
-       `isolation`, asi que un pseudoelemento con z-index negativo se pinta encima
-       del relleno azul, no detras: si el gradiente fuera un disco, la cuna clara
-       cruzaria el boton por el medio (bug visto en produccion el 2026-09-20).
-       La mascara de dos capas con composite exclude recorta el centro y deja anillo. */
-    .button::before, .button::after {
-      content: ""; position: absolute; box-sizing: border-box; border-radius: 999px; pointer-events: none;
-      background: conic-gradient(from var(--giro), rgba(255,255,255,0) 0deg, rgba(255,255,255,.96) 18deg, rgba(190,214,255,.85) 40deg, rgba(255,255,255,.28) 76deg, rgba(255,255,255,0) 120deg, rgba(255,255,255,0) 360deg);
-      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor;
-      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      mask-composite: exclude;
-    }
-    /* El filo va DENTRO del boton, sobre el azul: puesto fuera cae sobre el fondo
-       crema y el blanco no contrasta con nada. */
-    .button::before { z-index: 1; inset: 0; padding: 2px; }
-    .button::after { z-index: 0; inset: -4px; padding: 5px; opacity: .55; filter: blur(8px); }
-    .button:hover { background: var(--blue-deep); transform: translateY(-2px); }
-    .button:hover::after { opacity: .85; filter: blur(10px); }
-    .button:hover svg { transform: translateX(4px); }
-    .button:active { transform: translateY(0) scale(.985); transition-duration: .08s; }
-    .button.secondary { background: var(--white); color: var(--ink); animation: none; }
-    .button.secondary::before { inset: -1px; padding: 1px; background: var(--line); }
-    .button.secondary::after { display: none; }
-    .button.secondary:hover { background: #f3eee2; transform: translateY(-2px); }
-    @keyframes giro-luz { to { --giro: 360deg; } }
-
-    /* --- Hero. Composicion centrada con las tres medidas decrecientes. --- */
-    .hero { padding-block: 44px 8px; text-align: center; }
-    .hero-copy { display: flex; flex-direction: column; align-items: center; gap: 20px; }
-    .hero-eyebrow { display: inline-flex; align-items: center; gap: 9px; margin: 0; padding: 7px 15px 7px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--white); color: var(--muted); font-size: 13px; font-weight: 600; line-height: 1.4; letter-spacing: -.005em; }
-    .hero-eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--blue); }
-    .hero h1 { margin-inline: auto; }
-    .hero-sub { max-width: var(--w-sub); margin-inline: auto; color: var(--muted); font-size: 16px; line-height: 1.6; }
-    .hero-sub p + p { margin-top: 13px; }
-    .hero-action { display: flex; flex-direction: column; align-items: center; gap: 14px; }
-    .hero-action .buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
-    .hero-note { max-width: 46ch; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
-    .entity { max-width: var(--w-body); margin: 34px auto 0; padding-top: 22px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; line-height: 1.7; text-align: left; }
-
-    /* --- Mockup del hero: la pantalla partida. A la izquierda la respuesta
-       correcta de la IA, a la derecha la hoja en blanco con el reloj. Todo en
-       HTML y CSS; no hay ni una imagen. --- */
-    .mock { position: relative; isolation: isolate; max-width: var(--w-title); margin: 40px auto 0; padding: 0; }
-    /* Profundidad sin sombra: un halo radial desenfocado por detras. */
-    .mock::before { content: ""; position: absolute; z-index: -1; inset: 8% 4% -6%; background: radial-gradient(60% 55% at 26% 45%, #1f57d63d, transparent 70%), radial-gradient(55% 55% at 76% 55%, #b9a98233, transparent 72%); filter: blur(42px); }
-    .mock-grid { display: grid; gap: 14px; }
-    .mock-panel { position: relative; display: flex; flex-direction: column; padding: 18px 18px 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--white); text-align: left; }
-    .mock-tag { display: flex; align-items: center; gap: 9px; margin: 0 0 14px; color: var(--muted); font-size: 12px; font-weight: 600; letter-spacing: .1em; line-height: 1.4; text-transform: uppercase; }
-    .mock-tag::before { content: ""; width: 16px; height: 2px; border-radius: 2px; background: currentColor; }
-    .mock-ia .mock-tag { color: var(--blue); }
-    .mock-q { margin: 0 0 12px; padding: 11px 14px; border-radius: 13px 13px 13px 3px; background: var(--paper-deep); color: var(--muted); font-size: 13.5px; line-height: 1.55; }
-    .mock-a { margin: 0; padding: 13px 15px; border: 1px solid #d9e1f3; border-radius: 3px 13px 13px 13px; background: var(--blue-soft); font-size: 15px; line-height: 1.6; }
-    /* El sello de "correcta" se pega al fondo del panel: asi las dos mitades
-       de la pantalla partida acaban a la misma altura sin recortar texto. */
-    .mock-ok { display: flex; align-items: center; gap: 7px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); color: #1d6b45; font-size: 13px; font-weight: 600; line-height: 1.4; }
-    .mock-ia .mock-ok { margin-top: auto; }
-    .mock-sheet { margin-top: auto; }
-    .mock-ok svg { width: 15px; height: 15px; }
-    /* La hoja: papel rayado de verdad, sin una sola letra escrita. */
-    .mock-clock { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
-    .mock-clock .t { font: 600 32px/1 var(--sans); font-variant-numeric: lining-nums tabular-nums; letter-spacing: -.045em; }
-    .mock-clock .u { color: var(--muted); font-size: 12px; line-height: 1.4; }
-    .mock-sheet { position: relative; height: 168px; padding: 13px 15px; border: 1px solid var(--line); border-radius: 10px; background-color: #fff; background-image: repeating-linear-gradient(transparent 0 25px, #cbd6ea 25px 26px); }
-    .mock-sheet p { margin: 0; color: #a9a294; font-size: 13px; line-height: 25px; font-variant-numeric: lining-nums tabular-nums; }
-    .mock figcaption { max-width: var(--w-sub); margin: 18px auto 0; color: var(--muted); font-size: 13.5px; line-height: 1.6; }
-
-    /* --- Fila de datos. --- */
-    .stats { display: grid; gap: 0; margin: 44px auto 0; padding: 0; }
-    .stat { padding: 18px 0; }
-    .stat + .stat { border-top: 1px solid var(--line); }
-    .stat dt { font-family: var(--serif); font-size: 34px; font-weight: 400; line-height: 1.1; letter-spacing: -.02em; font-variant-numeric: lining-nums tabular-nums; }
-    .stat dd { max-width: 34ch; margin: 6px 0 0; color: var(--muted); font-size: 13.5px; line-height: 1.6; }
-
-    /* --- Secciones. --- */
-    .section { padding-block: 54px; border-bottom: 1px solid var(--line); }
-    .section.tinted { position: relative; }
-    .section.tinted::before { content: ""; position: absolute; z-index: -1; inset: 0 calc(50% - 50vw); background: var(--paper-deep); }
-    .bluf { max-width: var(--w-body); margin-top: 20px; color: var(--ink); font-size: 17px; line-height: 1.6; letter-spacing: -.006em; }
-    .section-detail { max-width: var(--w-body); margin-top: 20px; }
-    .section-detail > p { color: var(--muted); font-size: 16px; line-height: 1.65; }
-    .section-detail > p + p { margin-top: 14px; }
-    .editorial.prose > .section-detail { padding-left: 20px; border-left: 2px solid var(--line); }
-    p a { color: var(--blue); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
-    p a:hover { color: var(--blue-deep); }
-    .section-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: 28px; }
-    .section-cta p { max-width: 42ch; color: var(--muted); font-size: 14px; line-height: 1.6; }
-
-    /* --- Comparativa de dos estados. --- */
-    .compare { display: grid; gap: 14px; margin-top: 26px; }
-    .compare-state { padding: 22px; border: 1px dashed #d7cec1; border-radius: 14px; }
-    .compare-state:last-child { position: relative; isolation: isolate; border-style: solid; border-color: #c5d2ed; background: var(--white); }
-    .compare-state:last-child::before { content: ""; position: absolute; z-index: -1; inset: 14% 8% -8%; background: radial-gradient(60% 60% at 50% 50%, #1f57d629, transparent 72%); filter: blur(28px); }
-    .compare-title { display: flex; align-items: center; gap: 10px; }
-    .compare-title svg { width: 19px; height: 19px; color: var(--muted); }
-    .compare-state:last-child .compare-title svg { color: var(--blue); }
-    .compare-title h3 { font-size: 16px; color: var(--muted); }
-    .compare-state:last-child .compare-title h3 { color: var(--ink); }
-    .compare-state p { margin-top: 12px; color: var(--muted); font-size: 15px; line-height: 1.6; }
-
-    /* --- Prompt de muestra. --- */
-    .prompt-card { margin-top: 26px; padding: 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--white); transition: border-color .22s ease, transform .22s var(--ease-out); }
-    @media (hover: hover) {
-      .prompt-card:hover { border-color: #b7c8ea; transform: translateY(-2px); }
-      .compare-state { transition: border-color .22s ease; }
-      .compare-state:hover { border-color: #b7c8ea; }
-    }
-    pre { max-width: 100%; margin: 15px 0 0; padding: 16px 18px; border-left: 3px solid var(--blue); border-radius: 0 var(--r) var(--r) 0; background: var(--paper-deep); white-space: pre-wrap; overflow-wrap: anywhere; font: 13.5px/1.75 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-    .after-prompt { margin-top: 24px; padding-left: 20px; border-left: 2px solid var(--line); }
-    .after-prompt p { max-width: 58ch; margin-top: 10px; color: var(--muted); font-size: 15px; line-height: 1.65; }
-
-    /* --- Indice de prompts: una tarjeta con cinco filas, no cinco cajas. --- */
-    .prompt-index { display: grid; gap: 0; margin: 28px 0 0; padding: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--white); list-style: none; overflow: clip; }
-    .prompt-index li { display: grid; grid-template-columns: auto 1fr; gap: 5px 16px; padding: 19px 20px; }
-    .prompt-index li + li { border-top: 1px solid var(--line); }
-    .prompt-index .tag { grid-row: span 2; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; margin-top: 1px; border-radius: 10px; background: var(--blue-soft); color: var(--blue); font-size: 13px; font-weight: 600; font-variant-numeric: lining-nums tabular-nums; }
-    .prompt-index h3 { font-size: 16px; }
-    .prompt-index p { color: var(--muted); font-size: 15px; line-height: 1.6; }
-
-    /* --- Las tres tarjetas del planner. --- */
-    .kit { display: grid; gap: 16px; margin-top: 34px; }
-    .kit-item { padding: 26px 24px; border: 1px solid var(--line); border-radius: 16px; background: var(--white); }
-    .kit-icon { box-sizing: content-box; width: 21px; height: 21px; margin-bottom: 20px; padding: 9px; border-radius: 11px; background: var(--blue-soft); color: var(--blue); }
-    .kit-item p { margin-top: 12px; color: var(--muted); font-size: 15px; line-height: 1.65; }
-
-    /* --- Franja de precio. Relieve por halo, nunca por sombra. --- */
-    .price-card { border: 1px solid #c3d1ec; border-radius: 18px; background: var(--white); overflow: clip; }
-    .price-wrap { position: relative; isolation: isolate; margin-top: 32px; }
-    .price-wrap::before { content: ""; position: absolute; z-index: -1; inset: 12% 6% -4%; background: radial-gradient(55% 60% at 50% 55%, #1f57d633, transparent 72%); filter: blur(40px); }
-    .price-main { padding: 30px 24px 32px; text-align: center; background: var(--blue-soft); border-bottom: 1px solid #c3d1ec; }
-    .price-flag { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px 7px 11px; border: 1px solid #b7c8ea; border-radius: 999px; background: var(--white); color: var(--blue); font-size: 13px; font-weight: 600; line-height: 1.4; }
-    .price-flag svg { width: 15px; height: 15px; }
-    .price-amount { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 4px 13px; margin-top: 16px; }
-    .price-card .amount { font-family: var(--serif); font-size: 52px; font-weight: 400; line-height: 1.05; letter-spacing: -.02em; font-variant-numeric: lining-nums tabular-nums; }
-    .price-after { color: var(--muted); font-size: 16px; text-decoration: line-through; text-decoration-color: #ab9f8e; text-decoration-thickness: 1px; }
-    .price-includes { display: grid; gap: 11px; width: fit-content; max-width: 32ch; margin: 22px auto 0; padding: 0; list-style: none; text-align: left; }
-    .price-includes li { display: grid; grid-template-columns: auto 1fr; gap: 11px; align-items: start; font-size: 15px; line-height: 1.55; }
-    .price-includes svg { width: 17px; height: 17px; margin-top: 3px; color: var(--blue); }
-    /* El CTA de compra está apagado hasta que exista la URL de Payhip. Apagado
-       de verdad: ni animación, ni glow, ni puntero de enlace. El precio sigue
-       visible encima, porque eso sí es información. */
-    .price-cta { margin: 24px 0 0; }
-    .button.ghost[disabled] { animation: none; background: var(--paper-deep); border: 1px dashed #b3a894; color: var(--muted); cursor: not-allowed; }
-    .button.ghost[disabled]::before, .button.ghost[disabled]::after { display: none; }
-    .button.ghost[disabled]:hover, .button.ghost[disabled]:active { transform: none; background: var(--paper-deep); }
-    .price-note { margin-top: 12px; color: var(--muted); font-size: 13px; line-height: 1.6; }
-
-    /* --- Formulario de aviso. --- */
-    .signup-panel { padding: 28px 24px 30px; background: var(--white); }
-    .signup-panel h3 { font-size: 19px; }
-    .signup-intro { max-width: 45ch; margin-top: 14px; color: var(--muted); font-size: 15px; line-height: 1.65; }
-    .signup-intro + .signup-intro { margin-top: 12px; }
-    form { margin-top: 22px; }
-    label { display: block; margin-bottom: 9px; font-size: 13px; font-weight: 600; }
-    input { width: 100%; min-width: 0; min-height: 54px; padding: 13px 16px; border: 1px solid #6f7889; border-radius: 999px; color: var(--ink); background: #fff; font-size: 16px; }
-    input:hover, input:focus-visible { border-color: var(--blue); }
-    form .button { width: 100%; margin-top: 12px; }
-    .privacy { max-width: 52ch; margin-top: 18px; color: var(--muted); font-size: 12.5px; line-height: 1.7; }
-
-    /* --- Preguntas frecuentes. --- */
-    .faq { padding-block: 54px; }
-    .questions { margin-top: 30px; }
-    .faq-group + .faq-group { margin-top: 42px; }
-    .faq-group-label { display: flex; align-items: center; gap: 10px; margin: 0; color: var(--muted); font-size: 12px; font-weight: 600; letter-spacing: .11em; line-height: 1.5; text-transform: uppercase; }
-    .faq-group-label::before { content: ""; width: 18px; height: 2px; border-radius: 2px; background: var(--blue); }
-    .faq-list { margin-top: 15px; border: 1px solid var(--line); border-radius: 14px; background: var(--white); overflow: clip; }
-    .faq-item + .faq-item { border-top: 1px solid var(--line); }
-    .faq-item[open] { background: #fdfaf4; border-left: 3px solid var(--blue); }
-    .faq-item > summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 58px; padding: 16px 20px; list-style: none; cursor: pointer; transition: background-color .2s ease; }
-    .faq-item > summary::-webkit-details-marker { display: none; }
-    .faq-item > summary::after { content: ""; flex: none; width: 30px; height: 30px; border: 1px solid var(--line); border-radius: 50%; background: var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23575047' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat center / 12px 12px; transition: transform .28s var(--ease-out), background-color .2s ease, border-color .2s ease; }
-    .faq-item[open] > summary::after { transform: rotate(180deg); border-color: #b7c8ea; background-color: var(--blue-soft); }
-    .faq-item > summary h3 { font-size: 16px; letter-spacing: -.02em; transition: color .18s ease; }
-    .faq-item[open] > summary h3 { color: var(--blue); }
-    .faq-item > p { max-width: 64ch; margin: 0; padding: 0 20px 22px; color: var(--muted); font-size: 15px; line-height: 1.7; }
-    .faq-list :focus-visible { outline-offset: -3px; }
-    @media (hover: hover) and (pointer: fine) {
-      .faq-item > summary:hover { background-color: #fbf8f1; }
-      .faq-item > summary:hover h3 { color: var(--blue); }
-      .faq-item > summary:hover::after { border-color: #b7c8ea; background-color: var(--blue-soft); }
-    }
-    @supports (interpolate-size: allow-keywords) {
-      :root { interpolate-size: allow-keywords; }
-      .faq-item::details-content { block-size: 0; overflow: clip; opacity: 0; transition: block-size .34s var(--ease-out), opacity .24s ease, content-visibility .34s allow-discrete; }
-      .faq-item[open]::details-content { block-size: auto; opacity: 1; }
-    }
-
-    /* --- Pie. --- */
-    .site-footer { padding-block: 46px 24px; background: var(--paper-deep); border-top: 1px solid var(--line); }
-    .footer-grid { display: grid; gap: 32px; }
-    .footer-about .brand { width: 26px; height: 26px; color: var(--blue); }
-    .footer-about .eyebrow { color: var(--ink); }
-    .footer-tagline { max-width: 34ch; margin-top: 13px; color: var(--muted); font-size: 14px; line-height: 1.65; }
-    .footer-social { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 0; padding: 0; list-style: none; }
-    .footer-social a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 9px 16px 9px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--white); font-size: 13px; font-weight: 600; transition: color .18s ease, border-color .18s ease, transform .18s var(--ease-out); }
-    .footer-social svg { width: 16px; height: 16px; }
-    .footer-title { margin: 0 0 12px; color: var(--ink); font-size: 13px; font-weight: 600; letter-spacing: .09em; line-height: 1.5; text-transform: uppercase; }
-    .footer-nav ul { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
-    .footer-nav a { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); font-size: 15px; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 5px; transition: color .18s ease, text-decoration-color .18s ease; }
-    .footer-legal p { max-width: 62ch; color: var(--muted); font-size: 13px; line-height: 1.7; }
-    .footer-bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 24px; margin-top: 34px; padding-top: 20px; border-top: 1px solid var(--line); }
-    .footer-bottom p { color: var(--muted); font-size: 13px; line-height: 1.6; }
-    .footer-bottom a { color: var(--muted); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 4px; transition: color .18s ease, text-decoration-color .18s ease; }
-    @media (hover: hover) and (pointer: fine) {
-      .footer-social a:hover { color: var(--blue); border-color: #b7c8ea; transform: translateY(-2px); }
-      .footer-nav a:hover, .footer-bottom a:hover { color: var(--blue); text-decoration-color: currentColor; }
-    }
-
-    /* --- Barra fija de la version movil. Nace apagada: sin JS no aparece. --- */
-    .sticky-cta { position: fixed; right: 0; bottom: 0; left: 0; z-index: 30; visibility: hidden; opacity: 0; pointer-events: none; transform: translateY(100%); background: #faf6eeeb; -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border-top: 1px solid var(--line); transition: transform .2s var(--ease-out), opacity .2s var(--ease-out); }
-    .sticky-cta > div { display: grid; grid-template-columns: minmax(0, 1.62fr) minmax(0, 1fr); gap: 9px; margin: 0 16px; padding: 10px 0 calc(10px + env(safe-area-inset-bottom)); }
-    .sticky-cta a { display: flex; align-items: center; justify-content: center; min-height: 48px; padding: 8px 10px; border-radius: 999px; background: var(--blue); color: #fff; font-size: 13px; font-weight: 600; line-height: 1.25; text-align: center; transition: transform .14s var(--ease-out); }
-    .sticky-cta a + a { border: 1px solid var(--line); background: var(--white); color: var(--ink); }
-    .sticky-cta a:active { transform: scale(.97); }
-    .sticky-cta a:focus-visible { outline-color: var(--ink); outline-offset: 2px; }
-    @media (max-width: 679px) {
-      .sticky-cta.is-on { visibility: visible; opacity: 1; pointer-events: auto; transform: translateY(0); }
-      body.has-sticky-cta { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
-    }
-
-    /* --- Entrada: los bloques caen desde arriba, una sola vez cada uno.
-       Nace apagada y solo la enciende el JS, asi que sin JS, sin
-       IntersectionObserver o con movimiento reducido la pagina se ve entera
-       desde el primer momento. Solo se animan opacity y transform. --- */
-    /* Sin will-change a proposito: promover la capa y despromoverla al quitar
-       las clases dejaba el boton con su glow sin repintar en pantallas muy
-       altas (comprobado a 390x2400 el 2026-09-20). opacity y transform ya se
-       componen solos. */
-    html.js-reveal .reveal { opacity: .001; transform: translateY(-20px); transition: opacity .4s var(--muelle), transform .4s var(--muelle); transition-delay: var(--d, 0ms); }
-    html.js-reveal .reveal.is-in { opacity: 1; transform: none; }
-
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      html.js-reveal .reveal { opacity: 1; transform: none; }
-      .button { animation: none; }
-      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition: none !important; }
-    }
-
-    /* ==========================================================================
-       Tablet: 680 px en adelante.
-       ========================================================================== */
-    @media (min-width: 680px) {
-      .wrap { width: min(var(--shell), calc(100% - 60px)); }
-      .site-header { position: sticky; top: 0; z-index: 20; padding-block: 12px 0; }
-      /* Con la cabecera pegada arriba, un ancla sin holgura deja el titulo debajo
-         de la pastilla negra. 108px = alto de la pastilla mas su padding y un respiro. */
-      html { scroll-padding-top: 108px; }
-      .header-inner { padding: 11px 20px 11px 18px; }
-      .nav { font-size: 13.5px; gap: 6px 22px; }
-      html { scroll-padding-top: 96px; }
-      .hero { padding-block: 64px 10px; }
-      h1 { font-size: 62px; }
-      h2 { font-size: 40px; }
-      .hero-sub { font-size: 17px; }
-      .mock-grid { grid-template-columns: 1fr 1fr; gap: 18px; }
-      .mock-panel { padding: 22px 22px 24px; }
-      .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--gap); margin-top: 54px; }
-      .stat, .stat + .stat { padding: 0; border: 0; }
-      .stat + .stat { border-left: 1px solid var(--line); padding-left: calc(var(--gap) / 2); margin-left: calc(var(--gap) / -2); }
-      .section { padding-block: 70px; }
-      .faq { padding-block: 70px; }
-      .kit { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .kit-item { padding: 24px 20px; }
-      .compare { grid-template-columns: 1fr 1fr; gap: 18px; }
-      .price-card { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); }
-      .price-main { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 38px 32px; border-bottom: 0; border-right: 1px solid #c3d1ec; }
-      .signup-panel { padding: 38px 32px; }
-      .footer-grid { grid-template-columns: minmax(0, 1.15fr) minmax(0, .7fr); gap: 40px 44px; }
-      .footer-legal { grid-column: 1 / -1; padding-top: 28px; border-top: 1px solid var(--line); }
-      .footer-legal p { max-width: 78ch; }
-    }
-
-    /* ==========================================================================
-       Escritorio: 1020 px en adelante. Aqui entran de verdad las tres medidas
-       del hero (titular / cuerpo / subtitulo) y el par de columnas editorial.
-       ========================================================================== */
-    @media (min-width: 1020px) {
-      html { scroll-padding-top: 110px; }
-      .hero { padding-block: 76px 12px; }
-      h1 { font-size: 72px; line-height: 1.02; letter-spacing: -.016em; }
-      h2 { font-size: 46px; }
-      .hero-copy { gap: 24px; }
-      .hero-sub { font-size: 17px; line-height: 1.62; }
-      .mock { margin-top: 52px; }
-      .mock-grid { gap: 22px; }
-      .mock-panel { padding: 26px 26px 28px; }
-      .mock-sheet { height: 196px; }
-      .mock-clock .t { font-size: 40px; }
-      .stat dt { font-size: 38px; }
-      .section { padding-block: 88px; }
-      .faq { padding-block: 88px; }
-      /* Patron editorial 5/7: el titulo abre a la izquierda y el texto entra en
-         la columna de al lado. Las rejillas y las tarjetas ocupan las doce. */
-      .editorial { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: start; }
-      .editorial > * { grid-column: 6 / 13; max-width: none; margin-inline: 0; }
-      .editorial > h2 { grid-column: 1 / 6; grid-row: 1; font-size: 40px; }
-      .editorial > .bluf { grid-column: 6 / 13; grid-row: 1; margin-top: 4px; }
-      .editorial.prose > .section-detail { grid-row: 2; margin-top: 24px; }
-      .editorial > .prompt-index, .editorial > .section-cta { margin-top: 26px; }
-      #prompts > .section-cta { grid-column: 1 / 6; grid-row: 2; flex-direction: column; align-items: flex-start; gap: 16px; margin-top: 30px; }
-      #prompts > .section-cta p { max-width: 32ch; }
-      .editorial > .kit, .editorial > .price-wrap, .editorial > .questions, .mechanism.editorial > .section-detail { grid-column: 1 / -1; }
-      .editorial > .questions { margin-top: 48px; }
-      /* Seccion 2: la comparativa a doce columnas y, debajo, el prompt de
-         muestra junto a la nota de que hacer con la respuesta. */
-      .mechanism .section-detail { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: start; margin-top: 28px; }
-      .mechanism .section-detail > .compare-intro { grid-column: 1 / 9; }
-      .mechanism .section-detail > .compare { grid-column: 1 / -1; margin-top: 30px; }
-      .mechanism .section-detail > .prompt-card { grid-column: 1 / 8; margin-top: 28px; }
-      .mechanism .section-detail > .after-prompt { grid-column: 8 / 13; margin-top: 28px; }
-      .faq-group { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); }
-      .faq-group-head { grid-column: 1 / 5; position: sticky; top: 112px; align-self: start; }
-      .faq-list { grid-column: 5 / 13; margin-top: 0; }
-      .faq-group + .faq-group { margin-top: 54px; }
-      .faq-item > summary h3 { font-size: 17px; }
-      .faq-item > p { font-size: 15.5px; }
-      .price-card { grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); }
-      .price-main, .signup-panel { padding: 46px 44px; }
-      .price-card .amount { font-size: 60px; }
-      .prompt-index li { padding: 21px 24px; }
-      .kit-item { padding: 28px; }
-      .site-footer { padding-block: 60px 26px; }
-      .footer-grid { grid-template-columns: minmax(0, 4fr) minmax(0, 2.4fr) minmax(0, 5fr); gap: 52px; }
-      .footer-legal { grid-column: auto; padding-top: 0; border-top: 0; }
-      .footer-legal p { max-width: 46ch; }
-    }
-  </style>
-  <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "¿Cuánto cuesta y qué incluye?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "El planner cuesta 19 € las 30 primeras plazas y 29 € después. Incluye el archivo con las hojas Hoy, Temas, Repasos y Test, los 28 temas del programa oficial ya cargados y 12 meses de actualizaciones de la convocatoria. Los cinco prompts van aparte y son gratis."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Qué necesito para usarlo?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Una cuenta de ChatGPT o de Claude, y la versión gratuita de cualquiera de las dos sirve, más Google Sheets o Excel para abrir el planner. El temario lo aportas tú; el planner trae la lista oficial de temas, no el contenido de cada tema."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Cómo se entrega?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Con un enlace de descarga en cuanto se completa el pago. Bajas el archivo y lo abres en Excel, o lo subes a Google Sheets desde Archivo, Importar. No hay nada que esperar ni ningún acceso que aprobar."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Puedo devolverlo?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "La política de devolución está escrita en la página de compra. Ahí la lees antes de pagar."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Cuándo puedo comprar el planner?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Todavía no. El botón de compra se abre en cuanto la página de pago esté lista y aquí no hay fecha puesta hasta que la haya. Los prompts sí están publicados y los puedes copiar hoy; si quieres que te avise el día que abra, déjame tu correo."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Sirve para mi convocatoria?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "El planner trae el programa de Auxiliar Administrativo del Estado (C2) de la convocatoria publicada en el BOE el 22 de diciembre de 2025. Si te presentas a otra, contrasta que el programa coincida. El archivo no actualiza las leyes ni te da el temario."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Necesito ChatGPT de pago?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Puedes empezar con la versión gratuita de ChatGPT, que tiene límites de uso. Estudia con IA plantea trabajar pegando fragmentos de texto en el chat; incluye los prompts y el planner, sin incluir suscripciones a herramientas. Consulta los límites actuales en la ayuda oficial de ChatGPT."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Puedo usar Claude?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Los cinco prompts están escritos para trabajar con ChatGPT o Claude en tu propia cuenta. Claude dispone de un plan gratuito con uso limitado; puedes consultar las condiciones en su comparativa oficial de planes."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Esto es un temario?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. Son los prompts para trabajar con tu IA y un planner que ordena temas, repasos y test. El material de estudio lo pones tú."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Si ChatGPT ya me responde bien, ¿para qué necesito esto?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Porque el examen no lo haces con ChatGPT al lado. Lo que compras es el orden. Qué tema toca hoy, qué repaso vence y cuánto te queda de verdad de lo que diste hace tres semanas. La respuesta ya la tienes gratis."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Sirve para los psicotécnicos?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "El planner te reserva el bloque en el calendario y trae el reparto de las 30 preguntas por tipo, para que sepas qué practicar. Entrenarlos es otra cosa: se hacen con reloj, no leyendo."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Qué prompt funciona mejor para estudiar oposiciones?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Un punto de partida útil es pedir una tarea concreta sobre un texto que aportes, exigir el fragmento que respalda la respuesta e indicar que señale la información ausente. Los cinco prompts publicados siguen esa estructura; la comprobación del resultado sigue siendo necesaria."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Cómo resumo un tema con ChatGPT sin perder lo importante?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Aporta el tema por apartados y pide que conserve definiciones, requisitos, excepciones y referencias del original. Compara el resumen con el texto antes de estudiarlo, porque una frase omitida puede cambiar lo que necesitas aprender."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Cómo hago test de oposición con IA y respuestas explicadas?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Pega un fragmento del temario y pide preguntas con opciones, solución, explicación y el pasaje que respalda cada respuesta correcta. Revisa también los distractores para que no haya varias opciones válidas o ambigüedades. Las preguntas generadas son práctica de estudio, no preguntas oficiales ni una predicción del examen."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Es mejor ChatGPT o NotebookLM para opositar?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "NotebookLM permite trabajar con fuentes y consultar citas, según la documentación de Google. Estudia con IA está planteado para quienes quieren seguir usando su ChatGPT o Claude con prompts y un planner. La herramienta que elijas no sustituye la revisión del contenido que vas a memorizar."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Qué necesito para empezar sin academia?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Para preparar Auxiliar Administrativo del Estado sin academia, empieza comprobando las bases y el programa de la convocatoria, reúne material actualizado y reserva tiempo para practicar y repasar. Estudia con IA añade una rutina para trabajar ese material con tu IA; no incluye tutorías ni un temario."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Puedo preparar Auxiliar Administrativo en seis meses?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Puedes organizar un plan de seis meses, pero aprobar en ese plazo depende de tu punto de partida, las horas disponibles y tu progreso. El planner sirve para distribuir estudio y repasos; no garantiza una fecha de aprobado."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Cuánto se tarda en aprobar Auxiliar Administrativo del Estado por libre?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No hay un plazo que sirva para todas las personas que preparan Auxiliar Administrativo del Estado por libre. La base previa, la regularidad, los resultados de práctica y el calendario de la convocatoria condicionan la preparación. Ajusta el plan a tu avance, sin convertir una estimación en una promesa."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Cuánto cuesta preparar oposiciones por libre?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Depende del material, de los recursos de práctica y de las herramientas que elijas, además de las tasas que correspondan. Estudia con IA entra ahí con los prompts gratis y un planner de 19 €, que cubre cómo organizas el estudio, no toda la preparación."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Cuántos temas tiene Auxiliar Administrativo del Estado?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "La convocatoria publicada en el BOE el 22 de diciembre de 2025 lista 28 temas en su Anexo I: 16 del bloque de organización pública y 12 del de actividad administrativa y ofimática. Son los 28 que trae cargados el planner y puedes contarlos en el texto de la resolución en el BOE."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Cómo es el examen de Auxiliar Administrativo del Estado?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "El acceso libre se resuelve en un ejercicio con dos partes obligatorias y eliminatorias en una misma sesión. La primera junta 30 preguntas del bloque I y 30 psicotécnicas; la segunda, 50 preguntas del bloque II, con la parte de ofimática referida a Windows 11 y Microsoft 365 en su versión de escritorio. Confirma los detalles en las bases de tu convocatoria y en la información oficial del cuerpo."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Merece la pena opositar a Auxiliar Administrativo?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Valora las funciones del puesto, los requisitos y el tiempo de preparación que puedes sostener antes de decidir si Auxiliar Administrativo encaja contigo. Estudia con IA es un recurso para organizar el estudio cuando has elegido esa oposición; comprar el planner no garantiza una plaza."
-          }
-        }
-      ]
-    },
-    {
-      "@type": "Product",
-      "name": "Planner de estudio para Auxiliar Administrativo del Estado",
-      "description": "Planner precargado con los 28 temas del programa oficial de Auxiliar Administrativo del Estado (C2, España), con hoja diaria, calendario de repasos y registro de test, para Google Sheets o Excel. Incluye 12 meses de actualizaciones de la convocatoria.",
-      "category": "Material educativo para preparar oposiciones",
-      "offers": {
-        "@type": "Offer",
-        "price": "19",
-        "priceCurrency": "EUR",
-        "availability": "https://schema.org/PreOrder"
-      }
-    },
-    {
-      "@type": "Organization",
-      "name": "Estudia con IA",
-      "sameAs": []
-    }
-  ]
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Planner para Auxiliar Administrativo del Estado | Oposita con IA</title>
+<meta name="description" content="Para opositores a Auxiliar Administrativo del Estado (C2). Cada mañana sabes qué estudiar y qué repasar, y llevas la cuenta de tus test. 5 prompts gratis y un planner de 19 €.">
+<meta name="theme-color" content="#FFD23F">
+<meta name="color-scheme" content="light">
+<link rel="canonical" href="https://elraxy.github.io/estudia-opos-ia/">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://elraxy.github.io/estudia-opos-ia/">
+<meta property="og:site_name" content="Oposita con IA">
+<meta property="og:locale" content="es_ES">
+<meta property="og:title" content="Cada mañana sabrás qué toca estudiar | Oposita con IA">
+<meta property="og:description" content="Planner para Auxiliar Administrativo del Estado: qué estudiar hoy, qué repasar hoy y la cuenta de tus test. 19 €, todavía no está a la venta. Los 5 prompts son gratis.">
+<meta property="og:image" content="https://elraxy.github.io/estudia-opos-ia/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Tarjeta amarilla de Oposita con IA con el titular «Cada mañana sabrás qué toca estudiar», el precio del planner, 19 €, y el dibujo de una lista de temas con los tres primeros tachados y el tema 4 marcado para hoy.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cada mañana sabrás qué toca estudiar | Oposita con IA">
+<meta name="twitter:description" content="Planner para Auxiliar Administrativo del Estado: qué estudiar hoy, qué repasar hoy y la cuenta de tus test. 19 €, todavía no está a la venta. Los 5 prompts son gratis.">
+<meta name="twitter:image" content="https://elraxy.github.io/estudia-opos-ia/og.png">
+<meta name="twitter:image:alt" content="Tarjeta amarilla de Oposita con IA con el titular «Cada mañana sabrás qué toca estudiar», el precio del planner, 19 €, y el dibujo de una lista de temas con los tres primeros tachados y el tema 4 marcado para hoy.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --yellow:#FFD23F; --yellow-deep:#F2B705; --yellow-soft:#FFF1B8;
+  --ink:#17140F; --ink-2:#2E2920; --muted:#554D3F;
+  --paper:#FFFDF7; --white:#FFFFFF; --line:#E6DFCC;
+  --red:#C3321B; --red-bright:#E0442A; --green:#1D6B45;
+  --radius:18px;
+  --ease-out:cubic-bezier(.23,1,.32,1);
+  --display:"Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+  --text:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
 }
-  </script>
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:84px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--text);font-size:17px;line-height:1.6;overflow-x:clip}
+img,svg{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);font-weight:800;line-height:1.02;letter-spacing:-.025em;margin:0;text-wrap:balance}
+p{margin:0}
+.wrap{width:100%;max-width:1180px;margin-inline:auto;padding-inline:20px}
+.skip{position:absolute;left:12px;top:-60px;z-index:100;background:var(--ink);color:var(--yellow);padding:12px 16px;border-radius:10px;font-weight:700;text-decoration:none}
+.skip:focus{top:12px}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px;border-radius:6px}
+.on-dark :focus-visible{outline-color:var(--yellow)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:14px 26px;border-radius:999px;border:0;font:700 17px/1.1 var(--text);text-decoration:none;cursor:pointer;transition:transform 160ms var(--ease-out),box-shadow 160ms var(--ease-out),background-color 160ms ease;touch-action:manipulation}
+.btn svg{width:20px;height:20px;flex:none}
+.btn:active{transform:scale(.97)}
+.btn-ink{background:var(--ink);color:var(--yellow);box-shadow:0 5px 0 #000000cc}
+.btn-ink:active{transform:translateY(3px);box-shadow:0 2px 0 #000000cc}
+.btn-light{background:var(--white);color:var(--ink);box-shadow:0 5px 0 #7d1a0b}
+.btn-light:active{transform:translateY(3px);box-shadow:0 2px 0 #7d1a0b}
+.btn-outline{background:transparent;color:var(--ink);border:2.5px solid var(--ink);min-height:52px}
+@media (hover:hover) and (pointer:fine){
+  .btn-ink:hover{transform:translateY(-2px);box-shadow:0 7px 0 #000000cc}
+  .btn-light:hover{transform:translateY(-2px);box-shadow:0 7px 0 #7d1a0b}
+  .btn-outline:hover{background:var(--ink);color:var(--yellow)}
+}
+.link-arrow{display:inline-flex;align-items:center;gap:8px;font-weight:700;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px;min-height:44px}
+.link-arrow svg{width:18px;height:18px;transition:transform 160ms var(--ease-out)}
+@media (hover:hover) and (pointer:fine){.link-arrow:hover svg{transform:translateX(3px)}}
+
+/* Cabecera */
+.top{position:sticky;top:0;z-index:40;background:var(--yellow);border-bottom:2.5px solid var(--ink)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:-.02em;text-decoration:none}
+.brand-mark{width:34px;height:34px;flex:none}
+.top .btn{min-height:44px;padding:10px 16px;font-size:15px;box-shadow:0 3px 0 #000000cc}
+
+/* Hero */
+.hero{background:var(--yellow);position:relative;overflow:hidden;border-bottom:2.5px solid var(--ink)}
+.hero .wrap{position:relative;display:grid;gap:28px;padding-top:34px;padding-bottom:40px}
+.eyebrow{display:flex;align-items:center;gap:12px;font-weight:700;font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink)}
+.nw{white-space:nowrap}
+.eyebrow::before{content:"";width:28px;height:2.5px;background:var(--ink);flex:none}
+.hero h1{font-size:clamp(44px,12.4vw,84px);margin-top:16px}
+.mark{position:relative;white-space:nowrap;z-index:0}
+.mark::after{content:"";position:absolute;left:-.06em;right:-.08em;bottom:.04em;height:.42em;background:var(--white);z-index:-1;border-radius:4px;transform:skewX(-8deg) scaleX(1);transform-origin:left}
+.hero-sub{margin-top:20px;font-size:18.5px;line-height:1.55;color:var(--ink-2);max-width:40ch}
+.hero-sub strong{color:var(--ink)}
+.hero-cta{margin-top:26px;display:grid;gap:12px;justify-items:start}
+.hero-cta .btn{width:100%}
+.cta-note{font-size:15px;color:var(--ink-2);max-width:40ch}
+.cta-note b{color:var(--ink)}
+.specs{list-style:none;margin:30px 0 0;padding:14px 0 0;border-top:2.5px solid var(--ink);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px 18px;max-width:30rem}
+.specs li{font-size:14px;line-height:1.3;font-weight:500;color:var(--ink-2)}
+.specs b{display:block;font-family:var(--display);font-weight:800;font-size:26px;line-height:1;letter-spacing:-.02em;color:var(--ink);margin-bottom:4px}
+.hero-art{position:relative;max-width:560px;width:100%;justify-self:center}
+.hero-art svg{width:100%;height:auto;overflow:visible}
+
+/* Animación del hero */
+.strike{stroke-dasharray:1;stroke-dashoffset:1;animation:draw .5s var(--ease-out) forwards}
+.s1{animation-delay:.55s}.s2{animation-delay:.95s}.s3{animation-delay:1.35s}
+.tick{opacity:0;animation:pop .3s var(--ease-out) forwards}
+.t1{animation-delay:.45s}.t2{animation-delay:.85s}.t3{animation-delay:1.25s}
+.today{opacity:0;transform-box:fill-box;transform-origin:left center;animation:grow .5s var(--ease-out) 1.75s forwards}
+.today-tag{opacity:0;animation:pop .35s var(--ease-out) 2.1s forwards}
+.colon{animation:blink 1s steps(1) infinite}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes pop{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+@keyframes grow{from{opacity:0;transform:scaleX(.2)}to{opacity:1;transform:scaleX(1)}}
+@keyframes blink{50%{opacity:0}}
+.rise{animation:rise .6s var(--ease-out) both}
+.r2{animation-delay:.08s}.r3{animation-delay:.16s}.r4{animation-delay:.24s}.r5{animation-delay:.32s}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  .strike{animation:none;stroke-dashoffset:0}
+  .tick,.today,.today-tag{animation:none;opacity:1;transform:none}
+  .colon{animation:none}
+  .rise{animation:none}
+}
+
+/* Secciones */
+section{position:relative}
+.sec{padding-block:56px}
+.kicker{font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--red)}
+.sec h2{font-size:clamp(36px,9vw,64px);margin-top:10px}
+.lead{margin-top:16px;font-size:18.5px;color:var(--ink-2);max-width:52ch}
+
+/* Te suena */
+.pains{list-style:none;margin:32px 0 0;padding:0;display:grid}
+.pain{position:relative;border-top:2.5px solid var(--ink);padding:18px 0 22px 44px;font-size:19px;line-height:1.45;font-weight:500}
+.pain::before{content:"«";position:absolute;left:0;top:6px;font-family:var(--display);font-weight:800;font-size:46px;line-height:1;color:var(--red)}
+.pain q{quotes:none}
+.pain-after{margin-top:26px;font-size:20px;font-weight:700;max-width:40ch;line-height:1.4}
+.pain-after span{background:linear-gradient(transparent 58%,var(--yellow) 58%)}
+
+/* Giro */
+.turn{background:var(--ink);color:#F4EFE2}
+.turn .kicker{color:var(--yellow)}
+.turn h2{color:var(--white);font-size:clamp(46px,13vw,104px)}
+.turn h2 em{font-style:normal;color:var(--yellow);position:relative}
+.turn .lead{color:#D9D2C1}
+.turn .lead strong{color:var(--white)}
+.versus{margin-top:36px;display:grid;gap:14px}
+.vs-card{border-radius:12px;padding:18px;border:2px solid #FFFFFF26}
+.vs-chat{background:#26221B}
+.vs-exam{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.vs-label{font-size:13px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#BDB5A2}
+.vs-exam .vs-label{color:var(--muted)}
+.bubble{margin-top:12px;background:#3A342A;border-radius:16px 16px 16px 4px;padding:12px 14px;font-size:15.5px;color:#F4EFE2;max-width:30ch}
+.bubble.me{margin-left:auto;background:var(--yellow);color:var(--ink);border-radius:16px 16px 4px 16px;max-width:22ch;font-weight:700}
+.exam-top{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-weight:700}
+.exam-clock{font-family:var(--display);font-size:26px;font-variant-numeric:tabular-nums;color:var(--red)}
+.exam-q{margin-top:10px;font-size:15.5px;color:var(--ink-2)}
+.exam-opts{margin-top:10px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.exam-opts span{display:grid;place-items:center;height:40px;border:2px solid var(--ink);border-radius:50%;font-weight:700;aspect-ratio:1;justify-self:center}
+.exam-foot{margin-top:12px;font-weight:700}
+.vs-arrow{justify-self:center;color:var(--yellow);font-family:var(--display);font-size:18px;font-weight:800;text-align:center}
+.facts{margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;border-top:2px solid #FFFFFF2e;padding-top:24px}
+.fact b{display:block;font-family:var(--display);font-size:clamp(30px,8.4vw,48px);color:var(--yellow);line-height:1;font-variant-numeric:tabular-nums}
+.fact span{display:block;margin-top:6px;font-size:14px;line-height:1.35;color:#D9D2C1}
+.src{margin-top:16px;font-size:13.5px;color:#BDB5A2}
+.src a{color:#F4EFE2;text-underline-offset:3px}
+
+/* Solución */
+.pieces{margin-top:40px;display:grid;gap:56px}
+.piece{display:grid;gap:22px;align-items:center}
+.piece-num{display:block;font-family:var(--display);font-weight:800;font-size:22px;line-height:1;color:var(--red);font-variant-numeric:tabular-nums;padding-bottom:10px;border-bottom:2.5px solid var(--red);width:max-content}
+.piece h3{font-size:clamp(30px,7.6vw,44px);margin-top:14px}
+.piece p{margin-top:12px;color:var(--ink-2);max-width:46ch}
+.mock{background:var(--white);border:2px solid var(--ink);border-radius:10px;box-shadow:0 22px 40px -26px #17140F80;overflow:hidden;font-size:14.5px}
+.mock-bar{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:2px solid var(--ink);background:#F7F2E4;font-size:12.5px;font-weight:700;color:var(--muted)}
+.mock-bar::before{content:"fx";font-style:italic;font-family:Georgia,serif;font-weight:400;font-size:14px;color:var(--ink);padding-right:10px;border-right:1.5px solid #C9C0AA}
+.mock-bar span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mock-body{padding:16px}
+.mock-cap{margin-top:12px;font-size:13px;color:var(--muted)}
+.sheet-title{font-family:var(--display);font-weight:800;font-size:22px}
+.sheet-date{color:var(--muted);font-size:13px;font-weight:700}
+.row-study{margin-top:12px;background:var(--yellow);border:2px solid var(--ink);border-radius:12px;padding:12px}
+.row-study small{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.row-study b{display:block;font-size:17px;margin-top:2px}
+.rev-h{margin-top:14px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.rev{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:10px 0;border-bottom:1.5px dashed var(--line)}
+.rev:last-child{border-bottom:0}
+.rev b{font-size:15px}
+.rev em{font-style:normal;font-weight:700;font-variant-numeric:tabular-nums}
+.rev span{grid-column:1/-1;font-size:13px;color:var(--muted)}
+.bad{color:var(--red)}
+.tabs{display:flex;gap:4px;padding:0 10px;border-top:2px solid var(--ink);background:#F7F2E4;overflow:hidden}
+.tabs span{padding:8px 10px;font-size:12.5px;font-weight:700;color:var(--muted);white-space:nowrap}
+.tabs span.on{background:var(--white);color:var(--ink);border:2px solid var(--ink);border-top:0;margin-top:-2px;border-radius:0 0 8px 8px}
+.scale{display:grid;gap:12px}
+.scale-row{display:grid;grid-template-columns:112px 1fr 62px;gap:10px;align-items:center}
+.scale-row em{font-style:normal;font-weight:800;font-variant-numeric:tabular-nums;text-align:right}
+.scale-row b{font-size:14px}
+.bar{position:relative;height:28px;border:2px solid var(--ink);border-radius:10px;background:#F7F2E4;overflow:hidden}
+.bar i{position:absolute;inset:0 auto 0 0;background:var(--yellow);border-right:2px solid var(--ink)}
+.bar.low i{background:var(--red-bright)}
+.bar span{position:relative;display:flex;align-items:center;height:100%;padding-left:10px;font-weight:700;font-size:14px;font-variant-numeric:tabular-nums}
+.bar.low span{color:var(--white)}
+.timer{display:flex;align-items:center;gap:14px}
+.ring{width:78px;height:78px;flex:none}
+.timer-num{font-family:var(--display);font-weight:800;font-size:44px;line-height:1;font-variant-numeric:tabular-nums}
+.timer small{display:block;color:var(--muted);font-weight:700;font-size:13px;margin-top:4px}
+.log{width:100%;margin-top:14px;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.log th{font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);text-align:left;padding:6px 4px;border-bottom:2px solid var(--ink)}
+.log td{padding:8px 4px;border-bottom:1.5px dashed var(--line);font-weight:500}
+.log td:last-child,.log th:last-child{text-align:right;font-weight:700}
+
+/* Regalo */
+.gift-grid{display:grid;gap:40px}
+.gift{background:var(--paper)}
+.gift-card{position:relative;background:var(--white);border:2.5px dashed var(--ink);border-radius:6px;padding:34px 20px 24px}
+.ribbon{position:absolute;top:-15px;left:50%;background:#FFD23FD9;color:var(--ink);font-weight:800;font-family:var(--display);font-size:15px;letter-spacing:.02em;padding:5px 26px;transform:translateX(-50%) rotate(-2.5deg);clip-path:polygon(0 8%,4% 0,8% 10%,12% 0,100% 0,96% 12%,100% 22%,100% 100%,96% 90%,92% 100%,0 100%,4% 86%,0 76%)}
+.gift-card h2{font-size:clamp(32px,8.4vw,54px);margin-top:6px}
+.plist{list-style:none;margin:22px 0 0;padding:0;counter-reset:p}
+.plist li{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start;padding:12px 0;border-top:1.5px solid var(--line)}
+.plist li:first-child{border-top:0}
+.plist b{display:block;font-size:17px}
+.plist div span{display:block;font-size:15px;color:var(--muted);line-height:1.45}
+.ptag{font-family:var(--display);font-weight:800;font-size:22px;line-height:1.05;color:var(--red);letter-spacing:-.02em}
+.gift-cta{margin-top:22px;display:grid;gap:10px;justify-items:start}
+.gift-cta .btn{width:100%}
+.gift-note{font-size:14.5px;color:var(--muted)}
+
+/* Planner */
+.offer{background:var(--yellow);border-block:2.5px solid var(--ink)}
+.offer .wrap{position:relative}
+.offer .kicker{color:var(--ink)}
+.offer-grid{margin-top:30px;display:grid;gap:26px}
+.incl{list-style:none;margin:0;padding:0;display:grid;border-top:2.5px solid var(--ink)}
+.incl li{display:grid;grid-template-columns:104px 1fr;gap:14px;align-items:baseline;padding:13px 0;border-bottom:1.5px solid #17140F40;font-size:16.5px;line-height:1.45}
+.incl b{font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:-.01em}
+.spec{margin-top:18px;font-size:14.5px;color:var(--ink-2)}
+.buy{position:relative;background:var(--white);border:2.5px solid var(--ink);border-radius:14px;padding:24px 20px;box-shadow:10px 10px 0 var(--ink)}
+.status{display:inline-block;color:var(--red);border:2.5px solid currentColor;outline:1px solid currentColor;outline-offset:2px;border-radius:3px;padding:4px 10px 3px;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;transform:rotate(-2deg);transform-origin:left center}
+.price{margin-top:14px;display:flex;align-items:baseline;gap:10px}
+.price b{font-family:var(--display);font-weight:800;font-size:72px;line-height:.9;letter-spacing:-.04em}
+.price span{font-weight:700;color:var(--muted)}
+.buy h3{font-size:24px;margin-top:18px}
+.buy-intro{margin-top:8px;color:var(--ink-2)}
+form{margin-top:18px;display:grid;gap:8px}
+label{font-weight:700;font-size:15.5px}
+.field{display:grid;gap:10px}
+input[type=email]{width:100%;min-height:56px;padding:14px 16px;border:2.5px solid var(--ink);border-radius:14px;background:var(--paper);font:500 17px var(--text);color:var(--ink)}
+input[type=email]::placeholder{color:#6F6758}
+input[type=email]:focus-visible{outline:3px solid var(--yellow-deep);outline-offset:2px}
+input[aria-invalid=true]{border-color:var(--red);background:#FFF4F1}
+.err{min-height:0;color:var(--red);font-weight:700;font-size:14.5px}
+.err:empty{display:none}
+form .btn{width:100%}
+.privacy{font-size:14px;color:var(--ink-2);line-height:1.5}
+.safe{margin:16px 0 0;padding:14px 0 0;border-top:1.5px dashed var(--line);font-size:14.5px;font-weight:500;color:var(--ink-2);line-height:1.5}
+
+/* Para ti */
+.fit{margin-top:30px;display:grid;gap:16px}
+.fit-col{border:2.5px solid var(--ink);border-radius:10px;padding:22px 20px;background:var(--white)}
+.fit-col h3{font-size:26px}
+.fit-yes h3 span{background:linear-gradient(transparent 55%,var(--yellow) 55%);padding-inline:2px}
+.fit-no{background:#F7F2E4}
+.fit-no h3 span{color:var(--red)}
+.fit-col ul{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:10px}
+.fit-col li{padding-left:18px;position:relative;line-height:1.5}
+.fit-col li::before{content:"";position:absolute;left:0;top:.78em;width:10px;height:2.5px;background:var(--ink)}
+
+/* FAQ */
+.faq-list{margin-top:28px;border-top:2.5px solid var(--ink)}
+.faq-list details{border-bottom:2.5px solid var(--ink)}
+.faq-list summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:64px;padding:16px 0;cursor:pointer;font-family:var(--display);font-weight:700;font-size:20px;line-height:1.2;letter-spacing:-.015em}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list summary::after{content:"";flex:none;width:28px;height:28px;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2317140F' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M12 5v14M5 12h14'/%3E%3C/svg%3E") no-repeat center/22px;transition:transform 200ms var(--ease-out)}
+.faq-list details[open] summary::after{transform:rotate(45deg)}
+.faq-list details p{padding:0 0 20px;color:var(--ink-2);max-width:64ch}
+.faq-list details p a{font-weight:700;text-underline-offset:3px}
+
+/* Cierre */
+.close{background:var(--red);color:var(--white);border-top:2.5px solid var(--ink)}
+.close .wrap{padding-block:72px}
+.close h2{font-size:clamp(48px,13.4vw,112px);color:var(--white)}
+.close h2 span{color:var(--yellow)}
+.close p{margin-top:18px;font-size:19px;max-width:40ch;color:#FFF3EE}
+.close-cta{margin-top:28px;display:grid;gap:10px;justify-items:start}
+.close-cta .btn{width:100%}
+.close .link-arrow{color:var(--white)}
+.close :focus-visible{outline-color:var(--white)}
+
+/* Pie */
+footer{background:var(--ink);color:#D9D2C1;font-size:14.5px}
+footer .wrap{padding-block:36px;display:grid;gap:14px}
+footer a{color:#F4EFE2;text-underline-offset:3px}
+footer .brand{color:var(--white)}
+
+/* Escritorio */
+@media (min-width:760px){
+  .wrap{padding-inline:32px}
+  .sec{padding-block:96px}
+  .hero-cta .btn,.gift-cta .btn,.close-cta .btn{width:auto}
+  .pains{grid-template-columns:1fr 1fr;column-gap:44px}
+  .versus{grid-template-columns:1fr auto 1fr;align-items:center;gap:22px}
+  .vs-card{padding:24px}
+  .facts{gap:24px}
+  .fact span{font-size:15px}
+  .fit{grid-template-columns:1.1fr .9fr;gap:22px}
+  .gift-card{padding:40px 40px 34px}
+}
+@media (min-width:1000px){
+  body{font-size:18px}
+  .hero .wrap{grid-template-columns:1.02fr .98fr;align-items:center;gap:40px;padding-top:64px;padding-bottom:76px}
+  .hero h1{font-size:clamp(56px,5.5vw,74px)}
+  .piece{grid-template-columns:.9fr 1.1fr;gap:64px}
+  .piece:nth-child(even) .piece-text{order:2}
+  .piece:nth-child(even) .mock-wrap{order:1}
+  .offer-grid{grid-template-columns:1.05fr .95fr;gap:56px;align-items:start}
+  .gift-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:center}
+  .faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:start}
+  .faq-grid .faq-list{margin-top:8px}
+  .close .wrap{display:grid;grid-template-columns:1.25fr .75fr;gap:40px;align-items:end;padding-block:110px}
+  .close h2{font-size:clamp(56px,6.6vw,92px)}
+}
+</style>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "@id": "https://elraxy.github.io/estudia-opos-ia/#org",
+   "name": "Oposita con IA",
+   "url": "https://elraxy.github.io/estudia-opos-ia/",
+   "logo": "https://elraxy.github.io/estudia-opos-ia/favicon.svg",
+   "sameAs": [
+    "https://www.instagram.com/oposita.con.ia/"
+   ]
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://elraxy.github.io/estudia-opos-ia/#web",
+   "url": "https://elraxy.github.io/estudia-opos-ia/",
+   "name": "Oposita con IA",
+   "inLanguage": "es-ES",
+   "publisher": {
+    "@id": "https://elraxy.github.io/estudia-opos-ia/#org"
+   }
+  },
+  {
+   "@type": "Product",
+   "@id": "https://elraxy.github.io/estudia-opos-ia/#planner",
+   "name": "Planner para Auxiliar Administrativo del Estado",
+   "description": "Hoja de cálculo (.xlsx, sin macros) con cinco hojas: Hoy, Temas, Repasos, Test e Instrucciones. Trae los 28 temas del programa oficial (16 del bloque I y 12 del bloque II), te dice qué estudiar y qué repasar cada día, recalcula el repaso con tu nota a 2, 5, 12 o 25 días y guarda hasta 400 test. No incluye el temario.",
+   "image": "https://elraxy.github.io/estudia-opos-ia/og.png",
+   "url": "https://elraxy.github.io/estudia-opos-ia/#planner",
+   "brand": {
+    "@id": "https://elraxy.github.io/estudia-opos-ia/#org"
+   },
+   "offers": {
+    "@type": "Offer",
+    "price": "19.00",
+    "priceCurrency": "EUR",
+    "availability": "https://schema.org/PreOrder",
+    "url": "https://elraxy.github.io/estudia-opos-ia/#aviso",
+    "seller": {
+     "@id": "https://elraxy.github.io/estudia-opos-ia/#org"
+    }
+   }
+  },
+  {
+   "@type": "FAQPage",
+   "@id": "https://elraxy.github.io/estudia-opos-ia/#faq",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "¿Esto es un temario?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. El planner trae la lista oficial de los 28 temas, no el contenido de cada uno. El material de estudio lo pones tú."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Si ChatGPT ya me responde bien, ¿para qué lo quiero?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Porque el examen no lo haces con ChatGPT al lado. La respuesta ya la tienes gratis. Lo que te falta es el orden: qué tema toca hoy, qué repaso vence y cuánto recuerdas de lo que diste hace tres semanas."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Qué necesito para usarlo?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Google Sheets, Excel o LibreOffice para abrir el planner. Para los prompts, una cuenta de ChatGPT o de Claude; puedes empezar con la versión gratuita de cualquiera de las dos, que tiene límites de uso."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Sirve para mi convocatoria?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Trae el programa de Auxiliar Administrativo del Estado (C2) de la convocatoria publicada en el BOE el 22 de diciembre de 2025. Si te presentas a otra, comprueba que el programa coincide."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Cuándo podré comprarlo?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Todavía no hay fecha. Cuando la página de pago esté lista, escribo a quien haya dejado su correo. Los prompts sí están publicados y los puedes usar hoy."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Puedo devolverlo?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "La política de devolución estará escrita en la página de compra, para que la leas antes de pagar."
+     }
+    }
+   ]
+  }
+ ]
+}
+</script>
 </head>
 <body>
-  <a class="skip-link" href="#contenido">Saltar al contenido</a>
-  <header class="site-header">
-    <div class="wrap header-inner">
-    <div class="brand-lockup"><svg class="brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5"/><path d="M9 14.5l2 2 4-4"/></svg>
-    <div class="eyebrow">Estudia con IA</div></div>
-    <nav class="nav" aria-label="Navegación principal"><a href="prompts/">Prompts gratis</a><a href="#planner">El planner</a><a href="#preguntas">Preguntas frecuentes</a></nav>
-    </div>
-  </header>
-  <main id="contenido" tabindex="-1">
-    <section class="hero wrap" aria-labelledby="titulo">
-      <div class="hero-copy">
-        <p class="hero-eyebrow">Auxiliar Administrativo del Estado (C2) · Por libre · Con tu ChatGPT o Claude</p>
-        <h1 id="titulo">Estudia Auxiliar Administrativo con tu IA. El examen lo haces <i>sin ella</i>.</h1>
-        <div class="hero-sub">
-          <p>ChatGPT te resuelve el tema y te lo resume bien. Luego llega el examen y son hasta 110 preguntas en noventa minutos, a mano y sin consultar nada.</p>
-          <p>Lo que hay entre una cosa y la otra es el planner: los 28 temas oficiales, la hoja Hoy y los repasos que te tocan hoy. Los cinco prompts con los que trabajo el temario están abiertos y son gratis.</p>
-        </div>
-        <div class="hero-action">
-          <div class="buttons"><a class="button" href="prompts/">Copia los 5 prompts gratis<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a><a class="button secondary" href="#planner">Ver el planner, 19 €</a></div>
-          <p class="hero-note">Los prompts se copian sin dejar correo ni tarjeta.</p>
-          <!-- FECHA DE APERTURA. La frase "El planner abre el martes 22." se queda fuera hasta que Alex confirme el día: el copy del 2026-09-20 la deja pendiente de confirmar. Para devolverla, se pega este trozo dentro del párrafo .hero-note de aquí arriba, detrás del punto:
-          <span>El planner abre el martes 22.</span>
-          -->
-        </div>
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#main" aria-label="Oposita con IA, ir al inicio">
+      <svg class="brand-mark" viewBox="0 0 34 34" aria-hidden="true"><rect x="1.5" y="1.5" width="31" height="31" rx="7" fill="#17140F"/><path d="M8.5 10.5h17" stroke="#FFFDF7" stroke-width="2.4" stroke-linecap="round"/><path d="M7.5 14.5h19.5l-1.4 6H6.1z" fill="#FFD23F"/><path d="M8.5 17.5h14" stroke="#17140F" stroke-width="2.4" stroke-linecap="round"/><path d="M8.5 24.5h10" stroke="#FFFDF7" stroke-width="2.4" stroke-linecap="round"/></svg>
+      Oposita con IA
+    </a>
+    <a class="btn btn-ink" href="#planner">Quiero el planner</a>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="hero" aria-labelledby="h1">
+  <div class="wrap">
+    <div class="hero-text">
+      <p class="eyebrow rise"><span>Auxiliar Administrativo del <span class="nw">Estado · C2</span></span></p>
+      <h1 id="h1" class="rise r2">Cada mañana sabrás <span class="mark">qué toca</span> estudiar.</h1>
+      <p class="hero-sub rise r3">Tienes 28 temas, un trabajo o una casa que llevar, y lo que estudiaste hace tres semanas ya no está. <strong>El planner te dice qué estudiar hoy y qué repasar hoy.</strong> Y lleva la cuenta de tus test para que llegues al examen con los 90 minutos entrenados.</p>
+      <div class="hero-cta rise r4">
+        <a class="btn btn-ink" href="#planner">Quiero el planner
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <p class="cta-note"><b>19 €.</b> Todavía no está a la venta. Te aviso el día que abra, sin cobrarte nada.</p>
+        <a class="link-arrow" href="prompts/">O empieza hoy con los 5 prompts gratis
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
-      <!-- Pantalla partida. Dibujada con HTML y CSS, sin una sola imagen: a la
-           izquierda la IA contestando bien, a la derecha la hoja en blanco con
-           el reloj. La respuesta del artículo 21 es la que dio ChatGPT en la
-           sesión del 2026-09-20, no un ejemplo escrito a mano. -->
-      <figure class="mock">
-        <div class="mock-grid">
-          <div class="mock-panel mock-ia">
-            <p class="mock-tag">Hoy, con el chat abierto</p>
-            <p class="mock-q">¿Cuál es el plazo máximo para resolver del artículo 21?</p>
-            <p class="mock-a">Tres meses, cuando la norma del procedimiento no fije otro. Artículo 21.3 de la Ley 39/2015.</p>
-            <p class="mock-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12 5 5L20 6"/></svg>Respuesta correcta</p>
-          </div>
-          <div class="mock-panel mock-hoja">
-            <p class="mock-tag">El día del examen</p>
-            <div class="mock-clock"><span class="t">90:00</span><span class="u">para hasta 110 preguntas</span></div>
-            <div class="mock-sheet" role="img" aria-label="Hoja de examen en blanco: cinco preguntas numeradas y ni una sola respuesta escrita."><p>1.</p><p>2.</p><p>3.</p><p>4.</p><p>5.</p></div>
-          </div>
-        </div>
-        <figcaption>La respuesta de la IA es correcta. El examen sigue siendo tuyo.</figcaption>
-      </figure>
-      <p class="entity">Estudia con IA prepara Auxiliar Administrativo del Estado (C2, España) con ChatGPT o Claude. Cinco prompts gratuitos para trabajar tu temario, y un planner de pago con los 28 temas del programa oficial, la hoja diaria y los repasos ya programados.</p>
-    </section>
-    <dl class="stats wrap"><div class="stat"><dt>Gratis</dt><dd>los cinco prompts, en abierto y sin dejar el correo</dd></div><div class="stat"><dt>28 temas</dt><dd>los del programa oficial, ya cargados en el planner</dd></div><div class="stat"><dt>19 €</dt><dd>las 30 primeras plazas, después 29 €</dd></div></dl>
-<section class="section problem editorial prose wrap" id="problema" aria-labelledby="problema-titulo"><h2 id="problema-titulo">¿Sirve ChatGPT para preparar Auxiliar Administrativo del Estado?</h2><p class="section-text bluf">Sirve, y cada vez mejor. Le preguntas por el plazo del artículo 21 y te lo da bien, con la cita del BOE. Le preguntas por las plazas de la convocatoria y también. Lo que te contesta no es el problema.</p><div class="section-detail"><p>El problema es que responder con el chat abierto y responder en el examen con la hoja en blanco son dos cosas distintas, y solo estás entrenando la primera. El método empieza donde termina la respuesta. Qué haces con ella para que siga ahí dentro de tres semanas.</p></div></section>
-<section class="section tinted editorial wrap" id="prompts" aria-labelledby="prompts-titulo">
-      <h2 id="prompts-titulo">Los prompts, gratis y para siempre</h2>
-      <p class="section-text bluf">Los cinco prompts están publicados en abierto, sin correo y sin pagar nada. Abres la página, pulsas copiar y los pegas en tu ChatGPT o en tu Claude; la versión gratuita de los dos sirve. El que más trabajo hace es el quinto, el de repaso activo: te pregunta de una en una, tú contestas de memoria y él te corrige con el texto delante. Es lo más parecido a la hoja en blanco que puedes hacer dentro de un chat.</p>
-      <ul class="prompt-index">
-        <li><span class="tag">P1</span><h3>Resumen atado al texto</h3><p>Resume un tema citando el fragmento que respalda cada afirmación, para que puedas comprobarlo tú en el BOE.</p></li>
-        <li><span class="tag">P2</span><h3>Tanda de 20 preguntas tipo test</h3><p>Veinte preguntas con la opción correcta y el fragmento que la justifica.</p></li>
-        <li><span class="tag">P3</span><h3>Esquema para memorizar</h3><p>Convierte el tema en un esquema jerárquico sin perder plazos ni referencias.</p></li>
-        <li><span class="tag">P4</span><h3>Comprobador de afirmaciones</h3><p>Repasa la respuesta anterior afirmación por afirmación y marca cuáles están respaldadas por tu texto y cuáles no constan.</p></li>
-        <li><span class="tag">P5</span><h3>Repaso activo</h3><p>Te examina con preguntas abiertas, de una en una, y te corrige citando el texto. El que entrena la hoja en blanco.</p></li>
+      <ul class="specs rise r5" aria-label="Qué trae el planner">
+        <li><b>28</b>temas oficiales cargados</li>
+        <li><b>2 a 25</b>días hasta el repaso, según tu nota</li>
+        <li><b>400</b>filas para tus test</li>
       </ul>
-      <div class="section-cta"><a class="button" href="prompts/">Copia los 5 prompts gratis<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></a><p>Se abren en otra página del sitio, con un botón de copiar en cada prompt.</p></div>
-    </section>
-<section class="section mechanism editorial wrap" id="mecanismo" aria-labelledby="mecanismo-titulo"><h2 id="mecanismo-titulo">Hago test con IA y los apruebo. <i>¿Por qué luego fallo?</i></h2><p class="section-text bluf">Porque un test con el tema delante mide si sabes buscar, y el examen mide si sabes recordar. Son dos músculos y solo estás entrenando uno.</p><div class="section-detail"><p class="compare-intro">Puedes comprobarlo hoy. Cierra el chat, coge un folio y escribe de memoria lo que acabas de leer. Lo que no salga es lo que no sabías. El planner convierte eso en rutina, con una nota por tema y lo que sacas bajo puesto otra vez delante a los tres días, no cuando te acuerdes.</p><div class="compare"><div class="compare-state"><div class="compare-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10M7 13h6"/></svg><h3>Con el tema delante</h3></div><p>Abres el temario o el chat, lo buscas y contestas. Ahí mides si sabes encontrarlo. Casi siempre sale bien, y por eso no te avisa de nada.</p></div><div class="compare-state"><div class="compare-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M9 8h6"/></svg><h3>Con la hoja en blanco</h3></div><p>Cierras todo y escribes lo que recuerdas. Ahí mides si lo sabes. Lo que no salga vuelve a la lista, y sale hoy en tu casa en vez de en el examen.</p></div></div><div class="prompt-card"><h3>Prompt de muestra</h3><pre>"Trabaja solo con el texto que pego debajo. Resume las ideas principales. Junto a cada afirmación legal, copia el fragmento exacto que la respalda y conserva la referencia que figure en el original. Si falta información, escribe: 'No consta en el texto aportado'. No completes huecos con otros conocimientos. Texto: [pega aquí tu material]".</pre></div><div class="after-prompt"><h3>Con la respuesta delante</h3><p>Cierra el chat y escribe de memoria lo que acabas de leer. Lo que no salga vuelve a la lista de repasos, y el planner te lo pone otra vez delante a los tres días.</p></div></div></section>
-<section class="section editorial prose wrap" id="psicotecnicos" aria-labelledby="psicotecnicos-titulo"><h2 id="psicotecnicos-titulo">30 de las 60 preguntas de la primera parte <i>no son de temario</i></h2><p class="section-text bluf">La primera parte son hasta 60 preguntas y la mitad son psicotécnicas. Series, tablas, orden alfabético. La segunda parte suma hasta 50 más, y el reloj es el mismo para todo: noventa minutos.</p><div class="section-detail"><p>Ahí la IA no te entrena, porque lo que se puntúa no es saber la respuesta, es darla a tiempo y a mano. Es el trozo que casi nadie practica hasta el final.</p></div></section>
-<section class="section tinted editorial wrap" id="planner" aria-labelledby="planner-titulo">
-      <h2 id="planner-titulo">¿Qué es el planner y cuánto cuesta?</h2>
-      <p class="section-text bluf">El planner cuesta 19 € las 30 primeras plazas y 29 € después. Llega con los 28 temas del programa oficial ya cargados y, al abrirlo, la hoja Hoy dice qué tres temas tocan y qué repasos vencen. Se abre en Google Sheets o en Excel, se descarga en el momento del pago e incluye 12 meses de actualizaciones de la convocatoria.</p>
-      <div class="kit">
-        <article class="kit-item"><svg class="kit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 11h18M7 15h2m6 0h2m-10 3h2m6 0h2"/></svg><h3>La hoja Hoy, ya rellena</h3><p>Abres el archivo y ves los tres temas que te tocan y los repasos que vencen. Sin configurar nada y sin una plantilla en blanco esperándote.</p></article>
-        <article class="kit-item"><svg class="kit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5"/><path d="M9 14.5l2 2 4-4"/></svg><h3>Los 28 temas oficiales dentro</h3><p>Dieciséis del bloque de organización pública y doce del de actividad administrativa y ofimática, con el texto del programa publicado en el BOE. Cada tema con su estado y la fecha de su última vuelta.</p></article>
-        <article class="kit-item"><svg class="kit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="6" rx="1.5"/><rect x="14" y="15" width="7" height="6" rx="1.5"/><path d="M14 6h4v6m-3-3 3 3 3-3M10 18H6v-6m-3 3 3-3 3 3"/></svg><h3>Repasos y test conectados</h3><p>Apuntas la nota de un test y el próximo repaso de ese tema se recoloca solo. Las hojas Temas, Repasos y Test leen unas de otras.</p></article>
+    </div>
+
+    <div class="hero-art">
+      <svg viewBox="0 0 480 390" role="img" aria-labelledby="art-t">
+        <title id="art-t">Dibujo de un escritorio: el temario apilado, una hoja de respuestas en blanco, una lista de temas con los tres primeros tachados y el tema 4 marcado para hoy, y un reloj que marca 90:00.</title>
+        <path d="M6 352h468" stroke="#17140F" stroke-width="3" stroke-linecap="round"/>
+        <g transform="rotate(-9 110 120)">
+          <rect x="34" y="52" width="150" height="148" rx="10" fill="#fff" stroke="#17140F" stroke-width="3"/>
+          <rect x="50" y="68" width="70" height="9" rx="4" fill="#17140F"/>
+          <g fill="none" stroke="#17140F" stroke-width="2">
+            <circle cx="62" cy="100" r="7"/><circle cx="84" cy="100" r="7"/><circle cx="106" cy="100" r="7"/><circle cx="128" cy="100" r="7"/>
+            <circle cx="62" cy="124" r="7"/><circle cx="84" cy="124" r="7"/><circle cx="106" cy="124" r="7"/><circle cx="128" cy="124" r="7"/>
+            <circle cx="62" cy="148" r="7"/><circle cx="84" cy="148" r="7"/><circle cx="106" cy="148" r="7"/><circle cx="128" cy="148" r="7"/>
+            <circle cx="62" cy="172" r="7"/><circle cx="84" cy="172" r="7"/><circle cx="106" cy="172" r="7"/><circle cx="128" cy="172" r="7"/>
+          </g>
+        </g>
+        <g stroke="#17140F" stroke-width="3" stroke-linejoin="round">
+          <rect x="22" y="306" width="178" height="46" rx="7" fill="#C3321B"/>
+          <rect x="34" y="262" width="162" height="44" rx="7" fill="#17140F"/>
+          <rect x="26" y="220" width="168" height="42" rx="7" fill="#fff"/>
+        </g>
+        <g font-family="Bricolage Grotesque, Figtree, sans-serif" font-weight="800" font-size="15" letter-spacing=".5">
+          <text x="38" y="335" fill="#fff">BLOQUE I · 16</text>
+          <text x="50" y="290" fill="#FFD23F">BLOQUE II · 12</text>
+          <text x="42" y="247" fill="#17140F">TEMARIO</text>
+        </g>
+        <path d="M170 220v42" stroke="#17140F" stroke-width="3"/>
+        <g transform="rotate(3 330 180)">
+          <rect x="222" y="30" width="212" height="286" rx="14" fill="#fff" stroke="#17140F" stroke-width="3"/>
+          <rect x="290" y="18" width="76" height="26" rx="8" fill="#17140F"/>
+          <text x="244" y="80" font-family="Bricolage Grotesque, Figtree, sans-serif" font-weight="800" font-size="22" fill="#17140F">Temas</text>
+          <text x="404" y="80" text-anchor="end" font-family="Figtree, sans-serif" font-weight="700" font-size="13" fill="#554D3F">3 de 28</text>
+          <rect class="today" x="236" y="197" width="186" height="34" rx="8" fill="#FFD23F"/>
+          <g font-family="Figtree, sans-serif" font-weight="700" font-size="14.5" fill="#17140F">
+            <text x="274" y="115">1 · Constitución</text>
+            <text x="274" y="152">2 · T. Constitucional</text>
+            <text x="274" y="189">3 · Cortes Generales</text>
+            <text x="274" y="219">4 · P. Judicial</text>
+            <text x="274" y="256" fill="#554D3F">5 · El Gobierno</text>
+            <text x="274" y="293" fill="#554D3F">6 · Gob. Abierto</text>
+          </g>
+          <g fill="none" stroke="#17140F" stroke-width="2.5">
+            <rect x="244" y="100" width="20" height="20" rx="5"/>
+            <rect x="244" y="137" width="20" height="20" rx="5"/>
+            <rect x="244" y="174" width="20" height="20" rx="5"/>
+            <rect x="244" y="204" width="20" height="20" rx="5" fill="#fff"/>
+            <rect x="244" y="241" width="20" height="20" rx="5"/>
+            <rect x="244" y="278" width="20" height="20" rx="5"/>
+          </g>
+          <g fill="none" stroke="#C3321B" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+            <path class="tick t1" d="M247 110l5 5 10-11"/>
+            <path class="tick t2" d="M247 147l5 5 10-11"/>
+            <path class="tick t3" d="M247 184l5 5 10-11"/>
+            <path class="strike s1" pathLength="1" d="M272 110c30-2 62 1 92-1"/>
+            <path class="strike s2" pathLength="1" d="M272 147c45-2 90 2 128-1"/>
+            <path class="strike s3" pathLength="1" d="M272 184c40-1 90 2 128-1"/>
+          </g>
+          <g class="today-tag">
+            <rect x="382" y="203" width="46" height="22" rx="3" fill="#C3321B"/>
+            <text x="405" y="219" text-anchor="middle" font-family="Figtree, sans-serif" font-weight="700" font-size="12.5" fill="#fff">HOY</text>
+          </g>
+        </g>
+        <g transform="rotate(-4 400 330)">
+          <rect x="318" y="296" width="150" height="72" rx="16" fill="#17140F" stroke="#17140F" stroke-width="3"/>
+          <rect x="378" y="286" width="30" height="12" rx="4" fill="#17140F"/>
+          <text x="393" y="348" text-anchor="middle" font-family="Bricolage Grotesque, Figtree, sans-serif" font-weight="800" font-size="40" fill="#FFD23F">90<tspan class="colon">:</tspan>00</text>
+        </g>
+        <g transform="rotate(-24 250 340)">
+          <rect x="196" y="332" width="104" height="16" rx="3" fill="#FFD23F" stroke="#17140F" stroke-width="3"/>
+          <path d="M300 332l20 8-20 8z" fill="#fff" stroke="#17140F" stroke-width="3" stroke-linejoin="round"/>
+          <rect x="186" y="332" width="12" height="16" rx="2" fill="#C3321B" stroke="#17140F" stroke-width="3"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="suena-t">
+  <div class="wrap">
+    <p class="kicker">Lo que pasa cada semana</p>
+    <h2 id="suena-t">¿Te suena alguna?</h2>
+    <ul class="pains">
+      <li class="pain">
+        <q>Me siento a estudiar y se me va media hora decidiendo por qué tema empiezo.</q>
+      </li>
+      <li class="pain">
+        <q>Salgo de trabajar a las siete. Si hoy no estudio, mañana tengo el doble.</q>
+      </li>
+      <li class="pain">
+        <q>El tema 3 me lo sabía. Lo di hace un mes y ahora no recuerdo ni cómo empieza.</q>
+      </li>
+      <li class="pain">
+        <q>Le pido a ChatGPT que me lo explique, lo entiendo todo, y a los dos días no queda nada.</q>
+      </li>
+    </ul>
+    <p class="pain-after">Ganas tienes. Lo que te falta es <span>alguien que decida qué toca y cuándo repasar</span>. Eso hace el planner.</p>
+  </div>
+</section>
+
+<section class="sec turn on-dark" aria-labelledby="giro-t">
+  <div class="wrap">
+    <p class="kicker">Por qué se olvida</p>
+    <h2 id="giro-t">Contestar no es <em>estudiar.</em></h2>
+    <p class="lead">ChatGPT te explica un tema en diez segundos, y lo entiendes. Pero el día del examen no está ChatGPT. <strong>Estás tú, un papel con 110 preguntas y 90 minutos.</strong></p>
+    <p class="lead">Entender algo hoy no significa recordarlo dentro de tres semanas. Eso se entrena con orden, con repasos a tiempo y con el reloj delante.</p>
+
+    <div class="versus" aria-hidden="true">
+      <div class="vs-card vs-chat">
+        <p class="vs-label">En tu móvil, un martes</p>
+        <p class="bubble me">Explícame el tema 4</p>
+        <p class="bubble">Claro. Te lo resumo en cinco puntos…</p>
+        <p class="bubble me">Vale, entendido</p>
       </div>
-      <div class="price-wrap">
-      <div class="price-card">
-        <div class="price-main">
-          <p class="price-flag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4 12.4 21.6a2 2 0 0 1-2.8 0l-7.2-7.2a2 2 0 0 1-.6-1.4V4.4a2 2 0 0 1 2-2h8.6a2 2 0 0 1 1.4.6l6.8 6.8a2 2 0 0 1 0 2.8z"/><path d="M7 7h.01"/></svg>las 30 primeras plazas</p>
-          <p class="price-amount"><span class="amount">19 €</span><span class="price-after">29 € después</span></p>
-          <ul class="price-includes">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12 5 5L20 6"/></svg>Entrega en el acto</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12 5 5L20 6"/></svg>28 temas cargados</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 12 5 5L20 6"/></svg>12 meses de actualizaciones de la convocatoria</li>
-          </ul>
-          <!-- TODO: sustituir por la URL real de Payhip cuando el producto esté publicado; hasta entonces el CTA de compra va deshabilitado -->
-          <p class="price-cta"><button class="button ghost" type="button" disabled>El planner todavía no está a la venta</button></p>
-          <p class="price-note">19 € las 30 primeras plazas, 29 € después.</p>
+      <p class="vs-arrow">tres semanas<br>después</p>
+      <div class="vs-card vs-exam">
+        <p class="vs-label">El día del examen</p>
+        <div class="exam-top"><span>Pregunta 47 de 110</span><span class="exam-clock">52:14</span></div>
+        <p class="exam-q">Sin chat al lado. Solo lo que recuerdes.</p>
+        <div class="exam-opts"><span>a</span><span>b</span><span>c</span><span>d</span></div>
+        <p class="exam-foot">¿Lo recuerdas tú?</p>
+      </div>
+    </div>
+
+    <div class="facts">
+      <p class="fact"><b>1.700*</b><span>plazas de acceso libre</span></p>
+      <p class="fact"><b>110*</b><span>preguntas como máximo (60 + 50)</span></p>
+      <p class="fact"><b>90*</b><span>minutos para las dos partes</span></p>
+    </div>
+    <p class="src">* Convocatoria publicada en el <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26262" rel="noopener">BOE-A-2025-26262</a>, de 22 de diciembre de 2025. De las 1.700 plazas, 156 son para personas con discapacidad.</p>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="sol-t">
+  <div class="wrap">
+    <p class="kicker">Cómo funciona</p>
+    <h2 id="sol-t">Tres cosas que el planner decide por ti cada día</h2>
+    <p class="lead">Es una hoja de cálculo. La abres en Google Sheets o en Excel y la hoja Hoy ya te dice qué toca.</p>
+
+    <div class="pieces">
+      <article class="piece">
+        <div class="piece-text">
+          <span class="piece-num" aria-hidden="true">01</span>
+          <h3>Qué estudias hoy</h3>
+          <p>Abres el archivo y el tema del día ya está elegido. Los 28 temas oficiales vienen cargados, 16 del bloque I y 12 del bloque II. Tú te sientas y estudias.</p>
         </div>
-        <!-- GARANTÍA. NO se publica hasta que P2 dé 20 de 20 preguntas con su fragmento en un tema real (precondición del consejo del 2026-09-19). Texto exacto aprobado, para pegarlo debajo del precio cuando se cumpla:
-        Si una sola pregunta no lleva la cita literal del fragmento que pegaste, te devuelvo el dinero.
-        -->
-        <div class="signup-panel">
-          <h3 id="apertura-titulo">Todavía no está a la venta</h3>
-          <p class="signup-intro">El botón de compra todavía no está vivo. Si quieres saber el día que abra, déjame tu correo y te mando un aviso, uno solo.</p>
-          <p class="signup-intro">Mientras tanto los prompts ya están publicados y son gratis, así que puedes empezar hoy sin pagar nada.</p>
-          <form action="https://formspree.io/f/mppzeynn" method="POST"><label for="email">Tu email</label><div class="form-controls"><input type="email" name="email" id="email" placeholder="tu@email.com" required autocomplete="email" aria-describedby="privacidad"><button class="button" type="submit">Avísame cuando abra<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></button></div><p class="privacy" id="privacidad">Un correo el día que abra el botón y nada más. No lo comparto con nadie y lo borro si me lo pides.</p></form>
+        <div class="mock-wrap">
+          <figure class="mock" aria-label="Maqueta de la hoja Hoy con datos de ejemplo" style="margin:0">
+            <div class="mock-bar" aria-hidden="true"><span>planner-auxiliar-estado.xlsx</span></div>
+            <div class="mock-body">
+              <p class="sheet-title">Hoy</p>
+              <p class="sheet-date">Martes · día 18 del plan</p>
+              <div class="row-study"><small>Toca estudiar</small><b>Tema 12 · Protección de datos personales</b></div>
+              <p class="rev-h">Repasos que vencen hoy</p>
+              <div class="rev"><b>T3 · Cortes Generales</b><em class="bad">58 %</em><span>Sí: repásalo ya (2 días)</span></div>
+              <div class="rev"><b>T7 · Ley de transparencia</b><em>76 %</em><span>Sí: refuerza (5 días)</span></div>
+            </div>
+            <div class="tabs" aria-hidden="true"><span class="on">Hoy</span><span>Temas</span><span>Repasos</span><span>Test</span><span>Instrucciones</span></div>
+          </figure>
+          <p class="mock-cap">Maqueta con datos de ejemplo. Los textos de estado son los del archivo.</p>
         </div>
+      </article>
+
+      <article class="piece">
+        <div class="piece-text">
+          <span class="piece-num" aria-hidden="true">02</span>
+          <h3>Qué repasas hoy</h3>
+          <p>Después de cada test apuntas la nota. Si sacas menos de un 60 %, ese tema vuelve en 2 días. Si pasas del 90 %, en 25. Lo que flojea vuelve antes, y lo que ya sabes no te roba tiempo.</p>
+        </div>
+        <div class="mock-wrap">
+          <figure class="mock" aria-label="Cuándo vuelve un tema según tu nota" style="margin:0">
+            <div class="mock-bar" aria-hidden="true"><span>Hoja Repasos · cuándo vuelve el tema</span></div>
+            <div class="mock-body scale">
+              <div class="scale-row"><b>Menos del 60 %</b><div class="bar low" aria-hidden="true"><i style="width:14%"></i></div><em class="bad">2 días</em></div>
+              <div class="scale-row"><b>Hasta 80 %</b><div class="bar" aria-hidden="true"><i style="width:26%"></i></div><em>5 días</em></div>
+              <div class="scale-row"><b>Hasta 90 %</b><div class="bar" aria-hidden="true"><i style="width:52%"></i></div><em>12 días</em></div>
+              <div class="scale-row"><b>Más de 90 %</b><div class="bar" aria-hidden="true"><i style="width:100%"></i></div><em>25 días</em></div>
+            </div>
+          </figure>
+          <p class="mock-cap">Son los intervalos que calcula el archivo con tu última nota de cada tema.</p>
+        </div>
+      </article>
+
+      <article class="piece">
+        <div class="piece-text">
+          <span class="piece-num" aria-hidden="true">03</span>
+          <h3>Test con reloj</h3>
+          <p>El examen dura 90 minutos y se notan. Haz los test con el reloj delante y apunta cada uno en la hoja Test, con su tema, sus preguntas y sus aciertos. Hay 400 filas, y la nota de cada tema decide cuándo vuelve. Así ves qué flojea antes de que te lo diga el examen.</p>
+        </div>
+        <div class="mock-wrap">
+          <figure class="mock" aria-label="Maqueta de un simulacro de 90 minutos y de la hoja Test con datos de ejemplo" style="margin:0">
+            <div class="mock-bar" aria-hidden="true"><span>Hoja Test</span></div>
+            <div class="mock-body">
+              <div class="timer">
+                <svg class="ring" viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="32" fill="none" stroke="#F7F2E4" stroke-width="10"/><circle cx="40" cy="40" r="32" fill="none" stroke="#C3321B" stroke-width="10" stroke-dasharray="201" stroke-dashoffset="0" transform="rotate(-90 40 40)"/><circle cx="40" cy="40" r="37" fill="none" stroke="#17140F" stroke-width="2"/><circle cx="40" cy="40" r="27" fill="none" stroke="#17140F" stroke-width="2"/></svg>
+                <div><p class="timer-num">90:00</p><small>Tu reloj, en un simulacro</small></div>
+              </div>
+              <table class="log">
+                <thead><tr><th scope="col">Tema</th><th scope="col">Preg.</th><th scope="col">Aciertos</th><th scope="col">Nota</th></tr></thead>
+                <tbody>
+                  <tr><td>T3</td><td>20</td><td>17</td><td>85 %</td></tr>
+                  <tr><td>T11</td><td>20</td><td>11</td><td class="bad">55 %</td></tr>
+                  <tr><td>T12</td><td>30</td><td>27</td><td>90 %</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </figure>
+          <p class="mock-cap">Maqueta con datos de ejemplo. El reloj lo pones tú; el archivo guarda el resultado y calcula la nota.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sec gift" id="regalo" aria-labelledby="regalo-t" style="padding-top:8px">
+  <div class="wrap gift-grid">
+    <div>
+      <p class="kicker">Gratis, sin dejar el correo</p>
+      <p class="lead" style="margin-top:12px">Si todavía no te fías, empieza por aquí. Son los cinco prompts que uso para trabajar el temario con ChatGPT o Claude. Pegas tu tema debajo y cada afirmación legal sale con el fragmento de tu texto que la respalda.</p>
+    </div>
+    <div class="gift-card">
+      <span class="ribbon" aria-hidden="true">Regalo</span>
+      <h2 id="regalo-t">Los 5 prompts, gratis</h2>
+      <ul class="plist">
+        <li><span class="ptag" aria-hidden="true">P1</span><div><b>Resumen atado al texto</b><span>Resume el tema y cita el fragmento de cada afirmación legal.</span></div></li>
+        <li><span class="ptag" aria-hidden="true">P2</span><div><b>Tanda de 20 preguntas tipo test</b><span>Con la opción correcta y el fragmento que la justifica.</span></div></li>
+        <li><span class="ptag" aria-hidden="true">P3</span><div><b>Esquema para memorizar</b><span>Sin perder plazos, excepciones ni referencias.</span></div></li>
+        <li><span class="ptag" aria-hidden="true">P4</span><div><b>Comprobador de afirmaciones</b><span>Revisa una respuesta frase a frase contra tu texto.</span></div></li>
+        <li><span class="ptag" aria-hidden="true">P5</span><div><b>Repaso activo</b><span>Te pregunta de una en una y te corrige citando el texto.</span></div></li>
+      </ul>
+      <div class="gift-cta">
+        <a class="btn btn-outline" href="prompts/">Ver y copiar los 5 prompts
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <p class="gift-note">Cada uno con su botón de copiar. Son tuyos y los puedes compartir.</p>
       </div>
-      </div>
-    </section>
-<section class="section editorial prose wrap" id="por-libre" aria-labelledby="por-libre-titulo"><h2 id="por-libre-titulo">¿Puedo aprobar por libre, sin academia?</h2><p class="section-text bluf">Preparar Auxiliar Administrativo del Estado por libre es una opción, pero ningún método puede garantizarte el aprobado. Necesitas material ajustado a tu convocatoria, práctica y un plan que puedas sostener. Estudia con IA aporta prompts y un planner para organizar ese trabajo con tu propia IA, sin contratar una academia.</p><div class="section-detail"><p>"A mi ritmo" también necesita un hueco para repasar. Una oposición es una carrera de fondo y el agobio no arregla una semana demasiado llena. La idea es que sepas qué trabajar hoy y a qué volver después, incluso cuando la sesión te cabe por los pelos.</p></div></section>
-<section class="faq editorial wrap" id="preguntas" aria-labelledby="preguntas-titulo"><h2 id="preguntas-titulo">¿Qué necesito saber antes de estudiar esta oposición con IA?</h2><p class="section-text bluf">Para estudiar Auxiliar Administrativo del Estado con IA necesitas el programa de tu convocatoria, material actualizado y una cuenta de ChatGPT o de Claude. Los cinco prompts son gratis y el planner cuesta 19 €. Aquí están las respuestas sobre precio, entrega, herramientas y preparación por libre.</p><div class="questions">
-  <div class="faq-group">
-    <div class="faq-group-head"><p class="faq-group-label">Precio y entrega</p></div>
-    <div class="faq-list">
-    <details class="faq-item" open><summary><h3>¿Cuánto cuesta y qué incluye?</h3></summary><p>El planner cuesta 19 € las 30 primeras plazas y 29 € después. Incluye el archivo con las hojas Hoy, Temas, Repasos y Test, los 28 temas del programa oficial ya cargados y 12 meses de actualizaciones de la convocatoria. Los cinco prompts van aparte y son gratis.</p></details>
-    <details class="faq-item"><summary><h3>¿Qué necesito para usarlo?</h3></summary><p>Una cuenta de ChatGPT o de Claude, y la versión gratuita de cualquiera de las dos sirve, más Google Sheets o Excel para abrir el planner. El temario lo aportas tú; el planner trae la lista oficial de temas, no el contenido de cada tema.</p></details>
-    <details class="faq-item"><summary><h3>¿Cómo se entrega?</h3></summary><p>Con un enlace de descarga en cuanto se completa el pago. Bajas el archivo y lo abres en Excel, o lo subes a Google Sheets desde Archivo, Importar. No hay nada que esperar ni ningún acceso que aprobar.</p></details>
-    <details class="faq-item"><summary><h3>¿Puedo devolverlo?</h3></summary><p>La política de devolución está escrita en la página de compra. Ahí la lees antes de pagar.</p></details>
-    <details class="faq-item"><summary><h3>¿Cuándo puedo comprar el planner?</h3></summary><p>Todavía no. El botón de compra se abre en cuanto la página de pago esté lista y aquí no hay fecha puesta hasta que la haya. Los prompts sí están publicados y los puedes copiar hoy; si quieres que te avise el día que abra, déjame tu correo.</p></details>
-    <details class="faq-item"><summary><h3>¿Sirve para mi convocatoria?</h3></summary><p>El planner trae el programa de Auxiliar Administrativo del Estado (C2) de la convocatoria publicada en el BOE el 22 de diciembre de 2025. Si te presentas a otra, contrasta que el programa coincida. El archivo no actualiza las leyes ni te da el temario.</p></details>
-    <details class="faq-item"><summary><h3>¿Esto es un temario?</h3></summary><p>No. Son los prompts para trabajar con tu IA y un planner que ordena temas, repasos y test. El material de estudio lo pones tú.</p></details>
     </div>
   </div>
-  <div class="faq-group">
-    <div class="faq-group-head"><p class="faq-group-label">Herramientas</p></div>
-    <div class="faq-list">
-    <details class="faq-item"><summary><h3>¿Necesito ChatGPT de pago?</h3></summary><p>Puedes empezar con la versión gratuita de ChatGPT, que tiene límites de uso. Estudia con IA plantea trabajar pegando fragmentos de texto en el chat; incluye los prompts y el planner, sin incluir suscripciones a herramientas. Consulta los límites actuales en la <a href="https://help.openai.com/en/articles/9275245-using-chatgpt-s-free-tier-faq">ayuda oficial de ChatGPT</a>.</p></details>
-    <details class="faq-item"><summary><h3>¿Puedo usar Claude?</h3></summary><p>Los cinco prompts están escritos para trabajar con ChatGPT o Claude en tu propia cuenta. Claude dispone de un plan gratuito con uso limitado; puedes consultar las condiciones en su <a href="https://support.claude.com/en/articles/11049762-choose-a-claude-plan">comparativa oficial de planes</a>.</p></details>
-    <details class="faq-item"><summary><h3>Si ChatGPT ya me responde bien, ¿para qué necesito esto?</h3></summary><p>Porque el examen no lo haces con ChatGPT al lado. Lo que compras es el orden. Qué tema toca hoy, qué repaso vence y cuánto te queda de verdad de lo que diste hace tres semanas. La respuesta ya la tienes gratis.</p></details>
-    <details class="faq-item"><summary><h3>¿Qué prompt funciona mejor para estudiar oposiciones?</h3></summary><p>Un punto de partida útil es pedir una tarea concreta sobre un texto que aportes, exigir el fragmento que respalda la respuesta e indicar que señale la información ausente. Los cinco prompts publicados siguen esa estructura; la comprobación del resultado sigue siendo necesaria.</p></details>
-    <details class="faq-item"><summary><h3>¿Cómo resumo un tema con ChatGPT sin perder lo importante?</h3></summary><p>Aporta el tema por apartados y pide que conserve definiciones, requisitos, excepciones y referencias del original. Compara el resumen con el texto antes de estudiarlo, porque una frase omitida puede cambiar lo que necesitas aprender.</p></details>
-    <details class="faq-item"><summary><h3>¿Cómo hago test de oposición con IA y respuestas explicadas?</h3></summary><p>Pega un fragmento del temario y pide preguntas con opciones, solución, explicación y el pasaje que respalda cada respuesta correcta. Revisa también los distractores para que no haya varias opciones válidas o ambigüedades. Las preguntas generadas son práctica de estudio, no preguntas oficiales ni una predicción del examen.</p></details>
-    <details class="faq-item"><summary><h3>¿Es mejor ChatGPT o NotebookLM para opositar?</h3></summary><p>NotebookLM permite trabajar con fuentes y consultar citas, según la <a href="https://blog.google/innovation-and-ai/models-and-research/google-labs/notebooklm-discover-sources/">documentación de Google</a>. Estudia con IA está planteado para quienes quieren seguir usando su ChatGPT o Claude con prompts y un planner. La herramienta que elijas no sustituye la revisión del contenido que vas a memorizar.</p></details>
-    </div>
-  </div>
-  <div class="faq-group">
-    <div class="faq-group-head"><p class="faq-group-label">La oposición</p></div>
-    <div class="faq-list">
-    <details class="faq-item"><summary><h3>¿Qué necesito para empezar sin academia?</h3></summary><p>Para preparar Auxiliar Administrativo del Estado sin academia, empieza comprobando las bases y el programa de la convocatoria, reúne material actualizado y reserva tiempo para practicar y repasar. Estudia con IA añade una rutina para trabajar ese material con tu IA; no incluye tutorías ni un temario.</p></details>
-    <details class="faq-item"><summary><h3>¿Puedo preparar Auxiliar Administrativo en seis meses?</h3></summary><p>Puedes organizar un plan de seis meses, pero aprobar en ese plazo depende de tu punto de partida, las horas disponibles y tu progreso. El planner sirve para distribuir estudio y repasos; no garantiza una fecha de aprobado.</p></details>
-    <details class="faq-item"><summary><h3>¿Cuánto se tarda en aprobar Auxiliar Administrativo del Estado por libre?</h3></summary><p>No hay un plazo que sirva para todas las personas que preparan Auxiliar Administrativo del Estado por libre. La base previa, la regularidad, los resultados de práctica y el calendario de la convocatoria condicionan la preparación. Ajusta el plan a tu avance, sin convertir una estimación en una promesa.</p></details>
-    <details class="faq-item"><summary><h3>¿Cuánto cuesta preparar oposiciones por libre?</h3></summary><p>Depende del material, de los recursos de práctica y de las herramientas que elijas, además de las tasas que correspondan. Estudia con IA entra ahí con los prompts gratis y un planner de 19 €, que cubre cómo organizas el estudio, no toda la preparación.</p></details>
-    <details class="faq-item"><summary><h3>¿Cuántos temas tiene Auxiliar Administrativo del Estado?</h3></summary><p>La convocatoria publicada en el BOE el 22 de diciembre de 2025 lista 28 temas en su Anexo I: 16 del bloque de organización pública y 12 del de actividad administrativa y ofimática. Son los 28 que trae cargados el planner y puedes contarlos en el <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26262">texto de la resolución en el BOE</a>.</p></details>
-    <details class="faq-item"><summary><h3>¿Cómo es el examen de Auxiliar Administrativo del Estado?</h3></summary><p>El acceso libre se resuelve en un ejercicio con dos partes obligatorias y eliminatorias en una misma sesión. La primera junta 30 preguntas del bloque I y 30 psicotécnicas; la segunda, 50 preguntas del bloque II, con la parte de ofimática referida a Windows 11 y Microsoft 365 en su versión de escritorio. Confirma los detalles en las bases de tu convocatoria y en la <a href="https://www.inap.es/cuerpo-general-auxiliar-de-la-administracion-del-estado?_82_languageId=es_ES">información oficial del cuerpo</a>.</p></details>
-    <details class="faq-item"><summary><h3>¿Sirve para los psicotécnicos?</h3></summary><p>El planner te reserva el bloque en el calendario y trae el reparto de las 30 preguntas por tipo, para que sepas qué practicar. Entrenarlos es otra cosa: se hacen con reloj, no leyendo.</p></details>
-    <details class="faq-item"><summary><h3>¿Merece la pena opositar a Auxiliar Administrativo?</h3></summary><p>Valora las funciones del puesto, los requisitos y el tiempo de preparación que puedes sostener antes de decidir si Auxiliar Administrativo encaja contigo. Estudia con IA es un recurso para organizar el estudio cuando has elegido esa oposición; comprar el planner no garantiza una plaza.</p></details>
-    </div>
-  </div>
-</div></section>
-  </main>
-  <footer class="site-footer">
-    <div class="wrap footer-grid">
-      <div class="footer-col footer-about">
-        <div class="brand-lockup"><svg class="brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M14 3v5h5"/><path d="M9 14.5l2 2 4-4"/></svg>
-        <div class="eyebrow">Estudia con IA</div></div>
-        <p class="footer-tagline">Prompts y un planner para preparar Auxiliar Administrativo del Estado con tu ChatGPT o tu Claude.</p>
-        <ul class="footer-social">
-          <li><a href="https://www.instagram.com/oposita.con.ia/" rel="me noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg>Instagram</a></li>
-          <li><a href="https://www.tiktok.com/@oposita.con.ia" rel="me noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3v9.8a4.2 4.2 0 1 1-3.4-4.1"/><path d="M15 3a5 5 0 0 0 5 5"/></svg>TikTok</a></li>
+</section>
+
+<section class="sec offer" id="planner" aria-labelledby="planner-t">
+  <div class="wrap">
+    <p class="kicker">El planner</p>
+    <h2 id="planner-t">Todo el plan en un archivo, por 19 €</h2>
+    <div class="offer-grid">
+      <div>
+        <ul class="incl">
+          <li><b>Hoy</b><span>El tema que toca y los repasos que vencen, en una sola hoja.</span></li>
+          <li><b>Temas</b><span>Los 28 del programa oficial ya cargados, 16 del bloque I y 12 del bloque II.</span></li>
+          <li><b>Repasos</b><span>Se recalculan con tu nota, a 2, 5, 12 o 25 días.</span></li>
+          <li><b>Test</b><span>400 filas para apuntar cada test, también tus simulacros de 90 minutos, y ver tu nota por tema.</span></li>
+          <li><b>12 meses</b><span>de actualizaciones de la convocatoria, incluidas en el precio.</span></li>
         </ul>
+        <p class="spec">Archivo .xlsx de 42 KB, sin macros, con cinco hojas (Hoy, Temas, Repasos, Test e Instrucciones). Se abre en Google Sheets, Excel o LibreOffice.</p>
       </div>
-      <nav class="footer-col footer-nav" aria-label="Enlaces del pie">
-        <p class="footer-title">En esta web</p>
+
+      <div class="buy" id="aviso">
+        <p class="status">Todavía no está a la venta</p>
+        <p class="price"><b>19 €</b><span>pago único</span></p>
+        <h3>Te aviso el día que abra</h3>
+        <p class="buy-intro">La página de pago aún no está lista. Déjame tu correo y te escribo una sola vez, cuando se pueda comprar.</p>
+        <form action="https://formspree.io/f/mppzeynn" method="POST" novalidate>
+          <div class="field">
+            <label for="email">Tu correo</label>
+            <input type="email" name="email" id="email" placeholder="tu@correo.com" required autocomplete="email" inputmode="email" aria-describedby="email-err privacidad">
+            <p class="err" id="email-err" role="alert" aria-live="assertive"></p>
+          </div>
+          <button class="btn btn-ink" type="submit">Avísame cuando abra
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <p class="privacy" id="privacidad"><strong>Este botón no cobra nada.</strong> Guarda tu correo para un solo aviso. No lo comparto con nadie y lo borro si me lo pides.</p>
+        </form>
+        <p class="safe">Sin tarjeta ni datos de pago. Un solo correo, el día que abra. Esta web no usa cookies ni analítica.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="fit-t">
+  <div class="wrap">
+    <p class="kicker">Antes de apuntarte</p>
+    <h2 id="fit-t">¿Es para ti?</h2>
+    <div class="fit">
+      <div class="fit-col fit-yes">
+        <h3><span>Sí</span>, si…</h3>
         <ul>
-          <li><a href="prompts/">Prompts gratis</a></li>
-          <li><a href="#planner">El planner</a></li>
-          <li><a href="#preguntas">Preguntas frecuentes</a></li>
+          <li>Preparas el C2 del Estado por libre y ya tienes de dónde estudiar.</li>
+          <li>Estudias con ChatGPT o Claude y te falta saber qué toca cada día.</li>
+          <li>Das un tema y a las tres semanas se te ha ido.</li>
+          <li>Tienes poco tiempo y no quieres gastarlo en organizarte.</li>
         </ul>
-      </nav>
-      <div class="footer-col footer-legal">
-        <p class="footer-title">Antes de comprar</p>
-        <!-- TODO LSSI: nombre y NIF del prestador antes de cobrar, o sea antes de que el boton de compra se active --><p>El planner es un producto digital de descarga inmediata. Al comprarlo aceptas que la descarga empieza en el momento y renuncias al derecho de desistimiento (art. 103.m TRLGDCU). Las condiciones de devolución están escritas en la página de compra. Hoy la web no cobra nada y el botón de compra está desactivado.</p>
+      </div>
+      <div class="fit-col fit-no">
+        <h3><span>No</span>, si…</h3>
+        <ul>
+          <li>Buscas el temario. El planner no trae apuntes, ordena los tuyos.</li>
+          <li>Quieres academia, con clases y alguien que te corrija.</li>
+          <li>Buscas una garantía de aprobado. Ningún método puede dártela.</li>
+        </ul>
       </div>
     </div>
-    <div class="wrap footer-bottom">
-      <p>© 2026 Estudia con IA</p>
-      <p><a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26262">Convocatoria en el BOE</a></p>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="faq-t" style="padding-top:0">
+  <div class="wrap faq-grid">
+    <div>
+      <p class="kicker">Preguntas</p>
+      <h2 id="faq-t">Antes de que preguntes</h2>
     </div>
-  </footer>
-  <nav class="sticky-cta" id="barra-cta" aria-label="Accesos rápidos">
-    <div><a href="prompts/">Copia los 5 prompts gratis</a><a href="#planner">El planner, 19 €</a></div>
-  </nav>
-  <script>
-    (() => {
-      const titulo = document.getElementById('titulo');
-      const barra = document.getElementById('barra-cta');
-      if (!titulo || !barra || !('IntersectionObserver' in window)) return;
-      document.body.classList.add('has-sticky-cta');
-      new IntersectionObserver(([e]) => barra.classList.toggle('is-on', !e.isIntersecting)).observe(titulo);
-    })();
+    <div class="faq-list">
+      <details>
+        <summary>¿Esto es un temario?</summary>
+        <p>No. El planner trae la lista oficial de los 28 temas, no el contenido de cada uno. El material de estudio lo pones tú.</p>
+      </details>
+      <details>
+        <summary>Si ChatGPT ya me responde bien, ¿para qué lo quiero?</summary>
+        <p>Porque el examen no lo haces con ChatGPT al lado. La respuesta ya la tienes gratis. Lo que te falta es el orden: qué tema toca hoy, qué repaso vence y cuánto recuerdas de lo que diste hace tres semanas.</p>
+      </details>
+      <details>
+        <summary>¿Qué necesito para usarlo?</summary>
+        <p>Google Sheets, Excel o LibreOffice para abrir el planner. Para los prompts, una cuenta de ChatGPT o de Claude; puedes empezar con la versión gratuita de cualquiera de las dos, que tiene límites de uso.</p>
+      </details>
+      <details>
+        <summary>¿Sirve para mi convocatoria?</summary>
+        <p>Trae el programa de Auxiliar Administrativo del Estado (C2) de la convocatoria publicada en el BOE el 22 de diciembre de 2025. Si te presentas a otra, comprueba que el programa coincide.</p>
+      </details>
+      <details>
+        <summary>¿Cuándo podré comprarlo?</summary>
+        <p>Todavía no hay fecha. Cuando la página de pago esté lista, escribo a quien haya dejado su correo. Los prompts sí están publicados y los puedes usar hoy.</p>
+      </details>
+      <details>
+        <summary>¿Puedo devolverlo?</summary>
+        <p>La política de devolución estará escrita en la página de compra, para que la leas antes de pagar.</p>
+      </details>
+    </div>
+  </div>
+</section>
 
-    /* Entrada de los bloques: caen desde arriba, una sola vez cada uno. Todo lo
-       de aqui es aditivo: si falta IntersectionObserver o el sistema pide
-       movimiento reducido, no se toca ni una clase y la pagina se ve entera
-       desde el primer momento. */
-    (() => {
-      const raiz = document.documentElement;
-      if (!('IntersectionObserver' in window)) return;
-      const quieto = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
-      if (quieto && quieto.matches) return;
+<section class="close on-dark" aria-labelledby="cierre-t">
+  <div class="wrap">
+    <div>
+      <h2 id="cierre-t">Contestar no es estudiar. <span>Estudiar es saber qué toca hoy.</span></h2>
+      <p>Y repasarlo antes de que se vaya, y llegar al examen con los 90 minutos ya entrenados.</p>
+    </div>
+    <div class="close-cta">
+      <a class="btn btn-light" href="#aviso">Quiero el planner
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="link-arrow" href="prompts/">O empieza hoy con los 5 prompts gratis
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </div>
+</section>
 
-      raiz.classList.add('js-reveal');
-      const SELECTOR = [
-        '.hero-eyebrow', '.hero h1', '.hero-sub', '.hero-action', '.mock', '.entity',
-        '.stats .stat', '.editorial > h2', '.editorial > .bluf', '.editorial > .section-detail',
-        '.section > h2', '.section > .bluf', '.section-cta', '.kit-item', '.prompt-index li',
-        '.compare-state', '.prompt-card', '.after-prompt', '.price-wrap', '.faq-group',
-        '.footer-col', '.footer-bottom'
-      ].join(', ');
+</main>
 
-      const porPadre = new Map();
-      const piezas = Array.prototype.slice.call(document.querySelectorAll(SELECTOR));
-      piezas.forEach((el) => {
-        const padre = el.parentElement;
-        const i = porPadre.get(padre) || 0;
-        porPadre.set(padre, i + 1);
-        el.style.setProperty('--d', Math.min(i, 5) * 50 + 'ms');
-        el.classList.add('reveal');
-      });
+<footer class="on-dark">
+  <div class="wrap">
+    <a class="brand" href="#main">
+      <svg class="brand-mark" viewBox="0 0 34 34" aria-hidden="true"><rect x="1.5" y="1.5" width="31" height="31" rx="7" fill="#FFFDF7"/><path d="M8.5 10.5h17" stroke="#17140F" stroke-width="2.4" stroke-linecap="round"/><path d="M7.5 14.5h19.5l-1.4 6H6.1z" fill="#FFD23F"/><path d="M8.5 17.5h14" stroke="#17140F" stroke-width="2.4" stroke-linecap="round"/><path d="M8.5 24.5h10" stroke="#17140F" stroke-width="2.4" stroke-linecap="round"/></svg>
+      Oposita con IA
+    </a>
+    <p>Prompts y un planner para preparar Auxiliar Administrativo del Estado con tu propia IA. En Instagram y TikTok como <a href="https://www.instagram.com/oposita.con.ia/" rel="noopener">@oposita.con.ia</a>.</p>
+    <p>Cifras del examen: <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26262" rel="noopener">BOE-A-2025-26262</a>. Esta web no usa cookies ni analítica.</p>
+  </div>
+</footer>
 
-      const ojo = new IntersectionObserver((entradas) => {
-        entradas.forEach((e) => {
-          if (!e.isIntersecting) return;
-          const el = e.target;
-          ojo.unobserve(el);
-          el.classList.add('is-in');
-          /* Cuando acaba, se quitan las clases: asi el elemento vuelve a su CSS
-             normal y no arrastra una transicion que luego pise al hover. */
-          const espera = 520 + (parseInt(el.style.getPropertyValue('--d'), 10) || 0);
-          setTimeout(() => {
-            el.classList.remove('reveal', 'is-in');
-            el.style.removeProperty('--d');
-          }, espera);
-        });
-      }, { threshold: 0.15, rootMargin: '0px 0px -4% 0px' });
-      piezas.forEach((el) => ojo.observe(el));
-    })();
-  </script>
+<script>
+(function(){
+  var form=document.querySelector('#aviso form');
+  if(!form) return;
+  var input=form.querySelector('#email'), err=form.querySelector('#email-err');
+  function check(){
+    var v=input.value.trim();
+    if(!v){return 'Escribe tu correo para poder avisarte.';}
+    if(!input.checkValidity()){return 'Ese correo no parece completo. Revisa que tenga @ y un dominio, por ejemplo tu@correo.com.';}
+    return '';
+  }
+  form.addEventListener('submit',function(e){
+    var m=check();
+    if(m){e.preventDefault();err.textContent=m;input.setAttribute('aria-invalid','true');input.focus();return;}
+    var b=form.querySelector('button');b.setAttribute('aria-busy','true');b.firstChild.textContent='Enviando… ';
+  });
+  input.addEventListener('blur',function(){ if(input.value.trim()){var m=check();err.textContent=m;input.setAttribute('aria-invalid',m?'true':'false');} });
+  input.addEventListener('input',function(){ if(input.getAttribute('aria-invalid')==='true' && !check()){err.textContent='';input.setAttribute('aria-invalid','false');} });
+})();
+</script>
 </body>
 </html>
