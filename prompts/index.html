@@ -187,6 +187,26 @@ footer .brand{color:var(--white)}
   .cta-card .btn{width:auto}
 }
 @media (max-width:759px){.cta-card .btn{width:100%}}
+/* Aviso del planner: el mismo formulario que la landing (Formspree), sobre la tarjeta amarilla */
+.cta-card form{margin-top:18px;display:grid;gap:8px;max-width:30rem}
+.cta-card label{font-weight:700;font-size:15.5px}
+.field{display:grid;gap:10px}
+input[type=email]{width:100%;min-height:56px;padding:14px 16px;border:2.5px solid var(--ink);border-radius:14px;background:var(--paper);font:500 17px var(--text);color:var(--ink)}
+input[type=email]::placeholder{color:#6F6758}
+input[type=email]:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+input[aria-invalid=true]{border-color:var(--red);background:#FFF4F1}
+.err{min-height:0;color:var(--red);font-weight:700;font-size:14.5px}
+.err:empty{display:none}
+.cta-card form .btn{width:100%}
+.privacy{font-size:14px;color:var(--ink-2);line-height:1.5;margin:0}
+@keyframes sacude{0%,100%{transform:none}20%{transform:translateX(-6px)}45%{transform:translateX(5px)}70%{transform:translateX(-3px)}}
+@media (prefers-reduced-motion:no-preference){input.sacude{animation:sacude .32s var(--ease-out)}}
+.done{display:grid;gap:10px;margin-top:18px;padding:18px 0 4px;border-top:2.5px solid var(--ink)}
+.done:focus{outline:none}
+.done:focus-visible{outline:3px solid var(--ink);outline-offset:4px}
+.done .status{display:inline-block;justify-self:start;color:var(--green);border:2.5px solid currentColor;border-radius:3px;padding:4px 10px 3px;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;transform:rotate(-2deg);margin:0}
+.done h3{margin-top:4px;font-size:24px}
+.done p{color:var(--ink-2);margin:0}
 /* Alex 2026-09-22: nada de trazos que se lean como guion largo junto a títulos */
 .prompt-label::after{content:none}.prompt-label{padding-bottom:0}
 </style>
@@ -227,7 +247,7 @@ footer .brand{color:var(--white)}
       <svg class="brand-mark" viewBox="0 0 34 34" aria-hidden="true"><rect x="1.5" y="1.5" width="31" height="31" rx="7" fill="#17140F"/><path d="M8.5 10.5h17" stroke="#FFFDF7" stroke-width="2.4" stroke-linecap="round"/><path d="M7.5 14.5h19.5l-1.4 6H6.1z" fill="#FFD23F"/><path d="M8.5 17.5h14" stroke="#17140F" stroke-width="2.4" stroke-linecap="round"/><path d="M8.5 24.5h10" stroke="#FFFDF7" stroke-width="2.4" stroke-linecap="round"/></svg>
       Oposita con IA
     </a>
-    <a class="btn btn-ink" href="../#planner">Quiero el planner</a>
+    <a class="btn btn-ink" href="../#aviso">Quiero el planner</a>
   </div>
 </header>
 
@@ -371,8 +391,18 @@ Texto:
       <!-- GARANTÍA (no publicar hasta que P2 dé 20/20 con fragmento, council 2026-09-19):
       <p class="guarantee">Si una pregunta no lleva la cita literal del fragmento que pegaste, te devuelvo el dinero.</p>
       -->
-      <a class="btn btn-ink" href="../#planner">Quiero el planner
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <p><strong>El planner costará 19 €, pago único. Aún no se puede comprar.</strong> Si quieres, te escribo el día que abra.</p>
+      <form action="https://formspree.io/f/mppzeynn" method="POST" novalidate>
+        <input type="hidden" name="origen" value="prompts">
+        <div class="field">
+          <label for="email">Tu correo</label>
+          <input type="email" name="email" id="email" placeholder="tu@correo.com" required autocomplete="email" inputmode="email" aria-describedby="email-err privacidad">
+          <p class="err" id="email-err" role="alert" aria-live="assertive"></p>
+        </div>
+        <button class="btn btn-ink" type="submit"><span class="btn-label">Avísame cuando salga</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <p class="privacy" id="privacidad"><strong>Este botón no cobra nada.</strong> No comparto tu correo y lo borro si me lo pides.</p>
+      </form>
     </section>
   </div>
   <p class="sr" id="copy-status" aria-live="polite"></p>
@@ -445,6 +475,46 @@ Texto:
     estado.textContent='No se pudo copiar el prompt '+nombre+'. Está seleccionado para que lo copies a mano.';
   });
   document.addEventListener('animationend',function(e){ if(e.target.classList && e.target.classList.contains('barre')) e.target.classList.remove('barre'); });
+
+  /* Formulario de aviso: el mismo de la landing, se envía a Formspree sin salir de la página. Sin JS, el POST normal sigue funcionando */
+  var form=document.querySelector('.cta-card form');
+  if(!form) return;
+  var input=form.querySelector('#email'), err=form.querySelector('#email-err'), boton=form.querySelector('button'), etiqueta=boton.querySelector('.btn-label');
+  var textoBoton=etiqueta.textContent;
+  function check(){
+    var v=input.value.trim();
+    if(!v){return 'Escribe tu correo para poder avisarte.';}
+    if(!input.checkValidity()){return 'Ese correo no parece completo. Revisa que tenga @ y un dominio, por ejemplo tu@correo.com.';}
+    return '';
+  }
+  function sacude(){ input.classList.remove('sacude'); void input.offsetWidth; input.classList.add('sacude'); }
+  input.addEventListener('animationend',function(){ input.classList.remove('sacude'); });
+  function ocupado(si){
+    if(si){ boton.setAttribute('aria-busy','true'); boton.setAttribute('aria-disabled','true'); etiqueta.textContent='Enviando…'; }
+    else { boton.removeAttribute('aria-busy'); boton.removeAttribute('aria-disabled'); etiqueta.textContent=textoBoton; }
+  }
+  function hecho(correo){
+    var caja=document.createElement('div');
+    caja.className='done'; caja.setAttribute('role','status'); caja.tabIndex=-1;
+    caja.innerHTML='<p class="status">Apuntado</p><h3>Ya estás en la lista</h3><p></p><p>Un solo correo, sin cobrarte nada.</p>';
+    caja.querySelectorAll('p')[1].textContent='Te escribo a '+correo+' el día que abra. Si ese día no lo ves, mira en promociones o en spam.';
+    form.replaceWith(caja);
+    caja.focus({preventScroll:true});
+  }
+  form.addEventListener('submit',function(e){
+    var m=check();
+    if(m){e.preventDefault();err.textContent=m;input.setAttribute('aria-invalid','true');input.focus();sacude();return;}
+    if(!window.fetch || !window.FormData){ ocupado(true); return; }
+    e.preventDefault();
+    if(boton.getAttribute('aria-busy')==='true') return;
+    ocupado(true); err.textContent=''; input.setAttribute('aria-invalid','false');
+    var correo=input.value.trim();
+    fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}})
+      .then(function(r){ if(!r.ok) throw new Error(r.status); hecho(correo); })
+      .catch(function(){ ocupado(false); err.textContent='No se ha podido enviar. Revisa tu conexión y vuelve a probar en un momento.'; sacude(); });
+  });
+  input.addEventListener('blur',function(){ if(input.value.trim()){var m=check();err.textContent=m;input.setAttribute('aria-invalid',m?'true':'false');} });
+  input.addEventListener('input',function(){ if(input.getAttribute('aria-invalid')==='true' && !check()){err.textContent='';input.setAttribute('aria-invalid','false');} });
 })();
 </script>
 </body>

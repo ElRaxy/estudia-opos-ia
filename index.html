@@ -97,6 +97,10 @@ p{margin:0}
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:-.02em;text-decoration:none}
 .brand-mark{width:34px;height:34px;flex:none}
 .top .btn{min-height:44px;padding:10px 16px;font-size:15px;box-shadow:0 3px 0 #000000cc}
+/* «Avísame cuando salga» es más largo que el texto anterior: en móvil, marca y botón en una línea cada uno */
+.brand,.top .btn{white-space:nowrap}
+@media (max-width:420px){.brand{font-size:17px;gap:8px}.brand-mark{width:30px;height:30px}.top .btn{font-size:14px;padding:10px 12px}}
+@media (max-width:374px){.brand{font-size:16px}.top .btn{font-size:13px;padding:10px 10px}}
 .top{view-transition-name:cabecera}
 .top::before{content:"";position:absolute;inset:auto 0 -14px 0;height:12px;background:linear-gradient(#17140F24,#17140F00);opacity:0;transition:opacity 200ms ease;pointer-events:none}
 .top.is-scrolled::before{opacity:1}
@@ -343,8 +347,9 @@ section{position:relative}
 .buy{position:relative;overflow:clip;overflow-clip-margin:12px;background:var(--white);border:2.5px solid var(--ink);border-radius:14px;padding:24px 20px;box-shadow:10px 10px 0 var(--ink)}
 .status{display:inline-block;color:var(--red);border:2.5px solid currentColor;outline:1px solid currentColor;outline-offset:2px;border-radius:3px;padding:4px 10px 3px;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;transform:rotate(-2deg);transform-origin:left center}
 .price{margin-top:14px;display:flex;align-items:baseline;gap:10px}
-.price b{font-family:var(--display);font-weight:800;font-size:72px;line-height:.9;letter-spacing:-.04em}
+.price b{font-family:var(--display);font-weight:800;font-size:72px;line-height:.9;letter-spacing:-.04em;white-space:nowrap}
 .price span{font-weight:700;color:var(--muted)}
+.guarantee{margin-top:10px;font-weight:700}
 .buy h3{font-size:24px;margin-top:18px}
 .buy-intro{margin-top:8px;color:var(--ink-2)}
 form{margin-top:18px;display:grid;gap:8px}
@@ -533,7 +538,7 @@ footer .brand{color:var(--white)}
      "name": "¿Puedo devolverlo?",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "La política de devolución estará escrita en la página de compra, para que la leas antes de pagar."
+      "text": "Sí. Si en 14 días ves que no te sirve, escríbeme y te devuelvo los 19 €."
      }
     }
    ]
@@ -551,7 +556,7 @@ footer .brand{color:var(--white)}
       <svg class="brand-mark" viewBox="0 0 34 34" aria-hidden="true"><rect x="1.5" y="1.5" width="31" height="31" rx="7" fill="#17140F"/><path d="M8.5 10.5h17" stroke="#FFFDF7" stroke-width="2.4" stroke-linecap="round"/><path d="M7.5 14.5h19.5l-1.4 6H6.1z" fill="#FFD23F"/><path d="M8.5 17.5h14" stroke="#17140F" stroke-width="2.4" stroke-linecap="round"/><path d="M8.5 24.5h10" stroke="#FFFDF7" stroke-width="2.4" stroke-linecap="round"/></svg>
       Oposita con IA
     </a>
-    <a class="btn btn-ink top-cta" href="#planner">Quiero el planner</a>
+    <a class="btn btn-ink top-cta" href="#aviso">Avísame cuando salga</a>
   </div>
 </header>
 
@@ -562,18 +567,18 @@ footer .brand{color:var(--white)}
     <div class="hero-text">
       <p class="eyebrow rise"><span>Auxiliar Administrativo del <span class="nw">Estado · C2</span></span></p>
       <h1 id="h1">Cada mañana sabrás <span class="mark">qué toca</span> estudiar.</h1>
-      <p class="hero-sub">Preparas las oposiciones con 28 temas, un trabajo o una casa que llevar, y lo que estudiaste hace tres semanas ya no está. <strong>El planner te dice qué estudiar hoy y qué repasar hoy.</strong> Y lleva la cuenta de tus test para que llegues al examen con los 90 minutos entrenados.</p>
+      <p class="hero-sub">Preparas las oposiciones con 28 temas, un trabajo o una casa que llevar, y lo que estudiaste hace tres semanas ya no está. <strong>El planner es una hoja de cálculo que te dice qué estudiar hoy y qué repasar hoy.</strong> La abres en Google Sheets o en Excel, apuntas tus test y tu nota decide cuándo vuelve cada tema.</p>
       <div class="hero-cta rise r4">
-        <a class="btn btn-ink" href="#planner">Quiero el planner
+        <a class="btn btn-ink" href="#aviso">Avísame cuando salga
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        <p class="cta-note"><b>19 €.</b> Todavía no está a la venta. Te aviso el día que abra, sin cobrarte nada.</p>
+        <p class="cta-note"><b>19 €, pago único.</b> Aún no se puede comprar. Te escribo el día que abra y no te cobro nada.</p>
         <a class="link-arrow" href="prompts/">O empieza hoy con los 5 prompts gratis
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
       <ul class="specs rise r5" aria-label="Qué trae el planner">
         <li><b>28</b>temas oficiales cargados</li>
         <li><b>2 a 25</b>días hasta el repaso, según tu nota</li>
-        <li><b>400</b>filas para tus test</li>
+        <li><b>400</b>test y simulacros que puedes apuntar</li>
       </ul>
     </div>
 
@@ -715,7 +720,7 @@ footer .brand{color:var(--white)}
 <section class="sec" aria-labelledby="sol-t">
   <div class="wrap">
     <p class="kicker">Cómo funciona</p>
-    <h2 id="sol-t">Tres cosas que el planner decide por ti cada día</h2>
+    <h2 id="sol-t">Lo que hace el planner por ti cada día</h2>
     <p class="lead">Es una hoja de cálculo. La abres en Google Sheets o en Excel y la hoja Hoy ya te dice qué toca.</p>
 
     <div class="pieces">
@@ -771,7 +776,7 @@ footer .brand{color:var(--white)}
         <div class="piece-text">
           <span class="piece-num" aria-hidden="true">03</span>
           <h3>Test con reloj</h3>
-          <p>En la última convocatoria el examen fue de 90 minutos, y se notan. Haz el test en papel con el <a href="cronometro/">cronómetro de simulacro</a>, que es gratis y cuenta atrás desde 90:00. Después lo apuntas en la hoja Test con el tema, las preguntas, los aciertos y los minutos que has usado. El archivo calcula la nota y los segundos por pregunta, y esa nota decide cuándo vuelve el tema.</p>
+          <p>En la última convocatoria el examen fue de 90 minutos, y se notan. Haz el test en papel con el <a href="cronometro/">cronómetro de simulacro</a>, que es gratis. Luego apuntas en la hoja Test las preguntas, los aciertos y los minutos. El archivo calcula tu nota y los segundos por pregunta, y con esa nota decide cuándo vuelve el tema.</p>
         </div>
         <div class="mock-wrap" data-reveal>
           <figure class="mock" aria-label="Maqueta de un simulacro de 90 minutos y de la hoja Test con datos de ejemplo" style="margin:0">
@@ -794,8 +799,6 @@ footer .brand{color:var(--white)}
             </div>
           </figure>
           <p class="mock-cap">Maqueta con datos de ejemplo. El reloj es el cronómetro gratis de esta web; la hoja Test guarda minutos y aciertos y calcula el resto.</p>
-          <a class="link-arrow" href="cronometro/">Abrir el cronómetro de 90 minutos
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </div>
       </article>
     </div>
@@ -806,7 +809,7 @@ footer .brand{color:var(--white)}
   <div class="wrap gift-grid">
     <div>
       <p class="kicker">Gratis, sin dejar el correo</p>
-      <p class="lead" style="margin-top:12px">Si todavía no te fías, empieza por aquí. Son los cinco prompts que uso para trabajar el temario con ChatGPT o Claude. Pegas tu tema debajo y cada afirmación legal sale con el fragmento de tu texto que la respalda.</p>
+      <p class="lead" style="margin-top:12px">Si todavía no te fías, empieza por aquí. Soy Alex y preparo materiales para el C2 del Estado. Estos son los cinco prompts que uso con ChatGPT o Claude. Pegas tu tema y te devuelve un resumen, un esquema o 20 preguntas tipo test, y cada afirmación legal lleva el fragmento de tu texto que la respalda.</p>
     </div>
     <div class="gift-card" data-reveal>
       <span class="ribbon" aria-hidden="true">Regalo</span>
@@ -848,10 +851,12 @@ footer .brand{color:var(--white)}
 
       <div class="buy" id="aviso" data-reveal>
         <p class="status">Todavía no está a la venta</p>
-        <p class="price"><b>19 €</b><span>pago único</span></p>
+        <p class="price"><b>19 €</b><span>pago único, sin suscripción</span></p>
+        <p class="guarantee">Si en 14 días ves que no te sirve, te devuelvo los 19 €.</p>
         <h3>Te aviso el día que abra</h3>
-        <p class="buy-intro">La página de pago aún no está lista. Déjame tu correo y te escribo una sola vez, cuando se pueda comprar.</p>
+        <p class="buy-intro">Déjame tu correo y te escribo el día que se pueda comprar.</p>
         <form action="https://formspree.io/f/mppzeynn" method="POST" novalidate>
+          <input type="hidden" name="origen" value="landing">
           <div class="field">
             <label for="email">Tu correo</label>
             <input type="email" name="email" id="email" placeholder="tu@correo.com" required autocomplete="email" inputmode="email" aria-describedby="email-err privacidad">
@@ -859,9 +864,9 @@ footer .brand{color:var(--white)}
           </div>
           <button class="btn btn-ink" type="submit"><span class="btn-label">Avísame cuando abra</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-          <p class="privacy" id="privacidad"><strong>Este botón no cobra nada.</strong> Guarda tu correo para un solo aviso. No lo comparto con nadie y lo borro si me lo pides.</p>
+          <p class="privacy" id="privacidad"><strong>Este botón no cobra nada.</strong> No comparto tu correo con nadie y lo borro si me lo pides.</p>
         </form>
-        <p class="safe">Sin tarjeta ni datos de pago. Un solo correo, el día que abra. Esta web no usa cookies ni analítica.</p>
+        <p class="safe">Un solo correo, el día que abra. Sin tarjeta. Esta web no usa cookies ni analítica.</p>
       </div>
     </div>
   </div>
@@ -922,7 +927,7 @@ footer .brand{color:var(--white)}
       </details>
       <details>
         <summary>¿Puedo devolverlo?</summary>
-        <p>La política de devolución estará escrita en la página de compra, para que la leas antes de pagar.</p>
+        <p>Sí. Si en 14 días ves que no te sirve, escríbeme y te devuelvo los 19 €.</p>
       </details>
     </div>
   </div>
