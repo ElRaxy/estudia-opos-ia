@@ -2,20 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://elraxy.github.io/estudia-opos-ia/</loc>
-    <lastmod>2026-09-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <lastmod>2026-09-22</lastmod>
   </url>
   <url>
     <loc>https://elraxy.github.io/estudia-opos-ia/prompts/</loc>
-    <lastmod>2026-09-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <lastmod>2026-09-22</lastmod>
   </url>
   <url>
     <loc>https://elraxy.github.io/estudia-opos-ia/cronometro/</loc>
-    <lastmod>2026-09-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <lastmod>2026-09-22</lastmod>
+  </url>
+  <url>
+    <loc>https://elraxy.github.io/estudia-opos-ia/plan-de-estudio/</loc>
+    <lastmod>2026-09-22</lastmod>
   </url>
 </urlset>

@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Planner para Auxiliar Administrativo del Estado | Oposita con IA</title>
-<meta name="description" content="Para opositores a Auxiliar Administrativo del Estado (C2). Cada mañana sabes qué estudiar y qué repasar, y llevas la cuenta de tus test. 5 prompts gratis y un planner de 19 €.">
+<title>Planificador de estudio Auxiliar Administrativo del Estado | Oposita con IA</title>
+<meta name="description" content="Planificador en Excel o Google Sheets para Auxiliar Administrativo del Estado: 28 temas, qué estudiar hoy y qué repasar según tu nota. Prompts y cronómetro gratis.">
 <meta name="theme-color" content="#FFD23F">
 <meta name="color-scheme" content="light">
 <link rel="canonical" href="https://elraxy.github.io/estudia-opos-ia/">
@@ -89,6 +89,7 @@ p{margin:0}
 .link-arrow{display:inline-flex;align-items:center;gap:8px;font-weight:700;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px;min-height:44px}
 .link-arrow svg{width:18px;height:18px;transition:transform 160ms var(--ease-out)}
 @media (hover:hover) and (pointer:fine){.link-arrow:hover svg{transform:translateX(3px)}}
+.link-arrow:active svg{transform:translateX(3px)}
 
 /* Cabecera */
 .top{position:sticky;top:0;z-index:40;background:var(--yellow);border-bottom:2.5px solid var(--ink)}
@@ -140,11 +141,9 @@ p{margin:0}
 .t1{animation-delay:.45s}.t2{animation-delay:.85s}.t3{animation-delay:1.25s}
 .today{opacity:0;transform-box:fill-box;transform-origin:left center;animation:grow .5s var(--ease-out) 1.75s forwards}
 .today-tag{opacity:0;transform-box:fill-box;transform-origin:center;animation:sello .32s var(--ease-out) 2.1s forwards}
-.colon{animation:blink 1s steps(1) infinite}
 @keyframes draw{to{stroke-dashoffset:0}}
 @keyframes pop{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
 @keyframes grow{from{opacity:0;transform:scaleX(.2)}to{opacity:1;transform:scaleX(1)}}
-@keyframes blink{50%{opacity:0}}
 @keyframes sello{from{opacity:0;transform:scale(1.5) rotate(-10deg)}to{opacity:1;transform:none}}
 /* En móvil el dibujo queda bajo el pliegue: su animación espera a que entre en pantalla */
 .js .hero-art:not(.in) *{animation-play-state:paused}
@@ -167,7 +166,6 @@ p{margin:0}
 @media (prefers-reduced-motion:reduce){
   .strike{animation:none;stroke-dashoffset:0}
   .tick,.today,.today-tag{animation:none;opacity:1;transform:none}
-  .colon{animation:none}
   .rise{animation:none}
 }
 
@@ -180,24 +178,25 @@ p{margin:0}
   .js .versus .bubble,.js .versus .vs-arrow,.js .versus .vs-exam{opacity:0;transform:translateY(8px) scale(.97);transition:opacity .3s ease,transform .4s var(--ease-out)}
   .js .versus .bubble{transform-origin:left bottom}
   .js .versus .bubble.me{transform-origin:right bottom}
-  .js .versus.in .bubble,.js .versus.in .vs-arrow,.js .versus.in .vs-exam{opacity:1;transform:none}
+  .js .versus.in .bubble,.js .versus.in .vs-arrow.in,.js .versus.in .vs-exam.in{opacity:1;transform:none}
   .js .versus.in .bubble:nth-of-type(3){transition-delay:.45s}
   .js .versus.in .bubble:nth-of-type(4){transition-delay:.9s}
-  .js .versus.in .vs-arrow{transition-delay:1.25s}
-  .js .versus.in .vs-exam{transition-delay:1.5s}
+  /* En móvil van apiladas: la flecha y el examen esperan a entrar en pantalla, y entonces salen enseguida */
+  .js .versus.in .vs-arrow.in{transition-delay:.1s}
+  .js .versus.in .vs-exam.in{transition-delay:.25s}
   .js .piece-num::after{transform:scaleX(0);transition:transform .5s var(--ease-out) .1s}
   .js .piece.in .piece-num::after{transform:scaleX(1)}
   .js .row-study{clip-path:inset(0 100% 0 0 round 12px);transition:clip-path .7s var(--ease-in-out) .2s}
-  .js .piece.in .row-study{clip-path:inset(0 0 0 0 round 12px)}
+  .js .mock-wrap.in .row-study{clip-path:inset(0 0 0 0 round 12px)}
   .js .bar i{transform:scaleX(0);transform-origin:left;transition:transform .7s var(--ease-out)}
-  .js .piece.in .bar i{transform:scaleX(1)}
-  .js .piece.in .scale-row:nth-child(2) .bar i{transition-delay:.08s}
-  .js .piece.in .scale-row:nth-child(3) .bar i{transition-delay:.16s}
-  .js .piece.in .scale-row:nth-child(4) .bar i{transition-delay:.24s}
+  .js .mock-wrap.in .bar i{transform:scaleX(1)}
+  .js .mock-wrap.in .scale-row:nth-child(2) .bar i{transition-delay:.08s}
+  .js .mock-wrap.in .scale-row:nth-child(3) .bar i{transition-delay:.16s}
+  .js .mock-wrap.in .scale-row:nth-child(4) .bar i{transition-delay:.24s}
   .js .ring-run{stroke-dashoffset:201;transition:stroke-dashoffset 1.4s var(--ease-in-out) .2s}
-  .js .piece.in .ring-run{stroke-dashoffset:0}
+  .js .mock-wrap.in .ring-run{stroke-dashoffset:0}
   .js .corrector path{stroke-dashoffset:1;transition:stroke-dashoffset .55s var(--ease-out) 1.1s}
-  .js .piece.in .corrector path{stroke-dashoffset:0}
+  .js .mock-wrap.in .corrector path{stroke-dashoffset:0}
   .js .ribbon{opacity:0;transform:translateX(-50%) translateY(-10px) rotate(-9deg) scale(1.08);transition:opacity .2s ease .15s,transform .45s var(--ease-out) .15s}
   .js .gift-card.in .ribbon{opacity:1;transform:translateX(-50%) rotate(-2.5deg)}
   .js .buy .status{opacity:0;transform:scale(1.5) rotate(-9deg)}
@@ -312,7 +311,7 @@ section{position:relative}
 .js .try{display:block}
 .try label{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:14px}
 .try output{font-family:var(--display);font-weight:800;font-size:24px;line-height:1;font-variant-numeric:tabular-nums}
-.try input{display:block;width:100%;height:44px;margin:4px 0 0;accent-color:var(--ink);cursor:pointer}
+.try input{display:block;width:100%;height:44px;margin:4px 0 0;accent-color:var(--ink);cursor:pointer;touch-action:pan-y}
 .try-res{font-size:14.5px;color:var(--ink-2);min-height:3em}
 .try-res b{color:var(--ink)}
 
@@ -432,6 +431,8 @@ footer .brand{color:var(--white)}
   .versus{grid-template-columns:1fr auto 1fr;align-items:center;gap:22px}
   .vs-card{padding:24px}
   .facts{gap:24px}
+  .js .versus.in .vs-arrow.in{transition-delay:1.25s}
+  .js .versus.in .vs-exam.in{transition-delay:1.5s}
   .fact span{font-size:15px}
   .fit{grid-template-columns:1.1fr .9fr;gap:22px}
   .gift-card{padding:40px 40px 34px}
@@ -462,9 +463,15 @@ footer .brand{color:var(--white)}
    "@id": "https://elraxy.github.io/estudia-opos-ia/#org",
    "name": "Oposita con IA",
    "url": "https://elraxy.github.io/estudia-opos-ia/",
-   "logo": "https://elraxy.github.io/estudia-opos-ia/favicon.svg",
+   "logo": {
+    "@type": "ImageObject",
+    "url": "https://elraxy.github.io/estudia-opos-ia/logo.png",
+    "width": 512,
+    "height": 512
+   },
    "sameAs": [
-    "https://www.instagram.com/oposita.con.ia/"
+    "https://www.instagram.com/oposita.con.ia/",
+    "https://www.tiktok.com/@oposita.con.ia"
    ]
   },
   {
@@ -475,27 +482,6 @@ footer .brand{color:var(--white)}
    "inLanguage": "es-ES",
    "publisher": {
     "@id": "https://elraxy.github.io/estudia-opos-ia/#org"
-   }
-  },
-  {
-   "@type": "Product",
-   "@id": "https://elraxy.github.io/estudia-opos-ia/#planner",
-   "name": "Planner para Auxiliar Administrativo del Estado",
-   "description": "Hoja de cálculo (.xlsx, sin macros) con cinco hojas: Hoy, Temas, Repasos, Test e Instrucciones. Trae los 28 temas del programa oficial (16 del bloque I y 12 del bloque II), te dice qué estudiar y qué repasar cada día, recalcula el repaso con tu nota a 2, 5, 12 o 25 días y guarda hasta 400 test, con los minutos usados y los segundos por pregunta. No incluye el temario.",
-   "image": "https://elraxy.github.io/estudia-opos-ia/og.png",
-   "url": "https://elraxy.github.io/estudia-opos-ia/#planner",
-   "brand": {
-    "@id": "https://elraxy.github.io/estudia-opos-ia/#org"
-   },
-   "offers": {
-    "@type": "Offer",
-    "price": "19.00",
-    "priceCurrency": "EUR",
-    "availability": "https://schema.org/PreOrder",
-    "url": "https://elraxy.github.io/estudia-opos-ia/#aviso",
-    "seller": {
-     "@id": "https://elraxy.github.io/estudia-opos-ia/#org"
-    }
    }
   },
   {
@@ -531,7 +517,7 @@ footer .brand{color:var(--white)}
      "name": "¿Sirve para mi convocatoria?",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "Trae el programa de Auxiliar Administrativo del Estado (C2) de la convocatoria publicada en el BOE el 22 de diciembre de 2025. Si te presentas a otra, comprueba que el programa coincide."
+      "text": "Trae el programa de Auxiliar Administrativo del Estado (C2) de la última convocatoria, publicada en el BOE el 22 de diciembre de 2025, cuyo examen fue el 23 de mayo de 2026. A 22 de septiembre de 2026 la siguiente no se ha publicado. Si en los 12 meses después de tu compra el BOE cambia el temario, te mando gratis el archivo actualizado."
      }
     },
     {
@@ -576,7 +562,7 @@ footer .brand{color:var(--white)}
     <div class="hero-text">
       <p class="eyebrow rise"><span>Auxiliar Administrativo del <span class="nw">Estado · C2</span></span></p>
       <h1 id="h1">Cada mañana sabrás <span class="mark">qué toca</span> estudiar.</h1>
-      <p class="hero-sub">Tienes 28 temas, un trabajo o una casa que llevar, y lo que estudiaste hace tres semanas ya no está. <strong>El planner te dice qué estudiar hoy y qué repasar hoy.</strong> Y lleva la cuenta de tus test para que llegues al examen con los 90 minutos entrenados.</p>
+      <p class="hero-sub">Preparas las oposiciones con 28 temas, un trabajo o una casa que llevar, y lo que estudiaste hace tres semanas ya no está. <strong>El planner te dice qué estudiar hoy y qué repasar hoy.</strong> Y lleva la cuenta de tus test para que llegues al examen con los 90 minutos entrenados.</p>
       <div class="hero-cta rise r4">
         <a class="btn btn-ink" href="#planner">Quiero el planner
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -697,7 +683,7 @@ footer .brand{color:var(--white)}
   <div class="wrap">
     <p class="kicker">Por qué se olvida</p>
     <h2 id="giro-t" data-reveal>Contestar no es <em>estudiar.</em></h2>
-    <p class="lead">ChatGPT te explica un tema en diez segundos, y lo entiendes. Pero el día del examen no está ChatGPT. <strong>Estás tú, un papel con 110 preguntas y 90 minutos.</strong></p>
+    <p class="lead">ChatGPT te explica un tema en diez segundos, y lo entiendes. Pero el día del examen no está ChatGPT. <strong>Estás tú con un papel y un reloj.</strong> En la última convocatoria fueron hasta 110 preguntas en 90 minutos.</p>
     <p class="lead">Entender algo hoy no significa recordarlo dentro de tres semanas. Eso se entrena con orden, con repasos a tiempo y con el reloj delante.</p>
 
     <div class="versus" aria-hidden="true" data-reveal>
@@ -707,8 +693,8 @@ footer .brand{color:var(--white)}
         <p class="bubble">Claro. Te lo resumo en cinco puntos…</p>
         <p class="bubble me">Vale, entendido</p>
       </div>
-      <p class="vs-arrow">tres semanas<br>después</p>
-      <div class="vs-card vs-exam">
+      <p class="vs-arrow" data-reveal>tres semanas<br>después</p>
+      <div class="vs-card vs-exam" data-reveal>
         <p class="vs-label">El día del examen</p>
         <div class="exam-top"><span>Pregunta 47 de 110</span><span class="exam-clock" id="exam-clock">52:14</span></div>
         <p class="exam-q">Sin chat al lado. Solo lo que recuerdes.</p>
@@ -718,11 +704,11 @@ footer .brand{color:var(--white)}
     </div>
 
     <div class="facts">
-      <p class="fact"><b>1.700*</b><span>plazas de acceso libre</span></p>
+      <p class="fact"><b>1.700*</b><span>plazas libres en la última convocatoria</span></p>
       <p class="fact"><b>110*</b><span>preguntas como máximo (60 + 50)</span></p>
       <p class="fact"><b>90*</b><span>minutos para las dos partes</span></p>
     </div>
-    <p class="src">* Convocatoria publicada en el <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26262" rel="noopener">BOE-A-2025-26262</a>, de 22 de diciembre de 2025. De las 1.700 plazas, 156 son para personas con discapacidad.</p>
+    <p class="src">* Última convocatoria, publicada en el <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26262" rel="noopener">BOE-A-2025-26262</a> de 22 de diciembre de 2025, con examen el 23 de mayo de 2026. De las 1.700 plazas, 156 eran para personas con discapacidad. A 22 de septiembre de 2026 la siguiente no se ha publicado.</p>
   </div>
 </section>
 
@@ -739,7 +725,7 @@ footer .brand{color:var(--white)}
           <h3>Qué estudias hoy</h3>
           <p>Abres el archivo y el tema del día ya está elegido. Los 28 temas oficiales vienen cargados, 16 del bloque I y 12 del bloque II. Tú te sientas y estudias.</p>
         </div>
-        <div class="mock-wrap">
+        <div class="mock-wrap" data-reveal>
           <figure class="mock" aria-label="Maqueta de la hoja Hoy con datos de ejemplo" style="margin:0">
             <div class="mock-bar" aria-hidden="true"><span>planner-auxiliar-estado.xlsx</span></div>
             <div class="mock-body">
@@ -762,7 +748,7 @@ footer .brand{color:var(--white)}
           <h3>Qué repasas hoy</h3>
           <p>Después de cada test apuntas la nota. Si sacas menos de un 60 %, ese tema vuelve en 2 días. Si pasas del 90 %, en 25. Lo que flojea vuelve antes, y lo que ya sabes no te roba tiempo.</p>
         </div>
-        <div class="mock-wrap">
+        <div class="mock-wrap" data-reveal>
           <figure class="mock" aria-label="Cuándo vuelve un tema según tu nota" style="margin:0">
             <div class="mock-bar" aria-hidden="true"><span>Hoja Repasos · cuándo vuelve el tema</span></div>
             <div class="mock-body scale">
@@ -785,9 +771,9 @@ footer .brand{color:var(--white)}
         <div class="piece-text">
           <span class="piece-num" aria-hidden="true">03</span>
           <h3>Test con reloj</h3>
-          <p>El examen dura 90 minutos y se notan. Haz el test en papel con el <a href="cronometro/">cronómetro de simulacro</a>, que es gratis y cuenta atrás desde 90:00. Después lo apuntas en la hoja Test con el tema, las preguntas, los aciertos y los minutos que has usado. El archivo calcula la nota y los segundos por pregunta, y esa nota decide cuándo vuelve el tema.</p>
+          <p>En la última convocatoria el examen fue de 90 minutos, y se notan. Haz el test en papel con el <a href="cronometro/">cronómetro de simulacro</a>, que es gratis y cuenta atrás desde 90:00. Después lo apuntas en la hoja Test con el tema, las preguntas, los aciertos y los minutos que has usado. El archivo calcula la nota y los segundos por pregunta, y esa nota decide cuándo vuelve el tema.</p>
         </div>
-        <div class="mock-wrap">
+        <div class="mock-wrap" data-reveal>
           <figure class="mock" aria-label="Maqueta de un simulacro de 90 minutos y de la hoja Test con datos de ejemplo" style="margin:0">
             <div class="mock-bar" aria-hidden="true"><span>Hoja Test</span></div>
             <div class="mock-body">
@@ -857,6 +843,7 @@ footer .brand{color:var(--white)}
           <li><b>12 meses</b><span>Contados desde el día de tu compra. Si en ese plazo el BOE cambia el temario oficial o la convocatoria, te mando gratis el archivo actualizado a tu correo.</span></li>
         </ul>
         <p class="spec">Archivo .xlsx de 59 KB, sin macros, con cinco hojas (Hoy, Temas, Repasos, Test e Instrucciones). Se abre en Google Sheets, Excel o LibreOffice.</p>
+        <p class="spec">Si antes quieres ver cómo reparto los temas, el <a href="plan-de-estudio/">plan de estudio de los 28 temas</a> es gratis: en qué orden darlos, semanas por tema según tus horas y cuándo repasar.</p>
       </div>
 
       <div class="buy" id="aviso" data-reveal>
@@ -927,7 +914,7 @@ footer .brand{color:var(--white)}
       </details>
       <details>
         <summary>¿Sirve para mi convocatoria?</summary>
-        <p>Trae el programa de Auxiliar Administrativo del Estado (C2) de la convocatoria publicada en el BOE el 22 de diciembre de 2025. Si te presentas a otra, comprueba que el programa coincide.</p>
+        <p>Trae el programa de Auxiliar Administrativo del Estado (C2) de la última convocatoria, publicada en el BOE el 22 de diciembre de 2025, cuyo examen fue el 23 de mayo de 2026. A 22 de septiembre de 2026 la siguiente no se ha publicado. Si en los 12 meses después de tu compra el BOE cambia el temario, te mando gratis el archivo actualizado.</p>
       </details>
       <details>
         <summary>¿Cuándo podré comprarlo?</summary>
@@ -965,7 +952,8 @@ footer .brand{color:var(--white)}
       Oposita con IA
     </a>
     <p>Prompts y un planner para preparar Auxiliar Administrativo del Estado con tu propia IA. En Instagram y TikTok como <a href="https://www.instagram.com/oposita.con.ia/" rel="noopener">@oposita.con.ia</a>.</p>
-    <p>Cifras del examen: <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26262" rel="noopener">BOE-A-2025-26262</a>. Esta web no usa cookies ni analítica.</p>
+    <p>Gratis y sin dejar el correo: <a href="prompts/">los 5 prompts</a>, el <a href="cronometro/">cronómetro de simulacro</a> y el <a href="plan-de-estudio/">plan de estudio de los 28 temas</a>.</p>
+    <p>Cifras de la última convocatoria: <a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-26262" rel="noopener">BOE-A-2025-26262</a>. Esta web no usa cookies ni analítica.</p>
   </div>
 </footer>
 
@@ -977,9 +965,11 @@ footer .brand{color:var(--white)}
   /* Entrar en pantalla: una sola vez por elemento */
   var marcados=document.querySelectorAll('[data-reveal]');
   if(hasIO){
+    /* Umbral 0 con margen: con pantallas bajas un bloque alto nunca llegaba al 20 % visible a tiempo.
+       Lo que ya quedó por encima (recarga a media página, salto a un ancla) se da por visto */
     var io=new IntersectionObserver(function(es){
-      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-    },{rootMargin:'0px 0px -12% 0px',threshold:.2});
+      es.forEach(function(e){ if(e.isIntersecting || e.boundingClientRect.bottom<0){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    },{rootMargin:'0px 0px -18% 0px',threshold:0});
     marcados.forEach(function(el){ io.observe(el); });
   } else {
     marcados.forEach(function(el){ el.classList.add('in'); });
@@ -988,9 +978,14 @@ footer .brand{color:var(--white)}
   /* Cabecera: sombra al bajar, y su botón solo cuando el del hero ya no se ve y no estás en la zona de compra */
   var top=document.querySelector('.top');
   if(top){
-    var bajado=false;
-    var sombra=function(){ var b=window.scrollY>8; if(b!==bajado){ bajado=b; top.classList.toggle('is-scrolled',b); } };
-    sombra(); window.addEventListener('scroll',sombra,{passive:true});
+    /* Sombra al bajar sin escuchar el scroll: un testigo de 9 px arriba del todo avisa cuando sale de pantalla */
+    if(hasIO){
+      var testigo=document.createElement('div');
+      testigo.setAttribute('aria-hidden','true');
+      testigo.style.cssText='position:absolute;top:0;left:0;width:1px;height:9px;pointer-events:none;visibility:hidden';
+      document.body.prepend(testigo);
+      new IntersectionObserver(function(es){ top.classList.toggle('is-scrolled',!es[0].isIntersecting); }).observe(testigo);
+    }
     var heroCta=document.querySelector('.hero-cta .btn'), oferta=document.getElementById('planner');
     if(hasIO && heroCta && oferta){
       var heroVisto=true, ofertaVista=false;
@@ -999,6 +994,20 @@ footer .brand{color:var(--white)}
       new IntersectionObserver(function(es){ heroVisto=es[0].isIntersecting; pinta(); }).observe(heroCta);
       new IntersectionObserver(function(es){ ofertaVista=es[0].isIntersecting; pinta(); },{rootMargin:'-30% 0px -30% 0px'}).observe(oferta);
     }
+  }
+
+  /* Los dos puntos del reloj del dibujo parpadean solo mientras se ve. Con un intervalo de medio segundo:
+     la animación CSS infinita obligaba a recalcular estilos en cada frame del scroll */
+  var colon=document.querySelector('.hero-art .colon'), arte=document.querySelector('.hero-art');
+  if(colon && arte && hasIO){
+    var parpadeo=null, arteVisto=false;
+    var late=function(){
+      var si=arteVisto && !quieto.matches && document.visibilityState==='visible';
+      if(si && !parpadeo){ parpadeo=setInterval(function(){ colon.style.opacity=colon.style.opacity==='0'?'':'0'; },500); }
+      else if(!si && parpadeo){ clearInterval(parpadeo); parpadeo=null; colon.style.opacity=''; }
+    };
+    new IntersectionObserver(function(es){ arteVisto=es[0].isIntersecting; late(); }).observe(arte);
+    document.addEventListener('visibilitychange',late);
   }
 
   /* El reloj del examen corre mientras lo miras */
@@ -1031,6 +1040,14 @@ footer .brand{color:var(--white)}
       if(t[0]!==ultimo){ ultimo=t[0]; res.innerHTML='El tema vuelve en <b>'+t[1]+' días</b>. En la hoja Hoy verás «'+t[2]+'».'; }
     };
     nota.addEventListener('input',mueve); mueve();
+    /* En el móvil, un dedo que pasa por encima del deslizador para hacer scroll no debe cambiar la nota:
+       si el navegador se queda el gesto para desplazar la página (pointercancel), vuelve el valor de antes */
+    var previa=null, anulado=false;
+    var repone=function(){ if(anulado && previa!==null && nota.value!==previa){ nota.value=previa; mueve(); } };
+    nota.addEventListener('pointerdown',function(){ previa=nota.value; anulado=false; });
+    nota.addEventListener('pointercancel',function(){ anulado=true; repone(); });
+    nota.addEventListener('input',repone);
+    nota.addEventListener('touchend',function(){ setTimeout(function(){ repone(); anulado=false; previa=null; },0); },{passive:true});
   }
 
   /* Formulario de aviso: se envía a Formspree sin salir de la página. Sin JS, el POST normal sigue funcionando */

@@ -1,6 +1,6 @@
 # Oposita con IA
 
-> Oposita con IA es para quien prepara Auxiliar Administrativo del Estado (C2, España) y ya estudia con ChatGPT o Claude. Hay cinco prompts gratis para trabajar el temario propio y un planner de pago en hoja de cálculo que dice cada día qué tema estudiar y qué repasar. Parte de una idea: la IA contesta bien, pero contestar no es estudiar. El examen se hace en papel, con reloj y de memoria.
+> Oposita con IA es para quien prepara las oposiciones de Auxiliar Administrativo del Estado (C2, España) y ya estudia con ChatGPT o Claude. Hay cinco prompts gratis para trabajar el temario propio y un planner de pago en hoja de cálculo que dice cada día qué tema estudiar y qué repasar. Parte de una idea: la IA contesta bien, pero contestar no es estudiar. El examen se hace en papel, con reloj y de memoria.
 
 ## Qué hay
 - Prompts: cinco, gratis y en abierto en /prompts/, cada uno con su botón de copiar. Se usan en la cuenta propia de ChatGPT o de Claude, pegando debajo el texto del tema.
@@ -9,19 +9,22 @@
 - Hoja Temas: los 28 temas del programa oficial ya cargados, 16 del bloque I y 12 del bloque II.
 - Hoja Repasos: cada tema vuelve según la última nota. Con menos del 60 %, a los 2 días; hasta el 80 %, a los 5; hasta el 90 %, a los 12; por encima del 90 %, a los 25.
 - Hoja Test: 400 filas para apuntar cada test o simulacro con su tema, sus preguntas y sus aciertos. El archivo calcula la nota. Tiene columna para los minutos usados y calcula los segundos por pregunta.
-- Cronómetro de simulacro gratis: https://elraxy.github.io/estudia-opos-ia/cronometro/ (cuenta atrás de 90 minutos, como el examen; la pantalla no se apaga y recargar no pierde el tiempo).
+- Cronómetro de simulacro gratis: https://elraxy.github.io/estudia-opos-ia/cronometro/ (cuenta atrás de 90 minutos, lo que duró el examen de la última convocatoria; la pantalla no se apaga y recargar no pierde el tiempo).
 - Actualizaciones durante 12 meses desde la compra: si el BOE cambia el temario oficial o la convocatoria en ese plazo, el comprador recibe gratis el archivo actualizado en su correo.
 - Precio: 19 EUR, pago único.
 - Estado: todavía no está a la venta y no hay fecha de apertura. Quien deja su correo en la página recibe un solo aviso el día que se pueda comprar. Los prompts sí se pueden usar hoy.
 
 ## La oposición
-- Auxiliar Administrativo del Estado (C2), convocatoria BOE-A-2025-26262, de 22 de diciembre de 2025.
-- 1.700 plazas de acceso libre, 156 de ellas para personas con discapacidad.
-- Examen: hasta 110 preguntas (60 en la primera parte y 50 en la segunda) en 90 minutos para las dos partes.
+- Auxiliar Administrativo del Estado (C2). La última convocatoria es la BOE-A-2025-26262, de 22 de diciembre de 2025, y su examen se celebró el 23 de mayo de 2026.
+- En esa convocatoria hubo 1.700 plazas de acceso libre, 156 de ellas para personas con discapacidad.
+- En esa convocatoria el examen tuvo hasta 110 preguntas (60 en la primera parte y 50 en la segunda) y 90 minutos para las dos partes.
+- A 22 de septiembre de 2026 la siguiente convocatoria no se ha publicado, así que no hay fecha de examen nueva ni se sabe si cambiará el programa.
 
 ## Páginas
 - [Planner y aviso de apertura](https://elraxy.github.io/estudia-opos-ia/): qué hace el planner, cómo decide los repasos, precio, aviso y preguntas frecuentes.
 - [Los 5 prompts gratis](https://elraxy.github.io/estudia-opos-ia/prompts/): los cinco prompts completos con botón de copiar.
+- [Cronómetro de simulacro de 90 minutos](https://elraxy.github.io/estudia-opos-ia/cronometro/): cuenta atrás gratis para hacer un simulacro con el tiempo del examen, sin registro.
+- [Plan de estudio de los 28 temas](https://elraxy.github.io/estudia-opos-ia/plan-de-estudio/): los 28 temas del programa oficial, en qué orden darlos, semanas por tema según las horas y cuándo repasar.
 
 ## Límites
 - El planner no trae el temario. Ordena el material que ya tiene cada opositor.
