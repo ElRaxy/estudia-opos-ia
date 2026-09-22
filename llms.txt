@@ -4,12 +4,13 @@
 
 ## Qué hay
 - Prompts: cinco, gratis y en abierto en /prompts/, cada uno con su botón de copiar. Se usan en la cuenta propia de ChatGPT o de Claude, pegando debajo el texto del tema.
-- Planner: el producto de pago. Un archivo .xlsx de 42 KB, sin macros, con cinco hojas: Hoy, Temas, Repasos, Test e Instrucciones. Se abre en Google Sheets, Excel o LibreOffice.
+- Planner: el producto de pago. Un archivo .xlsx de 59 KB, sin macros, con cinco hojas: Hoy, Temas, Repasos, Test e Instrucciones. Se abre en Google Sheets, Excel o LibreOffice.
 - Hoja Hoy: el tema que toca estudiar y los repasos que vencen ese día.
 - Hoja Temas: los 28 temas del programa oficial ya cargados, 16 del bloque I y 12 del bloque II.
 - Hoja Repasos: cada tema vuelve según la última nota. Con menos del 60 %, a los 2 días; hasta el 80 %, a los 5; hasta el 90 %, a los 12; por encima del 90 %, a los 25.
-- Hoja Test: 400 filas para apuntar cada test o simulacro con su tema, sus preguntas y sus aciertos. El archivo calcula la nota. No trae cronómetro: el reloj lo pone quien estudia.
-- Incluye 12 meses de actualizaciones de la convocatoria.
+- Hoja Test: 400 filas para apuntar cada test o simulacro con su tema, sus preguntas y sus aciertos. El archivo calcula la nota. Tiene columna para los minutos usados y calcula los segundos por pregunta.
+- Cronómetro de simulacro gratis: https://elraxy.github.io/estudia-opos-ia/cronometro/ (cuenta atrás de 90 minutos, como el examen; la pantalla no se apaga y recargar no pierde el tiempo).
+- Actualizaciones durante 12 meses desde la compra: si el BOE cambia el temario oficial o la convocatoria en ese plazo, el comprador recibe gratis el archivo actualizado en su correo.
 - Precio: 19 EUR, pago único.
 - Estado: todavía no está a la venta y no hay fecha de apertura. Quien deja su correo en la página recibe un solo aviso el día que se pueda comprar. Los prompts sí se pueden usar hoy.
 

@@ -27,6 +27,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;700&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js')</script>
 <style>
 :root{
   --yellow:#FFD23F; --yellow-deep:#F2B705; --yellow-soft:#FFF1B8;
@@ -35,6 +36,7 @@
   --red:#C3321B; --red-bright:#E0442A; --green:#1D6B45;
   --radius:18px;
   --ease-out:cubic-bezier(.23,1,.32,1);
+  --ease-in-out:cubic-bezier(.77,0,.175,1);
   --display:"Bricolage Grotesque", "Figtree", system-ui, sans-serif;
   --text:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
   color-scheme: light;
@@ -42,6 +44,15 @@
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:84px}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Paso entre páginas: la cabecera se queda quieta y la hoja pasa. Aquí se entra desde /prompts/, así que llega desde la izquierda */
+@media (prefers-reduced-motion:no-preference){
+  @view-transition{navigation:auto}
+  ::view-transition-old(root){animation:vt-out-r 200ms var(--ease-out) both}
+  ::view-transition-new(root){animation:vt-in-l 340ms var(--ease-out) both}
+}
+@keyframes vt-out-r{to{opacity:0;transform:translateX(28px)}}
+@keyframes vt-in-l{from{opacity:0;transform:translateX(-28px)}}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--text);font-size:17px;line-height:1.6;overflow-x:clip}
 img,svg{display:block;max-width:100%}
 a{color:inherit}
@@ -67,7 +78,14 @@ p{margin:0}
   .btn-ink:hover{transform:translateY(-2px);box-shadow:0 7px 0 #000000cc}
   .btn-light:hover{transform:translateY(-2px);box-shadow:0 7px 0 #7d1a0b}
   .btn-outline:hover{background:var(--ink);color:var(--yellow)}
+  .btn svg{transition:transform 180ms var(--ease-out)}
+  .btn:hover svg{transform:translateX(3px)}
 }
+.btn:focus-visible{outline-offset:4px}
+.btn-label{display:inline-block;transition:opacity 180ms ease,filter 180ms ease}
+.btn[aria-busy=true]{cursor:progress}
+.btn[aria-busy=true] .btn-label{opacity:.75}
+.btn[aria-busy=true] svg{opacity:.35}
 .link-arrow{display:inline-flex;align-items:center;gap:8px;font-weight:700;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px;min-height:44px}
 .link-arrow svg{width:18px;height:18px;transition:transform 160ms var(--ease-out)}
 @media (hover:hover) and (pointer:fine){.link-arrow:hover svg{transform:translateX(3px)}}
@@ -78,13 +96,28 @@ p{margin:0}
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:-.02em;text-decoration:none}
 .brand-mark{width:34px;height:34px;flex:none}
 .top .btn{min-height:44px;padding:10px 16px;font-size:15px;box-shadow:0 3px 0 #000000cc}
+.top{view-transition-name:cabecera}
+.top::before{content:"";position:absolute;inset:auto 0 -14px 0;height:12px;background:linear-gradient(#17140F24,#17140F00);opacity:0;transition:opacity 200ms ease;pointer-events:none}
+.top.is-scrolled::before{opacity:1}
+/* Lo leído se va subrayando en rojo corrector bajo la cabecera */
+.top::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--red);transform:scaleX(0);transform-origin:left;pointer-events:none}
+@supports (animation-timeline:scroll()){
+  @media (prefers-reduced-motion:no-preference){
+    .top::after{animation:leido linear both;animation-timeline:scroll(root)}
+  }
+}
+@keyframes leido{to{transform:scaleX(1)}}
+/* El botón de la cabecera solo aparece cuando el del hero ya no se ve, y se aparta en la zona de compra */
+.top-cta{transition:opacity 200ms ease,transform 200ms var(--ease-out),visibility 0s linear 0s}
+.js .top[data-cta=off] .top-cta{opacity:0;transform:translateY(-8px);visibility:hidden;transition:opacity 160ms ease,transform 160ms ease,visibility 0s linear 160ms}
+@media (prefers-reduced-motion:reduce){.js .top[data-cta=off] .top-cta{transform:none}}
 
 /* Hero */
 .hero{background:var(--yellow);position:relative;overflow:hidden;border-bottom:2.5px solid var(--ink)}
 .hero .wrap{position:relative;display:grid;gap:28px;padding-top:34px;padding-bottom:40px}
 .eyebrow{display:flex;align-items:center;gap:12px;font-weight:700;font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink)}
 .nw{white-space:nowrap}
-.eyebrow::before{content:"";width:28px;height:2.5px;background:var(--ink);flex:none}
+
 .hero h1{font-size:clamp(44px,12.4vw,84px);margin-top:16px}
 .mark{position:relative;white-space:nowrap;z-index:0}
 .mark::after{content:"";position:absolute;left:-.06em;right:-.08em;bottom:.04em;height:.42em;background:var(--white);z-index:-1;border-radius:4px;transform:skewX(-8deg) scaleX(1);transform-origin:left}
@@ -106,21 +139,72 @@ p{margin:0}
 .tick{opacity:0;animation:pop .3s var(--ease-out) forwards}
 .t1{animation-delay:.45s}.t2{animation-delay:.85s}.t3{animation-delay:1.25s}
 .today{opacity:0;transform-box:fill-box;transform-origin:left center;animation:grow .5s var(--ease-out) 1.75s forwards}
-.today-tag{opacity:0;animation:pop .35s var(--ease-out) 2.1s forwards}
+.today-tag{opacity:0;transform-box:fill-box;transform-origin:center;animation:sello .32s var(--ease-out) 2.1s forwards}
 .colon{animation:blink 1s steps(1) infinite}
 @keyframes draw{to{stroke-dashoffset:0}}
 @keyframes pop{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
 @keyframes grow{from{opacity:0;transform:scaleX(.2)}to{opacity:1;transform:scaleX(1)}}
 @keyframes blink{50%{opacity:0}}
+@keyframes sello{from{opacity:0;transform:scale(1.5) rotate(-10deg)}to{opacity:1;transform:none}}
+/* En móvil el dibujo queda bajo el pliegue: su animación espera a que entre en pantalla */
+.js .hero-art:not(.in) *{animation-play-state:paused}
+/* El contador «N de 28» sube con cada tema tachado. Sin movimiento, solo se ve el 3 */
+.cnt-k{opacity:0}
+@keyframes ventana{0%{opacity:1}100%{opacity:0}}
+@keyframes aparece{to{opacity:1}}
+/* El H1 y el subtítulo no se animan: son el LCP y se pintan a la primera. Lo que se mueve es el subrayador */
 .rise{animation:rise .6s var(--ease-out) both}
 .r2{animation-delay:.08s}.r3{animation-delay:.16s}.r4{animation-delay:.24s}.r5{animation-delay:.32s}
 @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes pinta{from{transform:skewX(-8deg) scaleX(0)}to{transform:skewX(-8deg) scaleX(1)}}
+@media (prefers-reduced-motion:no-preference){
+  .hero .mark::after{animation:pinta .75s var(--ease-in-out) .3s both}
+  .cnt-final{opacity:0;animation:aparece 0s 1.25s forwards}
+  .cnt-k0{animation:ventana .45s steps(1) 0s forwards}
+  .cnt-k1{animation:ventana .4s steps(1) .45s forwards}
+  .cnt-k2{animation:ventana .4s steps(1) .85s forwards}
+}
 @media (prefers-reduced-motion:reduce){
   .strike{animation:none;stroke-dashoffset:0}
   .tick,.today,.today-tag{animation:none;opacity:1;transform:none}
   .colon{animation:none}
   .rise{animation:none}
 }
+
+/* Movimiento al entrar en pantalla. Solo con JS y con movimiento permitido: sin eso, todo se ve quieto y completo */
+@media (prefers-reduced-motion:no-preference){
+  .js .hl-go{background-size:0% 100%;transition:background-size .8s var(--ease-in-out) .15s}
+  .js .in .hl-go,.js .hl-go.in{background-size:100% 100%}
+  .js .turn h2 em::after{transform:scaleX(0);transition:transform .7s var(--ease-in-out) .25s}
+  .js .turn h2.in em::after{transform:scaleX(1)}
+  .js .versus .bubble,.js .versus .vs-arrow,.js .versus .vs-exam{opacity:0;transform:translateY(8px) scale(.97);transition:opacity .3s ease,transform .4s var(--ease-out)}
+  .js .versus .bubble{transform-origin:left bottom}
+  .js .versus .bubble.me{transform-origin:right bottom}
+  .js .versus.in .bubble,.js .versus.in .vs-arrow,.js .versus.in .vs-exam{opacity:1;transform:none}
+  .js .versus.in .bubble:nth-of-type(3){transition-delay:.45s}
+  .js .versus.in .bubble:nth-of-type(4){transition-delay:.9s}
+  .js .versus.in .vs-arrow{transition-delay:1.25s}
+  .js .versus.in .vs-exam{transition-delay:1.5s}
+  .js .piece-num::after{transform:scaleX(0);transition:transform .5s var(--ease-out) .1s}
+  .js .piece.in .piece-num::after{transform:scaleX(1)}
+  .js .row-study{clip-path:inset(0 100% 0 0 round 12px);transition:clip-path .7s var(--ease-in-out) .2s}
+  .js .piece.in .row-study{clip-path:inset(0 0 0 0 round 12px)}
+  .js .bar i{transform:scaleX(0);transform-origin:left;transition:transform .7s var(--ease-out)}
+  .js .piece.in .bar i{transform:scaleX(1)}
+  .js .piece.in .scale-row:nth-child(2) .bar i{transition-delay:.08s}
+  .js .piece.in .scale-row:nth-child(3) .bar i{transition-delay:.16s}
+  .js .piece.in .scale-row:nth-child(4) .bar i{transition-delay:.24s}
+  .js .ring-run{stroke-dashoffset:201;transition:stroke-dashoffset 1.4s var(--ease-in-out) .2s}
+  .js .piece.in .ring-run{stroke-dashoffset:0}
+  .js .corrector path{stroke-dashoffset:1;transition:stroke-dashoffset .55s var(--ease-out) 1.1s}
+  .js .piece.in .corrector path{stroke-dashoffset:0}
+  .js .ribbon{opacity:0;transform:translateX(-50%) translateY(-10px) rotate(-9deg) scale(1.08);transition:opacity .2s ease .15s,transform .45s var(--ease-out) .15s}
+  .js .gift-card.in .ribbon{opacity:1;transform:translateX(-50%) rotate(-2.5deg)}
+  .js .buy .status{opacity:0;transform:scale(1.5) rotate(-9deg)}
+  .js .buy.in .status{animation:sello-status .3s var(--ease-out) .25s forwards}
+}
+@keyframes sello-status{from{opacity:0;transform:scale(1.5) rotate(-9deg)}to{opacity:1;transform:rotate(-2deg)}}
+@keyframes sacude{0%,100%{transform:none}20%{transform:translateX(-6px)}45%{transform:translateX(5px)}70%{transform:translateX(-3px)}}
 
 /* Secciones */
 section{position:relative}
@@ -135,13 +219,14 @@ section{position:relative}
 .pain::before{content:"«";position:absolute;left:0;top:6px;font-family:var(--display);font-weight:800;font-size:46px;line-height:1;color:var(--red)}
 .pain q{quotes:none}
 .pain-after{margin-top:26px;font-size:20px;font-weight:700;max-width:40ch;line-height:1.4}
-.pain-after span{background:linear-gradient(transparent 58%,var(--yellow) 58%)}
+.pain-after span{background:linear-gradient(transparent 58%,var(--yellow) 58%) no-repeat 0 0/100% 100%}
 
 /* Giro */
 .turn{background:var(--ink);color:#F4EFE2}
 .turn .kicker{color:var(--yellow)}
 .turn h2{color:var(--white);font-size:clamp(46px,13vw,104px)}
 .turn h2 em{font-style:normal;color:var(--yellow);position:relative}
+.turn h2 em::after{content:"";position:absolute;left:0;right:.25em;bottom:-.02em;height:.07em;min-height:4px;background:var(--yellow);border-radius:2px;transform-origin:left}
 .turn .lead{color:#D9D2C1}
 .turn .lead strong{color:var(--white)}
 .versus{margin-top:36px;display:grid;gap:14px}
@@ -168,7 +253,8 @@ section{position:relative}
 /* Solución */
 .pieces{margin-top:40px;display:grid;gap:56px}
 .piece{display:grid;gap:22px;align-items:center}
-.piece-num{display:block;font-family:var(--display);font-weight:800;font-size:22px;line-height:1;color:var(--red);font-variant-numeric:tabular-nums;padding-bottom:10px;border-bottom:2.5px solid var(--red);width:max-content}
+.piece-num{position:relative;display:block;font-family:var(--display);font-weight:800;font-size:22px;line-height:1;color:var(--red);font-variant-numeric:tabular-nums;padding-bottom:12.5px;width:max-content}
+.piece-num::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2.5px;background:var(--red);transform-origin:left}
 .piece h3{font-size:clamp(30px,7.6vw,44px);margin-top:14px}
 .piece p{margin-top:12px;color:var(--ink-2);max-width:46ch}
 .mock{background:var(--white);border:2px solid var(--ink);border-radius:10px;box-shadow:0 22px 40px -26px #17140F80;overflow:hidden;font-size:14.5px}
@@ -209,6 +295,26 @@ section{position:relative}
 .log th{font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);text-align:left;padding:6px 4px;border-bottom:2px solid var(--ink)}
 .log td{padding:8px 4px;border-bottom:1.5px dashed var(--line);font-weight:500}
 .log td:last-child,.log th:last-child{text-align:right;font-weight:700}
+.log td{position:relative}
+.sim{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px;padding:9px 12px;background:#F7F2E4;border-radius:8px;font-size:14px}
+.sim span{font-weight:700;color:var(--muted)}
+.sim b{font-variant-numeric:tabular-nums}
+.piece-text p a{font-weight:700;text-decoration-thickness:2px;text-underline-offset:4px}
+.mock-wrap .link-arrow{margin-top:6px}
+.corrector{position:absolute;right:-8px;top:50%;width:62px;height:34px;transform:translateY(-50%) rotate(-4deg);overflow:visible;pointer-events:none}
+.corrector path{stroke-dasharray:1}
+/* Prueba con tu nota: la fila que toca se marca y dice cuándo vuelve el tema */
+.scale{isolation:isolate}
+.scale-row{position:relative}
+.scale-row::before{content:"";position:absolute;inset:-6px -8px;border-radius:8px;background:var(--yellow-soft);z-index:-1;opacity:0;transition:opacity 180ms ease}
+.scale-row.is-on::before{opacity:1}
+.try{display:none;margin-top:6px;padding-top:14px;border-top:1.5px dashed var(--line)}
+.js .try{display:block}
+.try label{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:14px}
+.try output{font-family:var(--display);font-weight:800;font-size:24px;line-height:1;font-variant-numeric:tabular-nums}
+.try input{display:block;width:100%;height:44px;margin:4px 0 0;accent-color:var(--ink);cursor:pointer}
+.try-res{font-size:14.5px;color:var(--ink-2);min-height:3em}
+.try-res b{color:var(--ink)}
 
 /* Regalo */
 .gift-grid{display:grid;gap:40px}
@@ -235,7 +341,7 @@ section{position:relative}
 .incl li{display:grid;grid-template-columns:104px 1fr;gap:14px;align-items:baseline;padding:13px 0;border-bottom:1.5px solid #17140F40;font-size:16.5px;line-height:1.45}
 .incl b{font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:-.01em}
 .spec{margin-top:18px;font-size:14.5px;color:var(--ink-2)}
-.buy{position:relative;background:var(--white);border:2.5px solid var(--ink);border-radius:14px;padding:24px 20px;box-shadow:10px 10px 0 var(--ink)}
+.buy{position:relative;overflow:clip;overflow-clip-margin:12px;background:var(--white);border:2.5px solid var(--ink);border-radius:14px;padding:24px 20px;box-shadow:10px 10px 0 var(--ink)}
 .status{display:inline-block;color:var(--red);border:2.5px solid currentColor;outline:1px solid currentColor;outline-offset:2px;border-radius:3px;padding:4px 10px 3px;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;transform:rotate(-2deg);transform-origin:left center}
 .price{margin-top:14px;display:flex;align-items:baseline;gap:10px}
 .price b{font-family:var(--display);font-weight:800;font-size:72px;line-height:.9;letter-spacing:-.04em}
@@ -253,6 +359,17 @@ input[aria-invalid=true]{border-color:var(--red);background:#FFF4F1}
 .err:empty{display:none}
 form .btn{width:100%}
 .privacy{font-size:14px;color:var(--ink-2);line-height:1.5}
+@media (prefers-reduced-motion:no-preference){input.sacude{animation:sacude .32s var(--ease-out)}}
+.done{display:grid;gap:10px;margin-top:18px;padding:18px 0 4px;border-top:2.5px solid var(--ink)}
+.done:focus{outline:none}
+.done:focus-visible{outline:3px solid var(--ink);outline-offset:4px}
+.done .status{color:var(--green);justify-self:start}
+.done h3{margin-top:4px}
+.done p{color:var(--ink-2)}
+@media (prefers-reduced-motion:no-preference){
+  .done{animation:rise .4s var(--ease-out) both}
+  .done .status{animation:sello-status .3s var(--ease-out) .15s both}
+}
 .safe{margin:16px 0 0;padding:14px 0 0;border-top:1.5px dashed var(--line);font-size:14.5px;font-weight:500;color:var(--ink-2);line-height:1.5}
 
 /* Para ti */
@@ -263,8 +380,7 @@ form .btn{width:100%}
 .fit-no{background:#F7F2E4}
 .fit-no h3 span{color:var(--red)}
 .fit-col ul{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:10px}
-.fit-col li{padding-left:18px;position:relative;line-height:1.5}
-.fit-col li::before{content:"";position:absolute;left:0;top:.78em;width:10px;height:2.5px;background:var(--ink)}
+.fit-col li{line-height:1.5;padding-top:10px;border-top:1px solid #17140F1F}
 
 /* FAQ */
 .faq-list{margin-top:28px;border-top:2.5px solid var(--ink)}
@@ -275,6 +391,20 @@ form .btn{width:100%}
 .faq-list details[open] summary::after{transform:rotate(45deg)}
 .faq-list details p{padding:0 0 20px;color:var(--ink-2);max-width:64ch}
 .faq-list details p a{font-weight:700;text-underline-offset:3px}
+@media (hover:hover) and (pointer:fine){.faq-list summary:hover::after{transform:rotate(90deg)}.faq-list details[open] summary:hover::after{transform:rotate(45deg)}}
+.faq-list summary:focus-visible{outline-offset:2px}
+/* Altura animada donde el navegador sabe interpolar hasta auto. Donde no, se abre de golpe, como siempre */
+@supports (interpolate-size:allow-keywords){
+  @media (prefers-reduced-motion:no-preference){
+    .faq-list details{interpolate-size:allow-keywords}
+    .faq-list details::details-content{block-size:0;overflow:clip;transition:block-size 300ms var(--ease-out),content-visibility 300ms allow-discrete}
+    .faq-list details[open]::details-content{block-size:auto}
+  }
+}
+@media (prefers-reduced-motion:no-preference){
+  .faq-list details p{transition:opacity 260ms ease 60ms,transform 300ms var(--ease-out) 60ms}
+  @starting-style{.faq-list details[open] p{opacity:0;transform:translateY(-6px)}}
+}
 
 /* Cierre */
 .close{background:var(--red);color:var(--white);border-top:2.5px solid var(--ink)}
@@ -320,6 +450,8 @@ footer .brand{color:var(--white)}
   .close .wrap{display:grid;grid-template-columns:1.25fr .75fr;gap:40px;align-items:end;padding-block:110px}
   .close h2{font-size:clamp(56px,6.6vw,92px)}
 }
+/* Alex 2026-09-22: nada de trazos que se lean como guion largo junto a títulos */
+.piece-num::after{content:none}
 </style>
 <script type="application/ld+json">
 {
@@ -349,7 +481,7 @@ footer .brand{color:var(--white)}
    "@type": "Product",
    "@id": "https://elraxy.github.io/estudia-opos-ia/#planner",
    "name": "Planner para Auxiliar Administrativo del Estado",
-   "description": "Hoja de cálculo (.xlsx, sin macros) con cinco hojas: Hoy, Temas, Repasos, Test e Instrucciones. Trae los 28 temas del programa oficial (16 del bloque I y 12 del bloque II), te dice qué estudiar y qué repasar cada día, recalcula el repaso con tu nota a 2, 5, 12 o 25 días y guarda hasta 400 test. No incluye el temario.",
+   "description": "Hoja de cálculo (.xlsx, sin macros) con cinco hojas: Hoy, Temas, Repasos, Test e Instrucciones. Trae los 28 temas del programa oficial (16 del bloque I y 12 del bloque II), te dice qué estudiar y qué repasar cada día, recalcula el repaso con tu nota a 2, 5, 12 o 25 días y guarda hasta 400 test, con los minutos usados y los segundos por pregunta. No incluye el temario.",
    "image": "https://elraxy.github.io/estudia-opos-ia/og.png",
    "url": "https://elraxy.github.io/estudia-opos-ia/#planner",
    "brand": {
@@ -427,13 +559,13 @@ footer .brand{color:var(--white)}
 <body>
 <a class="skip" href="#main">Saltar al contenido</a>
 
-<header class="top">
+<header class="top" data-cta="off">
   <div class="wrap">
     <a class="brand" href="#main" aria-label="Oposita con IA, ir al inicio">
       <svg class="brand-mark" viewBox="0 0 34 34" aria-hidden="true"><rect x="1.5" y="1.5" width="31" height="31" rx="7" fill="#17140F"/><path d="M8.5 10.5h17" stroke="#FFFDF7" stroke-width="2.4" stroke-linecap="round"/><path d="M7.5 14.5h19.5l-1.4 6H6.1z" fill="#FFD23F"/><path d="M8.5 17.5h14" stroke="#17140F" stroke-width="2.4" stroke-linecap="round"/><path d="M8.5 24.5h10" stroke="#FFFDF7" stroke-width="2.4" stroke-linecap="round"/></svg>
       Oposita con IA
     </a>
-    <a class="btn btn-ink" href="#planner">Quiero el planner</a>
+    <a class="btn btn-ink top-cta" href="#planner">Quiero el planner</a>
   </div>
 </header>
 
@@ -443,8 +575,8 @@ footer .brand{color:var(--white)}
   <div class="wrap">
     <div class="hero-text">
       <p class="eyebrow rise"><span>Auxiliar Administrativo del <span class="nw">Estado · C2</span></span></p>
-      <h1 id="h1" class="rise r2">Cada mañana sabrás <span class="mark">qué toca</span> estudiar.</h1>
-      <p class="hero-sub rise r3">Tienes 28 temas, un trabajo o una casa que llevar, y lo que estudiaste hace tres semanas ya no está. <strong>El planner te dice qué estudiar hoy y qué repasar hoy.</strong> Y lleva la cuenta de tus test para que llegues al examen con los 90 minutos entrenados.</p>
+      <h1 id="h1">Cada mañana sabrás <span class="mark">qué toca</span> estudiar.</h1>
+      <p class="hero-sub">Tienes 28 temas, un trabajo o una casa que llevar, y lo que estudiaste hace tres semanas ya no está. <strong>El planner te dice qué estudiar hoy y qué repasar hoy.</strong> Y lleva la cuenta de tus test para que llegues al examen con los 90 minutos entrenados.</p>
       <div class="hero-cta rise r4">
         <a class="btn btn-ink" href="#planner">Quiero el planner
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -459,7 +591,7 @@ footer .brand{color:var(--white)}
       </ul>
     </div>
 
-    <div class="hero-art">
+    <div class="hero-art" data-reveal>
       <svg viewBox="0 0 480 390" role="img" aria-labelledby="art-t">
         <title id="art-t">Dibujo de un escritorio: el temario apilado, una hoja de respuestas en blanco, una lista de temas con los tres primeros tachados y el tema 4 marcado para hoy, y un reloj que marca 90:00.</title>
         <path d="M6 352h468" stroke="#17140F" stroke-width="3" stroke-linecap="round"/>
@@ -488,7 +620,12 @@ footer .brand{color:var(--white)}
           <rect x="222" y="30" width="212" height="286" rx="14" fill="#fff" stroke="#17140F" stroke-width="3"/>
           <rect x="290" y="18" width="76" height="26" rx="8" fill="#17140F"/>
           <text x="244" y="80" font-family="Bricolage Grotesque, Figtree, sans-serif" font-weight="800" font-size="22" fill="#17140F">Temas</text>
-          <text x="404" y="80" text-anchor="end" font-family="Figtree, sans-serif" font-weight="700" font-size="13" fill="#554D3F">3 de 28</text>
+          <g text-anchor="end" font-family="Figtree, sans-serif" font-weight="700" font-size="13" fill="#554D3F">
+            <text class="cnt-final" x="404" y="80">3 de 28</text>
+            <text class="cnt-k cnt-k0" x="404" y="80">0 de 28</text>
+            <text class="cnt-k cnt-k1" x="404" y="80">1 de 28</text>
+            <text class="cnt-k cnt-k2" x="404" y="80">2 de 28</text>
+          </g>
           <rect class="today" x="236" y="197" width="186" height="34" rx="8" fill="#FFD23F"/>
           <g font-family="Figtree, sans-serif" font-weight="700" font-size="14.5" fill="#17140F">
             <text x="274" y="115">1 · Constitución</text>
@@ -552,18 +689,18 @@ footer .brand{color:var(--white)}
         <q>Le pido a ChatGPT que me lo explique, lo entiendo todo, y a los dos días no queda nada.</q>
       </li>
     </ul>
-    <p class="pain-after">Ganas tienes. Lo que te falta es <span>alguien que decida qué toca y cuándo repasar</span>. Eso hace el planner.</p>
+    <p class="pain-after" data-reveal>Ganas tienes. Lo que te falta es <span class="hl-go">alguien que decida qué toca y cuándo repasar</span>. Eso hace el planner.</p>
   </div>
 </section>
 
 <section class="sec turn on-dark" aria-labelledby="giro-t">
   <div class="wrap">
     <p class="kicker">Por qué se olvida</p>
-    <h2 id="giro-t">Contestar no es <em>estudiar.</em></h2>
+    <h2 id="giro-t" data-reveal>Contestar no es <em>estudiar.</em></h2>
     <p class="lead">ChatGPT te explica un tema en diez segundos, y lo entiendes. Pero el día del examen no está ChatGPT. <strong>Estás tú, un papel con 110 preguntas y 90 minutos.</strong></p>
     <p class="lead">Entender algo hoy no significa recordarlo dentro de tres semanas. Eso se entrena con orden, con repasos a tiempo y con el reloj delante.</p>
 
-    <div class="versus" aria-hidden="true">
+    <div class="versus" aria-hidden="true" data-reveal>
       <div class="vs-card vs-chat">
         <p class="vs-label">En tu móvil, un martes</p>
         <p class="bubble me">Explícame el tema 4</p>
@@ -573,7 +710,7 @@ footer .brand{color:var(--white)}
       <p class="vs-arrow">tres semanas<br>después</p>
       <div class="vs-card vs-exam">
         <p class="vs-label">El día del examen</p>
-        <div class="exam-top"><span>Pregunta 47 de 110</span><span class="exam-clock">52:14</span></div>
+        <div class="exam-top"><span>Pregunta 47 de 110</span><span class="exam-clock" id="exam-clock">52:14</span></div>
         <p class="exam-q">Sin chat al lado. Solo lo que recuerdes.</p>
         <div class="exam-opts"><span>a</span><span>b</span><span>c</span><span>d</span></div>
         <p class="exam-foot">¿Lo recuerdas tú?</p>
@@ -596,7 +733,7 @@ footer .brand{color:var(--white)}
     <p class="lead">Es una hoja de cálculo. La abres en Google Sheets o en Excel y la hoja Hoy ya te dice qué toca.</p>
 
     <div class="pieces">
-      <article class="piece">
+      <article class="piece" data-reveal>
         <div class="piece-text">
           <span class="piece-num" aria-hidden="true">01</span>
           <h3>Qué estudias hoy</h3>
@@ -619,7 +756,7 @@ footer .brand{color:var(--white)}
         </div>
       </article>
 
-      <article class="piece">
+      <article class="piece" data-reveal>
         <div class="piece-text">
           <span class="piece-num" aria-hidden="true">02</span>
           <h3>Qué repasas hoy</h3>
@@ -633,37 +770,46 @@ footer .brand{color:var(--white)}
               <div class="scale-row"><b>Hasta 80 %</b><div class="bar" aria-hidden="true"><i style="width:26%"></i></div><em>5 días</em></div>
               <div class="scale-row"><b>Hasta 90 %</b><div class="bar" aria-hidden="true"><i style="width:52%"></i></div><em>12 días</em></div>
               <div class="scale-row"><b>Más de 90 %</b><div class="bar" aria-hidden="true"><i style="width:100%"></i></div><em>25 días</em></div>
+              <div class="try">
+                <label for="nota">Prueba con una nota <output id="nota-out" for="nota">72 %</output></label>
+                <input type="range" id="nota" min="0" max="100" step="1" value="72" aria-describedby="nota-res">
+                <p class="try-res" id="nota-res" aria-live="polite">El tema vuelve en <b>5 días</b>. En la hoja Hoy verás «Sí: refuerza (5 días)».</p>
+              </div>
             </div>
           </figure>
           <p class="mock-cap">Son los intervalos que calcula el archivo con tu última nota de cada tema.</p>
         </div>
       </article>
 
-      <article class="piece">
+      <article class="piece" data-reveal>
         <div class="piece-text">
           <span class="piece-num" aria-hidden="true">03</span>
           <h3>Test con reloj</h3>
-          <p>El examen dura 90 minutos y se notan. Haz los test con el reloj delante y apunta cada uno en la hoja Test, con su tema, sus preguntas y sus aciertos. Hay 400 filas, y la nota de cada tema decide cuándo vuelve. Así ves qué flojea antes de que te lo diga el examen.</p>
+          <p>El examen dura 90 minutos y se notan. Haz el test en papel con el <a href="cronometro/">cronómetro de simulacro</a>, que es gratis y cuenta atrás desde 90:00. Después lo apuntas en la hoja Test con el tema, las preguntas, los aciertos y los minutos que has usado. El archivo calcula la nota y los segundos por pregunta, y esa nota decide cuándo vuelve el tema.</p>
         </div>
         <div class="mock-wrap">
           <figure class="mock" aria-label="Maqueta de un simulacro de 90 minutos y de la hoja Test con datos de ejemplo" style="margin:0">
             <div class="mock-bar" aria-hidden="true"><span>Hoja Test</span></div>
             <div class="mock-body">
               <div class="timer">
-                <svg class="ring" viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="32" fill="none" stroke="#F7F2E4" stroke-width="10"/><circle cx="40" cy="40" r="32" fill="none" stroke="#C3321B" stroke-width="10" stroke-dasharray="201" stroke-dashoffset="0" transform="rotate(-90 40 40)"/><circle cx="40" cy="40" r="37" fill="none" stroke="#17140F" stroke-width="2"/><circle cx="40" cy="40" r="27" fill="none" stroke="#17140F" stroke-width="2"/></svg>
-                <div><p class="timer-num">90:00</p><small>Tu reloj, en un simulacro</small></div>
+                <svg class="ring" viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="32" fill="none" stroke="#F7F2E4" stroke-width="10"/><circle class="ring-run" cx="40" cy="40" r="32" fill="none" stroke="#C3321B" stroke-width="10" stroke-dasharray="201" stroke-dashoffset="0" transform="rotate(-90 40 40)"/><circle cx="40" cy="40" r="37" fill="none" stroke="#17140F" stroke-width="2"/><circle cx="40" cy="40" r="27" fill="none" stroke="#17140F" stroke-width="2"/></svg>
+                <div><p class="timer-num">90:00</p><small>Cronómetro de simulacro</small></div>
               </div>
               <table class="log">
                 <thead><tr><th scope="col">Tema</th><th scope="col">Preg.</th><th scope="col">Aciertos</th><th scope="col">Nota</th></tr></thead>
                 <tbody>
                   <tr><td>T3</td><td>20</td><td>17</td><td>85 %</td></tr>
-                  <tr><td>T11</td><td>20</td><td>11</td><td class="bad">55 %</td></tr>
+                  <tr><td>T11</td><td>20</td><td>11</td><td class="bad">55 %<svg class="corrector" viewBox="0 0 62 34" aria-hidden="true"><path pathLength="1" d="M52 6C40 1 14 2 6 11c-7 8 4 18 22 19 17 1 30-4 30-12C58 11 48 7 37 7" fill="none" stroke="#C3321B" stroke-width="2.2" stroke-linecap="round"/></svg></td></tr>
                   <tr><td>T12</td><td>30</td><td>27</td><td>90 %</td></tr>
+                  <tr><td>Simul.</td><td>110</td><td>83</td><td>75 %</td></tr>
                 </tbody>
               </table>
+              <p class="sim"><span>Simulacro</span><b>84 min usados · 46 s por pregunta</b></p>
             </div>
           </figure>
-          <p class="mock-cap">Maqueta con datos de ejemplo. El reloj lo pones tú; el archivo guarda el resultado y calcula la nota.</p>
+          <p class="mock-cap">Maqueta con datos de ejemplo. El reloj es el cronómetro gratis de esta web; la hoja Test guarda minutos y aciertos y calcula el resto.</p>
+          <a class="link-arrow" href="cronometro/">Abrir el cronómetro de 90 minutos
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </div>
       </article>
     </div>
@@ -676,7 +822,7 @@ footer .brand{color:var(--white)}
       <p class="kicker">Gratis, sin dejar el correo</p>
       <p class="lead" style="margin-top:12px">Si todavía no te fías, empieza por aquí. Son los cinco prompts que uso para trabajar el temario con ChatGPT o Claude. Pegas tu tema debajo y cada afirmación legal sale con el fragmento de tu texto que la respalda.</p>
     </div>
-    <div class="gift-card">
+    <div class="gift-card" data-reveal>
       <span class="ribbon" aria-hidden="true">Regalo</span>
       <h2 id="regalo-t">Los 5 prompts, gratis</h2>
       <ul class="plist">
@@ -690,6 +836,8 @@ footer .brand{color:var(--white)}
         <a class="btn btn-outline" href="prompts/">Ver y copiar los 5 prompts
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         <p class="gift-note">Cada uno con su botón de copiar. Son tuyos y los puedes compartir.</p>
+        <a class="link-arrow" href="cronometro/">El cronómetro de simulacro, gratis
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
     </div>
   </div>
@@ -705,13 +853,13 @@ footer .brand{color:var(--white)}
           <li><b>Hoy</b><span>El tema que toca y los repasos que vencen, en una sola hoja.</span></li>
           <li><b>Temas</b><span>Los 28 del programa oficial ya cargados, 16 del bloque I y 12 del bloque II.</span></li>
           <li><b>Repasos</b><span>Se recalculan con tu nota, a 2, 5, 12 o 25 días.</span></li>
-          <li><b>Test</b><span>400 filas para apuntar cada test, también tus simulacros de 90 minutos, y ver tu nota por tema.</span></li>
-          <li><b>12 meses</b><span>de actualizaciones de la convocatoria, incluidas en el precio.</span></li>
+          <li><b>Test</b><span>400 filas para apuntar cada test y cada simulacro con los minutos usados. Calcula tu nota por tema y los segundos por pregunta.</span></li>
+          <li><b>12 meses</b><span>Contados desde el día de tu compra. Si en ese plazo el BOE cambia el temario oficial o la convocatoria, te mando gratis el archivo actualizado a tu correo.</span></li>
         </ul>
-        <p class="spec">Archivo .xlsx de 42 KB, sin macros, con cinco hojas (Hoy, Temas, Repasos, Test e Instrucciones). Se abre en Google Sheets, Excel o LibreOffice.</p>
+        <p class="spec">Archivo .xlsx de 59 KB, sin macros, con cinco hojas (Hoy, Temas, Repasos, Test e Instrucciones). Se abre en Google Sheets, Excel o LibreOffice.</p>
       </div>
 
-      <div class="buy" id="aviso">
+      <div class="buy" id="aviso" data-reveal>
         <p class="status">Todavía no está a la venta</p>
         <p class="price"><b>19 €</b><span>pago único</span></p>
         <h3>Te aviso el día que abra</h3>
@@ -722,7 +870,7 @@ footer .brand{color:var(--white)}
             <input type="email" name="email" id="email" placeholder="tu@correo.com" required autocomplete="email" inputmode="email" aria-describedby="email-err privacidad">
             <p class="err" id="email-err" role="alert" aria-live="assertive"></p>
           </div>
-          <button class="btn btn-ink" type="submit">Avísame cuando abra
+          <button class="btn btn-ink" type="submit"><span class="btn-label">Avísame cuando abra</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
           <p class="privacy" id="privacidad"><strong>Este botón no cobra nada.</strong> Guarda tu correo para un solo aviso. No lo comparto con nadie y lo borro si me lo pides.</p>
         </form>
@@ -823,19 +971,104 @@ footer .brand{color:var(--white)}
 
 <script>
 (function(){
+  var quieto=window.matchMedia('(prefers-reduced-motion: reduce)');
+  var hasIO='IntersectionObserver' in window;
+
+  /* Entrar en pantalla: una sola vez por elemento */
+  var marcados=document.querySelectorAll('[data-reveal]');
+  if(hasIO){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    },{rootMargin:'0px 0px -12% 0px',threshold:.2});
+    marcados.forEach(function(el){ io.observe(el); });
+  } else {
+    marcados.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* Cabecera: sombra al bajar, y su botón solo cuando el del hero ya no se ve y no estás en la zona de compra */
+  var top=document.querySelector('.top');
+  if(top){
+    var bajado=false;
+    var sombra=function(){ var b=window.scrollY>8; if(b!==bajado){ bajado=b; top.classList.toggle('is-scrolled',b); } };
+    sombra(); window.addEventListener('scroll',sombra,{passive:true});
+    var heroCta=document.querySelector('.hero-cta .btn'), oferta=document.getElementById('planner');
+    if(hasIO && heroCta && oferta){
+      var heroVisto=true, ofertaVista=false;
+      top.setAttribute('data-cta','off');
+      var pinta=function(){ top.setAttribute('data-cta',(heroVisto||ofertaVista)?'off':'on'); };
+      new IntersectionObserver(function(es){ heroVisto=es[0].isIntersecting; pinta(); }).observe(heroCta);
+      new IntersectionObserver(function(es){ ofertaVista=es[0].isIntersecting; pinta(); },{rootMargin:'-30% 0px -30% 0px'}).observe(oferta);
+    }
+  }
+
+  /* El reloj del examen corre mientras lo miras */
+  var reloj=document.getElementById('exam-clock');
+  if(reloj && hasIO){
+    var seg=52*60+14, tic=null;
+    var escribe=function(){ var m=Math.floor(seg/60), s=seg%60; reloj.textContent=m+':'+(s<10?'0':'')+s; };
+    new IntersectionObserver(function(es){
+      if(es[0].isIntersecting && !quieto.matches){ if(!tic){ tic=setInterval(function(){ if(seg>0){ seg--; escribe(); } },1000); } }
+      else if(tic){ clearInterval(tic); tic=null; }
+    }).observe(reloj);
+  }
+
+  /* Prueba con una nota: los mismos cortes que la fórmula del archivo */
+  var nota=document.getElementById('nota');
+  if(nota){
+    var out=document.getElementById('nota-out'), res=document.getElementById('nota-res');
+    var filas=document.querySelectorAll('.scale-row');
+    var tramo=function(n){
+      if(n<60) return [0,2,'Sí: repásalo ya (2 días)'];
+      if(n<=80) return [1,5,'Sí: refuerza (5 días)'];
+      if(n<=90) return [2,12,'Repaso normal (12 días)'];
+      return [3,25,'Vas bien (25 días)'];
+    };
+    var ultimo=-1;
+    var mueve=function(){
+      var n=+nota.value, t=tramo(n);
+      out.textContent=n+' %';
+      filas.forEach(function(f,i){ f.classList.toggle('is-on',i===t[0]); });
+      if(t[0]!==ultimo){ ultimo=t[0]; res.innerHTML='El tema vuelve en <b>'+t[1]+' días</b>. En la hoja Hoy verás «'+t[2]+'».'; }
+    };
+    nota.addEventListener('input',mueve); mueve();
+  }
+
+  /* Formulario de aviso: se envía a Formspree sin salir de la página. Sin JS, el POST normal sigue funcionando */
   var form=document.querySelector('#aviso form');
   if(!form) return;
-  var input=form.querySelector('#email'), err=form.querySelector('#email-err');
+  var input=form.querySelector('#email'), err=form.querySelector('#email-err'), boton=form.querySelector('button'), etiqueta=boton.querySelector('.btn-label');
+  var textoBoton=etiqueta.textContent;
   function check(){
     var v=input.value.trim();
     if(!v){return 'Escribe tu correo para poder avisarte.';}
     if(!input.checkValidity()){return 'Ese correo no parece completo. Revisa que tenga @ y un dominio, por ejemplo tu@correo.com.';}
     return '';
   }
+  function sacude(){ input.classList.remove('sacude'); void input.offsetWidth; input.classList.add('sacude'); }
+  input.addEventListener('animationend',function(){ input.classList.remove('sacude'); });
+  function ocupado(si){
+    if(si){ boton.setAttribute('aria-busy','true'); boton.setAttribute('aria-disabled','true'); etiqueta.textContent='Enviando…'; }
+    else { boton.removeAttribute('aria-busy'); boton.removeAttribute('aria-disabled'); etiqueta.textContent=textoBoton; }
+  }
+  function hecho(correo){
+    var caja=document.createElement('div');
+    caja.className='done'; caja.setAttribute('role','status'); caja.tabIndex=-1;
+    caja.innerHTML='<p class="status">Apuntado</p><h3>Ya estás en la lista</h3><p></p><p>Un solo correo, sin cobrarte nada. Mientras tanto, los <a href="prompts/">5 prompts</a> ya son tuyos.</p>';
+    caja.querySelectorAll('p')[1].textContent='Te escribo a '+correo+' el día que abra. Si ese día no lo ves, mira en promociones o en spam.';
+    form.replaceWith(caja);
+    caja.focus({preventScroll:true});
+  }
   form.addEventListener('submit',function(e){
     var m=check();
-    if(m){e.preventDefault();err.textContent=m;input.setAttribute('aria-invalid','true');input.focus();return;}
-    var b=form.querySelector('button');b.setAttribute('aria-busy','true');b.firstChild.textContent='Enviando… ';
+    if(m){e.preventDefault();err.textContent=m;input.setAttribute('aria-invalid','true');input.focus();sacude();return;}
+    if(!window.fetch || !window.FormData){ ocupado(true); return; }
+    e.preventDefault();
+    if(boton.getAttribute('aria-busy')==='true') return;
+    ocupado(true); err.textContent=''; input.setAttribute('aria-invalid','false');
+    var correo=input.value.trim();
+    fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}})
+      .then(function(r){ if(!r.ok) throw new Error(r.status); hecho(correo); })
+      .catch(function(){ ocupado(false); err.textContent='No se ha podido enviar. Revisa tu conexión y vuelve a probar en un momento.'; sacude(); });
   });
   input.addEventListener('blur',function(){ if(input.value.trim()){var m=check();err.textContent=m;input.setAttribute('aria-invalid',m?'true':'false');} });
   input.addEventListener('input',function(){ if(input.getAttribute('aria-invalid')==='true' && !check()){err.textContent='';input.setAttribute('aria-invalid','false');} });
